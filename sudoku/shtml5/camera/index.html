@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="maximum-scale=1, width=device-width">
+    <title>照相机</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script src="../../script/public.js"></script>
+    <script src="./camera.js"></script>
+    <style type="text/css">
+
+        .container{
+            width:95%;
+            padding:2px 2px;
+
+        }
+        .image{
+            width: 20%;
+            border-radius: 5px;
+            height: auto;
+            border-width: 0px;
+            margin: 15px;
+        }
+        
+        .borderstyle {
+        	border-style: solid;
+        	border-color: #CCC;
+            border-width: 1px;
+        }
+    </style>
+</head>
+<body>
+	<!-- <div id='header'>
+        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+        <h1>Camera测试</h1>
+        <div class="adpt" ></div>
+	</div> -->
+	<div class="container">
+        <center>
+        <video id="navy_video" width="320px" height="240px" autoplay class="borderstyle"></video>
+        <div id="snap" class='clickbtn' >拍照</div>
+        <div class='clickbtn' onclick="convertCanvasToImage()">保存</div>
+        <div id="camera_errbox">
+            <b>请点击“允许”按钮，授权网页访问您的摄像头！</b>
+            <div>若您并未看到任何授权提示，则表示您的浏览器不支持Media Capture或您的机器没有连接摄像头设备。</div>
+        </div>
+        <canvas id="canvas" width="160px" height="120px" class="borderstyle"></canvas>
+    </center>
+    </div>
+</body>
+<script>
+	window.domReady = function(){
+		init();
+	}
+</script>
+</html>

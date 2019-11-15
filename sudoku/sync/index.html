@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>同步接口</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script type="text/javascript" src="../script/public.js"></script>
+    <style>
+    	
+    	
+    </style>
+    <script type="text/javascript">
+		
+		apiready = function(){
+	    	
+	    }
+	    
+	    function getPrefs(){
+	    	apialert(api.getPrefs({key:'ldx', sync:true}));
+	    }
+	    
+	    function loadSecureValue(){
+	    	var skey = $('skey').value;
+	    	if(!skey){
+	    		apialert('请输入key');
+	    		return;
+	    	}
+	    	apialert(api.loadSecureValue({key:skey, sync:true}));
+	    }
+	    
+	    function readFile(){
+	    	apialert(api.readFile({path:'widget://res/key.xml', sync:true}));
+	    }
+	    
+	    function readFilesy(){
+	    	api.readFile({
+	    		path:'widget://res/key.xml'
+	    	}, function(ret, err){
+	    		if (ret.status) {
+			        var data = ret.data;
+			        apialert(data);
+			    } else {
+			        apialert(err.msg);
+			    }
+	    	});
+	    }
+	    
+	    function appInstalled(){
+	    	var pkg = $('apppkg').value;
+	    	if(!pkg){
+	    		apialert('请输入app包名');
+	    		return;
+	    	}
+	    	apialert(api.appInstalled({appBundle:pkg, sync:true}));
+	    }
+	    
+	    function getCacheSize(){
+	    	apialert(api.getCacheSize({sync:true}));
+	    }
+	    
+	    function getFreeDiskSpace(){
+	    	var size = api.getFreeDiskSpace({sync:true});
+	    	apialert("size: " + size);
+	    }
+		
+		function setGlobalData(){
+			api.setGlobalData({key:'key1', value:'abcdefg'});
+			api.setGlobalData({key:'key2', value:123});
+			api.setGlobalData({key:'key3', value:false});
+			api.setGlobalData({key:'key4', value:{a:'aaa', b:'bbbb'}});
+			apialert('设置成功');
+		}
+		
+		function getGlobalData(){
+			apialert("key4: " + api.getGlobalData({key:'key4'}).a);
+		}
+		
+	</script>
+</head>
+<body>
+    <div >
+        <div id="wrap">
+        	<!-- <div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>同步接口测试</h1>
+		        <div class="adpt" ></div>
+			</div> -->
+        	<div class='itemtitle'>1、getPrefs</div>
+            	<div class="clickbtn" tapmode="active" onclick="getPrefs()" >调用</div>
+        	<div class='itemtitle'>2、loadSecureValue</div>
+        		<lable>请输入SecureKey：</lable><br>
+    			<input type='text' id='skey' value="key1" /><br>
+            	<div class="clickbtn" tapmode="active" onclick="loadSecureValue()" >调用</div>
+            <div class='itemtitle'>3、readFile</div>
+            	<div class="clickbtn" tapmode="active" onclick="readFile()" >调用</div>
+            	<div class="clickbtn" tapmode="active" onclick="readFilesy()" >调用(异步)</div>
+            <div class='itemtitle'>4、appInstalled</div>
+            	<lable>请输入app包名：</lable><br>
+    			<input type='text' id='apppkg' value="com.tencent.mm" /><br>
+            	<div class="clickbtn" tapmode="active" onclick="appInstalled()" >调用</div>
+            <div class='itemtitle'>5、getCacheSize</div>
+            	<div class="clickbtn" tapmode="active" onclick="getCacheSize()" >调用</div>
+            <div class='itemtitle'>6、getFreeDiskSpace</div>
+            	<div class="clickbtn" tapmode="active" onclick="getFreeDiskSpace()" >调用</div>
+            <div class='itemtitle'>7、全局变量globalData</div>
+            	<div class="clickbtn" tapmode="active" onclick="setGlobalData()" >设置</div>
+            	<div class="clickbtn" tapmode="active" onclick="getGlobalData()" >获取</div>
+            <br>
+        </div>   
+    </div>
+</body>
+</html>

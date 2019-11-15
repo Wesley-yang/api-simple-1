@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>left_pane</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width" />
+    <link rel="stylesheet" href="../../css/api.css">
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <style>
+		html,body {
+			background:#74679C;
+			display:-webkit-box;
+			-webkit-box-orient:vertical;
+			-webkit-box-align:center;
+	    	-webkit-box-pack:center;
+		}
+		
+		#des{
+			display:-webkit-box;
+			-webkit-box-align:center;
+	    	-webkit-box-pack:center;
+	    	height:100%;
+			width:100%;
+	    	background: url(../image/icon.png) no-repeat center;
+		  	background-size:80px 80px;
+		}
+	</style>
+</head>
+    <body>
+		<div id="des" onclick='api.closeDrawerPane()'>
+			
+		</div>
+    </body>
+    <script>
+    	
+    	apiready = function(){
+			api.addEventListener({
+			    name:'viewappear'
+			},function(ret,err){
+			    console.log('left pane appear... ');
+			});
+			api.addEventListener({
+			    name:'viewdisappear'
+			},function(ret,err){
+			    console.log('left pane disappear... ');
+			});
+		};
+
+		function fromRemote(){
+    		apialert('Im left pane!');
+    	}
+	</script>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>数据云</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <script type="text/javascript" src="component.js"></script>
+</head>
+<body>
+    <div id="wrap">
+        <div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>数据云</h1>
+	        <div class="adpt" ></div>
+		</div>
+        <div id="main">
+                
+        </div>
+        <div id="footer">
+            <h5>APICloud Copyright &copy;<span id="year"></span> </h5>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+	var mcm = null;
+	var query = null;
+    apiready = function(){
+    	$('year').innerHTML = new Date().getFullYear();
+    	openContent('index_frm.html');
+        //配置一次，应用运行期间均生效，配置策略为覆盖上一次
+        //在线编译正式版时，可以不用配置，APICloud会自动取当前app的信息
+        mcm = api.require('model');
+        query = api.require('query');
+        mcm.config({
+    		appId:"A6964774665539", 
+    		appKey:"1E4DC0BD-06DD-F21D-D0A3-05899926188B", 
+    		url:'https://d.apicloud.com'
+    		//appId:"A6993793750556", 
+    		//appKey:"80B45EFE-39F1-8171-1FC2-71844BE2AE22", 
+    		//url:'https://d.apicloud.com'
+    	});
+    };
+    
+    function createQuery(callback){
+		query.createQuery(function(ret){
+			callback(ret.qid);
+		});
+	}
+    
+    var clazz = "Endo";
+    function test(){
+    	doBefore();
+		createQuery(function(QID){
+			//query.limit({
+			//	qid:QID, 
+			//	value:20
+			//});
+			query.whereLike({
+				qid:QID, 
+				column:"name", 
+				value:"123"
+			});
+			mcm.findAll({
+				class:clazz, 
+				qid:QID
+			}, doComplete);
+		});
+    }
+</script>
+</html>

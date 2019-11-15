@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>CLick List</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+	<style>
+    	#list{
+    		display:-webkit-box;
+			-webkit-box-orient:vertical;
+			padding:5px 0px;
+    	}
+    	
+    	.item {
+			width:auto;
+			-webkit-box-flex:1;
+			display:-webkit-box;
+			-webkit-box-orient:vertical;
+			-webkit-box-pack:center;
+			-webkit-box-align:center;
+			min-height:50px;
+			background-color: #EEEEEE;
+			border-color: #CCCCCC;
+			border-style: solid;
+			border-width: 1px;
+			color: #333333;
+			font-size: 14px;
+			margin:0px 5px;
+		}
+		
+		.active{
+			background-color: #CCC !important;
+		}
+    </style>
+</head>
+<body>
+	<div id='wrap'>
+	    <!-- <div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>大量列表</h1>
+	        <div class="adpt" ></div>
+		</div> -->
+		<div id='list'>
+	    	
+	    </div>
+	</div>
+</body>
+<!-- <script type="text/javascript" src="touch.js"></script> -->
+<script>
+	//window.onload
+	apiready = function(){
+		//TapMode.attach();
+		var htm = "";
+		for(var i = 0; i < 500; ++i){
+			htm += "<div class='item' tapmode='active' onclick=\"apialert('点击了第" + i + "项')\" longclick=\"apialert('长按了第" + i + "项')\">新闻标题" + i + "</div> ";
+			//htm += "<div class='item' onclick=\"console.log('点击了第" + i + "项')\" >新闻标题" + i + "</div> ";
+		}
+		$('list').innerHTML = htm;
+		//api.parseTapmode();
+	}
+</script>
+</html>

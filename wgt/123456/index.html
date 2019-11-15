@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <title>Index窗口</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="base.css">
+        <link rel="stylesheet" type="text/css" href="common.css" />
+        <script src="api.js"></script>
+        <style>
+        body{
+        		background: #F0F;
+        		padding:0;
+        		margin:0;
+        	}
+        	.btn {
+				background-color: #EEEEEE;
+				background-image: -webkit-linear-gradient(top, #EEEEEE, #CCCCCC);
+				border-color: #CCCCCC #CCCCCC #BBBBBB;
+				-webkit-border-radius: 4px;
+				border-style: solid;
+				border-width: 1px;
+				color: #333333;
+				font: bold 18px;
+				padding: 8px 0;
+				text-align: center;
+				text-shadow: 0 1px 0 #EEEEEE;
+				width: 220px;
+				margin-top:15px;
+				margin-left:auto;
+				margin-right:auto;
+				display:block;
+			}
+			
+			.active {
+				background-color: #CCCCCC;
+				background-image: -webkit-linear-gradient(top, #CCCCCC, #DDDDDD);
+				border-color: #CCCCCC #CCCCCC #BBBBBB;
+			}
+			
+        </style>
+    </head>
+    
+    <body >
+		<div id="wrap">
+        <div id="header">
+            <h1>我是Index窗口</h1>
+        </div>
+        <div id="main">
+             <div>
+            	<br><br><br><br><br><br>
+            	<div class="btn" onclick="openWin()" >打开A窗口</div><br>
+            	<div class="btn" onclick="addone()" >打开一个Frame</div><br>
+            	<div class="btn" onclick="showParam()" >展示wgtParam</div><br>
+            	<div class="btn" onclick="showFloatBox()" >打开浮动球</div><br>
+            	<br><br><br><br><br><br>
+            </div>   
+        </div>
+        <div id="footer">
+            <h5>©2018</h5>
+        </div>
+    </div>
+    </body>
+    <script>
+    
+    	apiready = function(){
+    		api.addEventListener({
+				name:'abc'
+			}, function(ret){
+				//console.log('recevie event： ' + ret.value);
+			});
+			console.log('wgtParam: ' + JSON.stringify(api.wgtParam));
+    	}
+    	
+    	function showFloatBox(){
+    		api.showFloatBox({
+				preventDefault:true
+			}, function(ret){
+				alert('你点击了球');
+			});
+    	}
+    	
+		function showParam(){
+    		api.alert({
+				title: '提示',
+				msg: '' + JSON.stringify(api.wgtParam),
+			});
+    	}
+
+    	function hideFloatBox(){
+    		//api.showFloatBox();
+    	}
+    	
+    	function openWin(){
+    		api.openWin({
+    			name:'wina',
+    			url:'wina.html'
+    		});
+    	}
+    	
+    	var inity = 250;
+    	var count = 0;
+    	
+    	function addone(){
+    		inity += 20;
+    		count++;
+    		var frms = api.winWidth - 20;
+    		api.openFrame({
+    			name:'frm_' + inity,
+    			url:'index_frm.html',
+    			pageParam:{
+    				id:count
+    			},
+    			rect:{
+    				x:10,
+    				y:inity,
+    				w:frms,
+    				h:400
+    			}
+    		});
+    	}
+    	
+    	function sendone(){
+    		api.sendEvent({
+	    			name:'index_frm',
+	    			extra:'sssss'
+	    	});
+    	}
+    </script>
+
+</html>

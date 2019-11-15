@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>应用列表</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../css/api.css">
+<style>
+section{
+    margin:20px;
+    display:-webkit-box;
+    overflow:hidden;
+}
+section hr{
+    width:100%;
+    -webkit-box-flex:1;
+}
+a {
+    width:70px;
+}
+a>div {
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+    width:70px;
+    height:70px;
+    overflow:height;
+}
+a>div>img {
+    width:57px;
+    height:57px;
+    border:0;
+}
+a>center{
+    margin-top:8px;
+    height:14px;
+    line-height:14px;
+    font-size:14px;
+    color:black;
+    font-weight:bold;
+}
+.tapActive {
+    background-color:#eee;
+}
+</style>
+</head>
+<body>
+</body>
+<script>
+	var appStore = null;
+	apiready = function() {
+		api.addEventListener({name:'keyback'}, function(ret){
+    		keyback(ret.keyCode);
+		});
+		appStore = api.require('appStore');
+		//insert();
+		appStore.open({x:0, y:0, w:'auto', h:'auto'}, function(ret, err){
+			if(ret){
+				var widgetId = ret.widgetId;
+				if(widgetId){
+					api.openWidget({id:widgetId});
+				}
+			}
+		});
+	}
+	
+	function insert(){
+		var ined = localStorage.getItem('ined');
+		if(ined){
+			return;
+		}
+		var url = "http://192.168.1.122/A00000001.zip";
+        var icon = "http://192.168.1.122/i1.png";
+        var t = "腾讯s";
+        var w = "A00000001";
+        appStore.exc({url:url, iconPath:icon, title:t, type:1, widgetId:w});
+        url = "http://192.168.1.122/A00000002.zip";
+        icon = "http://192.168.1.122/i2.png";
+        t = "新浪a";
+        var w = "A00000002";
+        appStore.exc({url:url, iconPath:icon, title:t, type:1, widgetId:w});
+        url = "http://192.168.1.122/A00000003.zip";
+        icon = "http://192.168.1.122/i3.png";
+        t = "网易n";
+        var w = "A00000003";
+        appStore.exc({url:url, iconPath:icon, title:t, type:1, widgetId:w});
+        url = "http://192.168.1.122/qiushibaike_63.apk";
+        icon = "http://192.168.1.122/i4.png";
+        t = "糗事百科";
+        var u = "qsbk.app";
+        appStore.exc({url:url, iconPath:icon, title:t, type:0, urlScheme:u});
+    	localStorage.setItem('ined', true);
+	}
+	
+	function keyback(code){
+		if(appStore){
+			appStore.onKeyEvent({keyCode:code});
+		}
+	}
+	
+</script>
+</html>

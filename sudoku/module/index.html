@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>模块测试</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script src="../script/public.js"></script>
+    <script>
+    	function initialization(){
+	         var manager = api.require('downloadManager');
+			 /**
+			 manager.enqueue({
+				url: 'http://a631aa25874caa1814bd.b0.upaiyun.com/apicloud/36e77b3f95222ac1fd546f7229c5083b.mp4',
+				//url: 'https://www.eia.gov/dnav/pet/hist_xls/RBRTEd.xls',
+				//savePath : 'fs://abcd.mp4',
+				title:'MP4文件'
+			 });
+			 manager.enqueue({
+				url: 'http://a631aa25874caa1814bd.b0.upaiyun.com/apicloud/d069f78f6f57e2795e767a01b2473f1a.jpg',
+				//savePath : 'fs://efg.jpg',
+				//iconPath : 'widget://image/tmp_icon.png',
+				title:'JPG图片'
+			 });**/
+			 manager.enqueue({
+				url: 'https://7yg0u4.com1.z0.glb.clouddn.com/5780014d9bcc4aee0fd005e223cdf2a3_d',
+				iconPath : 'widget://sudoku/image/hold.png',
+				//savePath : 'fs://c28.apk',
+				title:'apk包'
+			 });
+			
+			 manager.openManagerView({
+				title : '下载管理'
+			 });
+			 
+	    }
+    </script>
+    </head>
+    <body >
+        <div id="wrap">
+        	<!-- <div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>模块</h1>
+		        <div class="adpt" ></div>
+			</div> -->
+        	<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick="openWin('jpush/index.html')">极光推送</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('db_storage/index.html')">数据存储</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('socket/index.html')">Socket</div>
+        	</div>
+        	<div class='row'>
+        		
+        		<div tapmode='active' class='clickitem' onclick="openWin('mam/index.html')">MAM</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('mcm/index.html')">MCM</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('push/index.html')">PUSH</div>
+        	</div>
+        	<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick="openWin('location/index.html')">百度定位</div>
+        		<!-- <div tapmode='active' class='clickitem' onclick="openWin('appstore/index.html')">AppStore</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('oauth/index.html')">oauth认证</div> -->
+        	</div>
+        	<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick="initialization()">下载管理</div>
+        	</div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<security>
+  <item name="key" value="http://www.baidu.com"/>
+  <item name="key1" value="http://www.taobao.com"/>
+  <item name="key2" value="http://www.sina.com"/>
+  <item name="key3" value="http://www.qq.com"/>
+</security>

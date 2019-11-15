@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>WebApp</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <style>
+    	#list{
+    		display:-webkit-box;
+			-webkit-box-orient:vertical;
+			padding:5px 0px;
+    	}
+    	
+    	.item {
+			width:auto;
+			-webkit-box-flex:1;
+			display:-webkit-box;
+			-webkit-box-orient:vertical;
+			-webkit-box-pack:center;
+			-webkit-box-align:center;
+			min-height:44px;
+			background-color: #EEEEEE;
+			color: #333333;
+			font-size: 18px;
+			margin:5px 15px;
+		}
+    </style>
+    <script type="text/javascript">
+    	
+    	var home = 'https://www.apicloud.com/m/';
+    	
+    	function loadWebapp(str){
+    		var url = home;
+    		if('toutiao' == str){
+    			url = 'http://m.toutiao.com';
+    		}else if('baidu' == str){
+    			url = 'https://m.baidu.com';
+    		}else if('taobao' == str){
+    			url = 'https://h5.m.taobao.com';
+    		}else if('meituan' == str){
+    			url = 'http://i.meituan.com';
+    		}else if('jingdong' == str){
+    			url = 'https://m.jd.com/';
+    		}else if('wangyi' == str){
+    			url = 'https://3g.163.com';
+    		}else if('https-in' == str){
+    			url = 'https://login.alibaba-inc.com/';
+    		}else if('https-un' == str){
+    			url = 'http://test.xxx.com';//自行配置https证书不受信任的网址
+    		}else if('baiduv' == str){
+    			url = 'http://m.v.baidu.com/';
+    		}else if('iframe' == str){
+    			url = 'http://test.xxx.com'; //自行配置带iframe的网址
+    		}
+    		window.location.href = url;
+    	}
+    	
+    </script>
+</head>
+<body >
+    <div id='list'>
+    	<div tapmode='active' class='item' onclick="loadWebapp('toutiao')">今日头条</div>
+    	<div tapmode='active' class='item' onclick="loadWebapp('baidu')">百度</div>
+    	<div tapmode='active' class='item' onclick="loadWebapp('taobao')">淘宝</div>
+    	
+    	<div tapmode='active' class='item' onclick="loadWebapp('meituan')">美团</div>
+    	<div tapmode='active' class='item' onclick="loadWebapp('jingdong')">京东</div>
+    	<div tapmode='active' class='item' onclick="loadWebapp('wangyi')">网易新闻</div>
+    	<div tapmode='active' class='item' onclick="loadWebapp('baiduv')">百度视频</div>
+    	<!-- <div tapmode='active' class='item' onclick="loadWebapp('https-in')">需要安装证书的网站</div>
+    	<div tapmode='active' class='item' onclick="loadWebapp('https-un')">不受信任证书的网站</div>
+    	<div tapmode='active' class='item' onclick="loadWebapp('iframe')">带iframe的网站</div> -->
+
+    </div>
+</body>
+</html>

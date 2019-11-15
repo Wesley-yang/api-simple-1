@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>窗口系统</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script src="../../script/public.js"></script>
+    <script src="background_timer.js"></script>
+    </head>
+    
+    <body >
+		<div id="wrap">
+        <div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>我是B窗口</h1>
+	        <div class="adpt" ></div>
+		</div>
+        <div id="main">
+              
+        </div>
+        <div id="footer">
+            <h5>©2014</h5>
+        </div>
+    </div>
+    </body>
+    <script>
+    	apiready = function(){
+    		timerTest('winb.html timer run..');
+    		api.addEventListener({
+				name:'abc'
+			}, function(ret){
+				//console.log('recevie event： ' + ret.value);
+			});
+			var rect = {
+				marginTop:69,
+				marginBottom:30
+			}
+			openContent('winb_frm.html', 'frame', rect);
+    	}
+    	
+    	function openWin(){
+    		api.openWin({
+    			name:'winc',
+    			url:'winc.html'
+    		});
+    		/**
+    		setTimeout(function(){
+    			api.closeWin({
+    				name:api.winName
+    			});
+    		}, 600);
+    		**/
+    	}
+    </script>
+
+</html>

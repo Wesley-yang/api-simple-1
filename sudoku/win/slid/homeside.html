@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+	<title>homefixed</title>
+	<link rel="stylesheet" href="../../css/api.css">
+	<link rel="stylesheet" href="../../css/box.css">
+	<script src="../../script/public.js"></script>
+	<style>
+	
+	header {
+	    position:relative;
+	    display:-webkit-box;
+	    -webkit-box-align:center;
+	    -webkit-box-pack:center;
+	    height:140px;
+		background-color:#078f5f;
+	}
+	header>div {
+	    position:absolute;
+	    top:10px;
+	    left:0px;
+	    width:60px;
+	    height:60px;
+	    background:url(../image/sidemenu.png) no-repeat center;
+	    -webkit-background-size: 23px 15px;
+	}
+	.header-a-hov {
+	    background:url(../image/sidemenu_hov.png) no-repeat center;
+	    -webkit-background-size: 23px 15px;
+	}
+	header>img {
+	    width:206px;
+	    height:36;
+	    border:0px;
+	}
+	
+	</style>
+</head>
+<body>
+    <div id="wrap">
+        <header>
+            <div tapmode="header-a-hov" onclick="togglesl();"></div>
+            <img src="../image/logo2.png" onclick="GotoShow();"/>
+        </header>
+    </div>
+</body>
+<script>
+	apiready = function() {
+		initTabs();
+		api.addEventListener({
+		    name: 'keyback'
+		}, function( ret, err ){
+		    //api.closeWin();
+		    togglesl();
+		});
+	}
+
+	function togglesl(){
+		
+ 		api.openSlidPane({type:'left'});
+ 	}
+ 	
+	var alltabs = [
+		{name:'frm1', url:'../html/frame1.html', bounces:true},
+		{name:'frm2', url:'../html/frame2.html', bounces:true},
+		{name:'frm3', url:'../html/frame3.html', bounces:true},
+		{name:'frm4', url:'../html/frame4.html', bounces:true}
+    ];
+	
+	function initTabs(){//初始化4个frame
+		var ch = api.winHeight - 140;
+		console.log('api.winHeight: ' + api.winHeight);
+		api.openFrameGroup({
+              name:'tabs',
+              scrollEnabled:true,
+              rect:{x:0, y:140, w:'auto', h:ch},
+              frames:alltabs
+        });
+    }
+    
+    var curTab = 0;//当前选项卡索引  
+    //tab切换
+    function toggleTab(indx){
+    	if(indx == curTab){
+    		return;
+    	}
+		curTab = indx;
+		api.setFrameGroupIndex({name:'tabs', index:indx, smoothScroll:false});
+		api.closeSlidPane();
+    }
+
+	function GotoShow(){
+		api.require('test').show();
+	}
+	
+	function toalert(){
+		apialert('side pane alert');
+	}
+</script>
+</html>

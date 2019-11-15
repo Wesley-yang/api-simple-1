@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frame4</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width" />
+    <link rel="stylesheet" href="../../css/api.css">
+    <script src="../../script/public.js"></script>
+    <style>
+		html,body {
+			background:#CB413F;
+			/**background:rgba(0,0,0,0);**/
+			display:-webkit-box;
+			-webkit-box-orient:vertical;
+			-webkit-box-align:center;
+	    	-webkit-box-pack:center;
+		}
+		
+		#des{
+			display:-webkit-box;
+			-webkit-box-align:center;
+	    	-webkit-box-pack:center;
+	    	height:100%;
+			width:100%;
+	    	background: url(../image/icon.png) no-repeat center;
+		  	background-size:80px 80px;
+		}
+	</style>
+</head>
+    <body>
+		<div id="des" onclick='exejs()'>
+			
+		</div>
+    </body>
+    <script>
+    	
+    	function exejs(){
+			var js = 'toalert()';
+			api.execScript({
+				name:'homefixed',
+				script: js
+			});
+		}
+
+	</script>
+</html>

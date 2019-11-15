@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>首页</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width" />
+    <link rel="stylesheet" href="css/api.css">
+    <script type="text/javascript" src="script/tv.js"></script>
+    <style>
+		body {
+			position:absolute;
+			display:-webkit-box;
+			-webkit-box-orient:vertical;
+			background:#000;
+		}
+		
+		header{
+		  width:100%;
+		  height:45px;
+		  display:-webkit-box;
+		  background:#1E98D8;
+		}
+		
+		header #title{
+		  width:100%;
+		  height:45px;
+		  font-size:19px;
+		  color:#FFF;
+		  display:-webkit-box;
+		  -webkit-box-pack:center;
+		  -webkit-box-align:center;
+		}
+		
+		#content{
+			-webkit-box-flex:1;
+		}
+		
+		footer{
+			width:auto; 
+			height:50px;
+			padding:0 8px; 
+			display:-webkit-box;
+			-webkit-box-orient:horizontal;
+			background:#313131;
+		}
+		
+		input{
+			-webkit-appearance:none;
+		}
+		
+		.tab-item {
+		    height:49px;
+		  	margin:0 3px;
+		  	-webkit-box-flex:1;
+		  	display:-webkit-box;
+		  	-webkit-box-orient:vertical;
+		  	-webkit-box-pack:center;
+		  	-webkit-box-align:center;
+		}
+		
+		center{
+			color:#FFF;
+			margin-top:3px;
+		    font-size:0.7em;
+		}
+		
+		.active {
+			background:url(image/tab_sle.png) no-repeat center; 
+			background-size:100% 49px;
+		}
+		
+		#footer input[type='radio']:checked + div{
+    		background:url(image/tab_sle.png) no-repeat center; 
+			background-size:100% 49px;
+		}
+		
+		#frame1 + div div{
+			width:40px;
+		    height:28px;
+			background:url(image/buy_icon.png) no-repeat center; 
+			background-size:40px 28px;
+		}
+		#frame1:checked + div div{
+    		background:url(image/buy_icon_on.png) no-repeat center!important; 
+			background-size:40px 28px!important;
+		}
+		
+		#frame2 + div div{
+			width:40px;
+		    height:28px;
+			background:url(image/order_icon.png) no-repeat center; 
+			background-size:40px 28px;
+		}
+		#frame2:checked + div div{
+			background:url(image/order_icon_on.png) no-repeat center!important;
+			background-size:40px 28px!important;  
+		}
+		
+		#frame3 + div div{
+			width:40px;
+		    height:28px;
+			background:url(image/my_icon.png) no-repeat center; 
+			background-size:40px 28px;
+		}
+		#frame3:checked + div div{
+			background:url(image/my_icon_on.png) no-repeat center!important;
+			background-size:40px 28px!important;  
+		}
+		
+		#frame4 + div div{
+			width:40px;
+		    height:28px;
+			background:url(image/more_icon.png) no-repeat center; 
+			background-size:40px 28px;
+		}
+		#frame4:checked + div div{
+			background:url(image/more_icon_on.png) no-repeat center!important; 
+			background-size:40px 28px!important; 
+		}
+	</style>
+</head>
+    
+    <body>
+        <!-- <header id='header'>
+            <div id="title">电视节目单</div>
+        </header> -->
+        <section id='content'></section>
+        <footer id='footer'>
+        	<input id='frame1' type="radio" name='tab' >
+	            <div class='tab-item' tapmode='active' onclick='toggleTab(1)'>
+	            	<div></div>
+	            	<center>频道一</center>
+	            </div>
+            </input>
+            <input id='frame2' type="radio" name='tab'>
+	            <div class='tab-item' tapmode='active' onclick='toggleTab(2)'>
+	            	<div></div>
+	            	<center>频道二</center>
+	            </div>
+	        </input>
+	        <input id='frame3' type="radio" name='tab'>
+	            <div class='tab-item' tapmode='active' onclick='toggleTab(3)'>
+	            	<div></div>
+	            	<center>频道三</center>
+	            </div>
+	        </input>
+	        <input id="frame4" type="radio" name='tab'>
+	            <div class='tab-item' tapmode='active' onclick='toggleTab(4)'>
+	            	<div></div>
+	            	<center>频道四</center>
+	            </div>
+	        </input>
+        </footer>
+    </body>
+    <script>
+    	
+    	var curTab = 0;
+    	
+    	apiready = function(){
+			api.addEventListener({name:'focuschange'}, function(ret){
+				console.log('index focuschange: ' + ret.focused);
+				if(ret.focused){
+					document.body.style.border = "5px solid #008000";
+					if(0 == curTab){
+						curTab++;
+						var id = 'frame' + curTab;
+						setChecked(id);
+					}
+				}else{
+					document.body.style.border = "none";
+				}
+    		});
+    		api.addEventListener({name:'telecontroller'}, function(ret){
+				var code = ret.keyCode;
+				console.log("[main]telecontroller: " + code);
+				switch (code) {
+					case 19://KEYCODE_DPAD_UP
+					case 20://KEYCODE_DPAD_DOWN
+					case 21://KEYCODE_DPAD_LEFT
+					case 22://KEYCODE_DPAD_RIGHT
+					case 23://KEYCODE_DPAD_CENTER
+						handleKeyCode(code);
+						break;
+				}
+    		});
+			initFrames();
+		};
+    
+		function initFrames(){//初始化4个frame
+			var cw = api.winWidth;//可使用区域宽
+			var ch = api.winHeight - headerHeight - footerHeight;//可使用区域高
+			var padding = 10;//可使用区域内间距
+			var fw = (cw - (padding * 3)) / 2;//frame的宽度动态算法：可使用区域高减去上下padding及两个frame之间的padding，再除以2平分
+			var fh = (ch - (padding * 3)) / 2;//frame的高度动态算法：可使用区域高减去上下padding及两个frame之间的padding，再除以2平分
+			//第1个frame的区域
+			var rect = {};
+			rect.x = padding;
+			rect.y = headerHeight + padding;
+			rect.w = fw;
+			rect.h = fh;
+			api.openFrame({
+                  name:'frame1',
+                  rect:rect,
+                  url:'html/frame1.html'
+            });
+            //第2个frame的区域
+			rect = {};
+			rect.x = fw + (padding * 2);
+			rect.y = headerHeight + padding;
+			rect.w = fw;
+			rect.h = fh;
+			api.openFrame({
+                  name:'frame2',
+                  rect:rect,
+                  url:'html/frame2.html'
+            });
+            //第3个frame的区域
+			rect = {};
+			rect.x = padding;
+			rect.y = headerHeight + fh + (padding * 2);
+			rect.w = fw;
+			rect.h = fh;
+			api.openFrame({
+                  name:'frame3',
+                  rect:rect,
+                  url:'html/frame3.html'
+            });
+            //第4个frame的区域
+			rect = {};
+			rect.x = fw + (padding * 2);
+			rect.y = headerHeight + fh + (padding * 2);
+			rect.w = fw;
+			rect.h = fh;
+			api.openFrame({
+                  name:'frame4',
+                  rect:rect,
+                  url:'html/frame4.html'
+            });
+        }
+        
+        function toggleTab(indx){
+        	if(!indx){
+        		return;
+        	}
+        	var nae = 'frame' + indx;
+        	api.requestFocus({
+				name: nae      	
+        	});
+        }
+        
+        function handleKeyCode(code){
+        	switch (code) {
+				case 21://KEYCODE_DPAD_LEFT
+					if(curTab <= 1){
+						return;
+					}
+					curTab--;
+					var id = 'frame' + curTab;
+					setChecked(id);
+					return;
+				case 22://KEYCODE_DPAD_RIGHT
+					if(curTab >= 4){
+						return;
+					}
+					curTab++;
+					var id1 = 'frame' + curTab;
+					setChecked(id1);
+					return;
+				case 23://KEYCODE_DPAD_CENTER
+					api.toast({msg:'Main Clicked!'});
+					toggleTab(curTab - 1);
+					return;
+					
+			}
+        	api.onTvPeak({keyCode:code});
+        }
+        
+        function setChecked(id){
+        	if(!id){
+        		return;
+        	}
+        	$(id).checked = true;
+        	setTvFocus(id);
+        }
+	</script>
+</html>

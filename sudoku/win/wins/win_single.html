@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+		<meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+		<title>SingleWin</title>
+		<script type="text/javascript" src="../../script/public.js"></script>
+		<script src="background_timer.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    	<link rel="stylesheet" type="text/css" href="../../css/box.css" />
+		<style>
+			body, html{ 
+				background:#699B98; 
+			}
+		</style>
+	<head>
+	<body>
+		<div id='header' style='background:#699B98;' >
+        	<div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+        	<h1>Single_instance_Win</h1>
+        	<div class="adpt" ></div>
+        </div>
+		<div id='main'>
+			<br>
+			<p class='info-area'>
+				被open一次后，本window将一直存在于app的生命周期中，直到退出app。close操作仅会将本window从渲染栈中移除，并不销毁，且保留所有状态（相当于退到后台）。可再次通过openWin将本window加载到当前屏幕。
+			</p>
+			<div class='info-area' id='descon'>
+				已经计时：0次
+			</div><br>
+			<div class="clickbtn" tapmode onclick="allwindows()" >显示APP所有win</div>
+			<hr/>
+			
+		</div>
+	</body>
+	<script>
+		
+		var time_conuter = 0;
+		
+		apiready = function(){
+			timerTest('single instance win on running...', function(){
+				time_conuter++;
+				$('descon').innerHTML = "已经计时：" + time_conuter + "次";
+			});
+			api.addEventListener({
+				name:'abc'
+			}, function(ret){
+				console.log('win_single recevie event abc： ' + ret.value);
+			});
+		}
+		
+		function allwindows(){
+    		var list = api.windows();
+    		apialert('共' + (list ? list.length : 0) + '个\n详情：' + JSON.stringify(list));
+    	}
+    	
+    	function sinfun(){
+    		apialert('这是位于后台的单例win中弹出的对话框');
+    	}
+	</script>	
+</html>

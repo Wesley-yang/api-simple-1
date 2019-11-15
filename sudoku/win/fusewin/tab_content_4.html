@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>窗口系统</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css" />
+    <link rel="stylesheet" type="text/css" href="./css/box.css" />
+    <script src="./script/public.js"></script>
+        <style>
+        	body{
+        		background: #FCFCFC;
+        		display:-webkit-box;
+				-webkit-box-orient:vertical;
+				-webkit-box-pack:center;
+        	}
+        </style>
+    </head>
+    
+    <body>
+    	<div class="info-area" id='smart_des'>
+    		<h2>tab_content_4<h2>
+    	</div>
+        <div class="clickbtn" tapmode="active" onclick="setTabBarItemText()" >更新Tab项的文字</div>
+        <div class="clickbtn" tapmode="active" onclick="setTabBarItemIcon()" >更新Tab项的ICON</div>
+        <div class="clickbtn" tapmode="active" onclick="setTabBarItemDot(0)" >显示红点</div>
+        <div class="clickbtn" tapmode="active" onclick="setTabBarItemBrage(0)" >设置角标</div>
+        <div class="clickbtn" tapmode="active" onclick="hideBrage(0)" >隐藏角标/红点</div>
+        <div class="clickbtn" tapmode="active" onclick="setTabBarItemImgDot(0)" >显示图片角标</div>
+    </body>
+    <script>
+    	apiready = function(){
+    		api.addEventListener({
+				name:'abc'
+			}, function(ret){
+				console.log('recevie event： ' + ret.value);
+			});
+    	}
+    	
+    	var text_flag = true;
+    	function setTabBarItemText(){
+    		text_flag = !text_flag;
+    		var _text = text_flag ? '我' : '非我';
+    		api.setTabBarItemAttr({
+    			index:3,
+    			text: _text
+    		});
+    	}
+    	
+    	var icon_flag = true;
+    	function setTabBarItemIcon(){
+    		icon_flag = !icon_flag;
+    		var _icon = icon_flag ? './image/nav_tab_4.png' : './image/nav_tab_1.png';
+    		var _icon_sle = icon_flag ? './image/nav_tab_4_on.png' : './image/nav_tab_1_on.png';
+    		api.setTabBarItemAttr({
+    			index:3,
+    			iconPath: _icon,
+    			selectedIconPath: _icon_sle 
+    		});
+    	}
+    	
+    	var _number = 1;
+    	function setTabBarItemBrage(_index){
+    		var _text = _number += 6;
+    		if(_number > 99){
+    			_text = '999+';
+    		}
+    		api.setTabBarItemAttr({
+    			index: _index,
+    			badge: {
+					text: _text,			//角标内容。传0时隐藏角标，其余任意值表示显示角标，可以为空字符串，空字符串显示圆点
+					//background: '#f0f',	//角标的背景，支持颜色，图片，默认#f00
+					//color: '#000',		//角标文字颜色，默认#fff
+					//radius: 10,		//角标的半径，默认为10，高度固定，宽度根据内容自动增长
+					//x: 10,			//角标左边相对于所在项中间的位置，默认值5
+					//y: 5,			//角标顶部相对于所在项顶部的位置，默认值5
+				}
+    		});
+    	}
+    	
+    	function hideBrage(_index){
+    		api.setTabBarItemAttr({
+    			index: _index,
+    			badge: {
+					text: 0
+				}
+    		});
+    	}
+    	
+    	function setTabBarItemDot(_index){
+    		api.setTabBarItemAttr({
+    			index: _index,
+    			badge: {
+					text: '',
+					radius: 5
+				}
+    		});
+    	}
+    	
+    	function setTabBarItemImgDot(_index){
+    		api.setTabBarItemAttr({
+    			index: _index,
+    			badge: {
+					background:'./image/dot.png',
+					//radius: 8
+				}
+    		});
+    	}
+    	
+    </script>
+
+</html>

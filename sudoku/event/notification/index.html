@@ -1,0 +1,198 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>notification</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <style>
+    	
+    	
+    </style>
+    <script type="text/javascript">
+		
+		apiready = function(){
+			api.addEventListener({
+			    name:'noticeclicked'
+			},function(ret, err){
+				console.log('index noticeclicked: ' + JSON.stringify(ret));
+			    apialert('状态栏通知被点击: ' + JSON.stringify(ret));
+			});
+	    }
+		
+		var count = 0;
+    	var cid = 0;
+    	
+		function notify(){
+			count++;//计数，便于区分通知
+			var n_update = (1 == radioValue('n_update'));
+			api.notification({
+			    notify: {
+			    	title: '简单通知标题' + count, 	//标题，默认值为应用名称，只Android有效
+			        content: '简单通知内容' + count, //内容，默认值为'有新消息'
+			        extra:{//传递给通知的数据，在通知被点击后，该数据将通过监听函数回调给网页
+			        	key1:'value1',
+			        	key2:'value2',
+			        	key3:'value3'
+			        },
+			        updateCurrent: n_update    //是否覆盖更新已有的通知，取值范围true|false。只Android有效
+			    }
+			}, function(ret, err){
+			    if(ret){
+			    	cid = ret.id;
+			        apialert(JSON.stringify(ret));
+			    }else{
+			        apialert(JSON.stringify(err));
+			    }
+			});
+		}
+		
+		function notifyCus(){
+			count++;//计数，便于区分通知s
+			var s = (count % 2) ? 'widget://res/song.ogg' : '';
+			var n_update = (1 == radioValue('n_update'));
+			api.notification({
+				vibrate:[100, 500, 200, 500, 300, 500], //震动频率，等待100毫秒震动500毫秒-等待200毫秒震动500毫秒...
+				sound:s, //自定义通知提示音
+				light: true, //手机呼吸灯是否闪烁（前提是手机有呼吸灯）
+			    notify: {
+			    	title: '自定义通知标题' + count, //标题，默认值为应用名称，只Android有效
+			        content: '自定义通知内容' + count, //内容，默认值为'有新消息'
+			        extra:{ //传递给通知的数据，在通知被点击后，该数据将通过监听函数回调给网页
+			        	key1:'value1',
+			        	key2:'value2',
+			        	key3:'value3'
+			        }, 
+			        updateCurrent: n_update   //是否覆盖更新已有的通知，取值范围true|false。只Android有效
+			    }
+			}, function(ret, err){
+			    if(ret){
+			    	cid = ret.id;
+			        apialert(JSON.stringify(ret));
+			    }else{
+			        apialert(JSON.stringify(err));
+			    }
+			});
+		}
+		
+		function cancelNotify(){
+    		api.cancelNotification({
+    			id:cid
+    		});
+    	}
+    	
+    	function cancelAll(){
+    		api.cancelNotification({
+    			id:-1
+    		});
+    	}
+    	
+    	function zbhnot() {
+            api.notification({
+              vibrate:[], //默认震动频率[100, 500, 100, 500]
+            });
+        }
+        
+        function zbhnotCus() {
+            api.notification({
+              vibrate:[100, 500, 200, 500, 300, 500, 400, 500], //震动频率，等待100毫秒震动500毫秒-等待200毫秒震动500毫秒...
+            });
+        }
+		
+		function voicedot(){
+        	api.notification({
+        		sound:'default'
+        	});
+        }
+        
+        function voicedotCus(){
+        	api.notification({
+        		sound:'widget://res/horse.ogg', //自定义通知提示音
+        	});
+        }
+		
+		function zbhnotifi() {
+            api.notification({});
+        }
+		
+		function setAlarm(){
+			var next_minutes = document.getElementById('next_minutes').value;
+    		if(!next_minutes || next_minutes < 0){
+    			apialert('请正确设置下一个闹铃时间');
+    			return;
+    		}
+    		var n_openapp = (1 == radioValue('n_openapp'));
+    		var time = new Date().getTime() + (next_minutes * 60 * 1000);
+    		var alarm = {};
+    		alarm.time = time;
+    		alarm.openApp = n_openapp;
+    		var notice = {
+    			sound:'widget://res/horse.ogg',
+    			notify:{
+    				title:'闹铃title', 
+    				content: '闹铃content', 
+    				updateCurrent: false,
+    				extra:{
+    					key1:'闹铃extra1',
+    					key2:'闹铃extra2'
+    				} 
+    			}
+    		}
+    		notice.alarm = alarm;
+    		api.notification(notice, function(ret, err){
+    			if(ret){
+    				cid = ret.id;
+    				var op = n_openapp ? '打开app' : '弹出通知到状态栏';
+    				var msg = "设置成功，闹铃Id: " + cid + "，闹铃将在" + next_minutes + "分钟后" + op;
+					apialert(msg);
+    			}
+    		});
+		}
+	</script>
+</head>
+<body>
+    <div >
+        <div id="wrap">
+        	<!-- <div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>本地通知</h1>
+		        <div class="adpt" ></div>
+			</div> -->
+            <div  >
+            	<div class='itemtitle'>1、弹出通知到状态栏</div>
+            		<lable>是否覆盖上一个通知：</lable><br>
+					<div style='margin:10px 15px;'>
+						否<input type="radio" name="n_update" checked value="0" />
+						是<input type="radio" name="n_update" value="1" />
+					</div>
+	            	<div class="clickbtn" tapmode="active" onclick="notify()" >弹出一个默认最简单的通知</div>
+	            	<div class="clickbtn" tapmode="active" onclick="notifyCus()" >弹出一个自定义提示音和震动的通知</div>
+	            <div class='itemtitle'>2、取消状态栏通知</div>
+	            	<div class="clickbtn" tapmode="active" onclick="cancelNotify()" >取消</div>
+	            	<div class="clickbtn" tapmode="active" onclick="cancelAll()" >取消所有</div>
+	            <div class='itemtitle'>3、只震动</div>
+	            	<div class="clickbtn" tapmode="active" onclick="zbhnot()" >默认震动</div>
+	            	<div class="clickbtn" tapmode="active" onclick="zbhnotCus()" >自定义震动</div>
+	            <div class='itemtitle'>4、只提示音</div>
+	            	<div class="clickbtn" tapmode="active" onclick="voicedot()" >系统默认提示音</div>
+	            	<div class="clickbtn" tapmode="active" onclick="voicedotCus()" >自定义提示音</div>
+	            <div class='itemtitle'>5、系统提示音+震动</div>
+	            	<div class="clickbtn" tapmode="active" onclick="zbhnotifi()" >开始</div>
+	            <div class='itemtitle'>6、设置一个简单闹铃</div>
+	            	<lable>输入下一个闹铃距离此时的时长，单位：分</lable><br>
+					<input type="number" id="next_minutes" placeholder="输入下一个闹铃"/><br>
+					<lable>闹铃触发时是否打开app：</lable><br>
+					<div style='margin:10px 15px;'>
+						否<input type="radio" name="n_openapp" checked value="0" />
+						是<input type="radio" name="n_openapp" value="1" />
+					</div>
+	            	<div class="clickbtn" tapmode="active" onclick="setAlarm()" >设置</div>
+	            <br>
+            </div>
+        </div>   
+    </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{
+	name: 'hwin',
+	title:'高级窗口',
+	bgColor:'#fff',
+	navigationBar: {
+		height: 45,
+		background: "#303030",
+		shadow: "#eee",
+		color: "#FFF",
+		blurEffect: false,
+		hideBackButton: true
+	},
+	tabBar: {
+		height: 54,
+		background: "#FCFCFC",
+		shadow: "#ddd",
+		color: "#999",
+		selectedColor: "#45C01A",
+		animated: false,
+		index: 0,
+		list: [
+			{
+				text: "微信",
+				iconPath: "./image/nav_tab_1.png",
+				selectedIconPath: "./image/nav_tab_1_on.png"
+			}, {
+				text: "通讯录",
+				iconPath: "./image/nav_tab_2.png",
+				selectedIconPath: "./image/nav_tab_2_on.png"
+			}, {
+				text: "发现",
+				iconPath: "./image/nav_tab_3.png",
+				selectedIconPath: "./image/nav_tab_3_on.png"
+			}, {
+				text: "我",
+				iconPath: "./image/nav_tab_4.png",
+				selectedIconPath: "./image/nav_tab_4_on.png"
+			}
+		],
+		frames: [
+			{
+				title: "微信",//tab切换时对应的标题
+				name: "tab_frm_1",
+				url: "./tab_content_1.html"
+			}, {
+				title: "通讯录",
+				name: "tab_frm_2",
+				url: "./tab_content_2.html"
+			}, {
+				title: "发现",
+				name: "tab_frm_3",
+				url: "./tab_content_3.html"
+			}, {
+				title: "我",
+				name: "tab_frm_4",
+				url: "./tab_content_4.html"
+			}
+		]
+	}
+}

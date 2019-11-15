@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>窗口系统</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css" />
+    <link rel="stylesheet" type="text/css" href="./css/box.css" />
+    <script src="./script/public.js"></script>
+        <style>
+        	body{
+        		background: #FCFCFC;
+        		display:-webkit-box;
+				-webkit-box-orient:vertical;
+				-webkit-box-pack:center;
+        	}
+        </style>
+    </head>
+    
+    <body>
+    	<div class="info-area" id='smart_des'>
+    		<h2>tab_content_3<h2>
+    	</div>
+        <div class="clickbtn" tapmode="active" onclick="setTabBarTextColor()" >设置TabBar文字颜色</div>
+        <div class="clickbtn" tapmode="active" onclick="setTabBarBgColor()" >设置TabBar背景颜色</div>
+        <div class="clickbtn" tapmode="active" onclick="setTabBarIndex()" >设置TabBar选中项</div>
+        <br>
+        <div class="clickbtn" tapmode="active" onclick="setNavBarBgColor()" >设置NavBar背景颜色</div>
+        <div class="clickbtn" tapmode="active" onclick="setNavBarText()" >设置NavBar文字颜色和大小</div>
+        <div class="clickbtn" tapmode="active" onclick="setNavBarBtns()" >设置NavBar按钮</div>
+    </body>
+    <script>
+    	apiready = function(){
+    		api.addEventListener({
+				name:'abc'
+			}, function(ret){
+				console.log('recevie event： ' + ret.value);
+			});
+    	}
+    	
+    	var text_color_flag = true;
+    	function setTabBarTextColor(){
+    		text_color_flag = !text_color_flag;
+    		var cl = text_color_flag ? '#999' : '#F0F';
+    		api.setTabBarAttr({
+    			color: cl
+    		});
+    	}
+    	
+    	var bg_color_flag = true;
+    	function setTabBarBgColor(){
+    		bg_color_flag = !bg_color_flag;
+    		var cl = bg_color_flag ? '#FCFCFC' : 'rgba(39, 130, 215, 1)';
+    		//var cl = bg_color_flag ? '#FCFCFC' : "./image/bg.png";
+    		api.setTabBarAttr({
+    			background: cl
+    		});
+    	}
+    	
+    	var _index = 2;
+    	function setTabBarIndex(){
+    		_index++;
+    		if(_index > 3){
+    			_index = 0;
+    		}
+    		api.setTabBarAttr({
+    			index: _index
+    		});
+    	}
+    	
+    	var nav_text_color_flag = true;
+    	function setNavBarText(){
+    		nav_text_color_flag = !nav_text_color_flag;
+    		var cl = nav_text_color_flag ? '#FFF' : '#F0F';
+    		var sz = nav_text_color_flag ? 17 : 20;
+    		api.setNavBarAttr({
+    			color: cl,
+    			fontSize: sz
+    		});
+    	}
+    	
+    	var nav_bg_color_flag = true;
+    	function setNavBarBgColor(){
+    		nav_bg_color_flag = !nav_bg_color_flag;
+    		var cl = nav_bg_color_flag ? '#303030' : 'rgba(39, 130, 215, 1)';
+    		var sd = nav_bg_color_flag ? 'rgba(0,0,0,0)' : '#F0F';
+    		api.setNavBarAttr({
+    			background: cl,
+    			shadow: sd
+    		});
+    	}
+    	
+    	var nav_btn_flag = true;
+    	function setNavBarBtns(){
+    		nav_btn_flag = !nav_btn_flag;
+    		//传入空数组代表清除按钮，将默认显示backbtn
+    		api.setNavBarAttr({
+    			leftButtons: nav_btn_flag ? [] : [{
+					text: "主页",
+					color: "#FFF",
+					iconPath: "./image/left_back.png"
+				}],
+		    	rightButtons: nav_btn_flag ? [] : [{
+					text: "帮助",
+					color: "#00F",
+					iconPath: "./image/more.png"
+				}]
+    		}); 
+    	}
+    </script>
+
+</html>

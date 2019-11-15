@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <title>focus</title>
+    <style>
+		
+		
+		
+	</style>
+    <script>
+    	apiready = function(){
+    		setTimeout(function(){
+    			ffocos();
+    		}, 20);
+    		//ffocos();
+    	}
+    
+		function ffocos(){
+			var ndo = document.getElementById('text');
+			//ndo.blur();
+			ndo.focus();
+			api.requestFocus();
+		}
+		
+    </script>
+</head>
+<body>
+	<div id='wrap'>
+		<div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>本地通知</h1>
+	        <div class="adpt" ></div>
+		</div> 
+		<input id="text" type="text">
+		<div class="clickbtn" onclick="ffocos()" >获取focus</div>
+	</div>
+</body>
+</html>

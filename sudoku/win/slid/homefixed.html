@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>homefixed</title>
+	<link rel="stylesheet" href="../../css/api.css">
+	<link rel="stylesheet" href="../../css/box.css">
+	<script src="../../script/public.js"></script>
+	<style>
+	html,body {
+	    background-color:#CCC;
+	}
+	#left {
+	    height:100%;
+	    background-color:#333333;
+	    display:-webkit-box;
+	    -webkit-box-orient:vertical;
+	    -webkit-box-align:center;
+	    -webkit-box-pack:center;
+	}
+	.logo {
+	   -webkit-box-align:center;
+	   margin-top:20px;
+	}
+	.logo>img {
+	    width:70px;
+	    height:70px;
+	    border: 0;
+	    -webkit-border-radius: 15px;
+	}
+	.item{
+		display:-webkit-box;
+		width:70px;
+	    height:70px;
+		-webkit-box-align:center;
+		-webkit-box-pack:center;
+	   	margin-top:20px;
+	    -webkit-border-radius: 15px;
+	    background:#FFF;
+	}
+	</style>
+</head>
+<body>
+    <div id="wrap">
+        <div id="left">
+            <div class="logo" tapmode onclick='execSildTab(0)'>
+                <div class='item'>网易</div>
+            </div>
+            <div class="logo" tapmode onclick='execSildTab(1)'>
+                <div class='item'>点评</div>
+            </div>
+            <div class="logo" tapmode onclick='execSildTab(2)'>
+                <div class='item'>搜狐</div>
+            </div>
+            <div class="logo" tapmode onclick='execSildTab(3)'>
+                <div class='item'>头条</div>
+            </div>
+            <div class="item" tapmode onclick="api.closeWin({name:'slidLayout'})">
+                退出
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+	apiready = function() {
+	    var main = $('left');
+	    main.style.width = (api.frameWidth - 200) + 'px';
+	}
+	
+	function execSildTab(index){
+		if(0 == index){
+			var js = 'toalert()';
+			api.execScript({
+				name:'homeside',
+				frameName:'frm1',
+				script: js
+			});
+			return;
+		}
+		var js = 'toggleTab(' + index + ')';
+		api.execScript({
+			name:'homeside',
+			script: js
+		});
+	}
+	
+	function toalert(){
+		apialert('fixed pane alert');
+	}
+		
+</script>
+</html>

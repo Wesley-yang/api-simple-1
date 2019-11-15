@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+		<meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+		<title>DrawerLayout</title>
+		<script type="text/javascript" src="../../script/public.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    	<link rel="stylesheet" type="text/css" href="../../css/box.css" />
+		<style>
+			body, html{ 
+				background:#699B98; 
+			}
+		</style>
+	<head>
+	<body>
+		<div id='header' style='background:#699B98;' >
+        	<div class="back" tapmode="back-active" onclick="api.closeWin({name:'drawer'})" >返回</div>
+        	<h1>DrawerLayout</h1>
+        	<div class="adpt" ></div>
+        </div>
+		<div id='main'>
+			<br>
+			<p class='info-area'>
+				分别从屏幕左右边缘向中心滑动手指头试试？
+			</p>
+			<hr/>
+			<div class="clickbtn" tapmode onclick="openPane('left')" >打开LeftPane</div>
+			<div class="clickbtn" tapmode onclick="openPane('right')" >打开RightPane</div>
+			<div class="clickbtn" tapmode onclick="closePane()" >关闭屏幕上的Pane</div>
+			<div class="clickbtn" tapmode onclick="exeScriptToLeft()" >LeftPane执行脚本</div>
+			<div class="clickbtn" tapmode onclick="exeScriptToRight()" >RightPane执行脚本</div>
+			<div class="clickbtn" tapmode onclick="exeScriptToDrawer()" >Drawer执行脚本</div>
+			<div class="clickbtn" tapmode onclick="api.closeWin()" >关闭窗口</div>
+			<div class="clickbtn" tapmode onclick="allwindows()" >显示APP所有win</div>
+		</div>
+	</body>
+	<script>
+		
+		apiready = function(){
+			api.addEventListener({
+			    name: 'keyback'
+			}, function(ret, err ){
+				if(ret.longPress){
+					api.toast({
+						msg:'Back键被长按了'
+					});
+					return;
+				}
+				if(confirm("关闭Drawer么？")){
+					api.closeWin();
+				}
+			});
+		}
+		
+		function openPane(tpe){
+			if(!tpe){
+				return;
+			}
+			api.openDrawerPane({
+			    type:tpe
+			})
+		}
+		
+		function closePane(){
+			api.closeDrawerPane();
+		}
+		
+		function exeScriptToLeft(){
+        	var jsfun = 'fromRemote()';
+			api.execScript({
+			    name: 'leftPane1',
+			    script: jsfun
+			});
+        }
+        
+        function exeScriptToRight(){
+        	var jsfun = 'fromRemote()';
+			api.execScript({
+			    name: 'rightPane1',
+			    script: jsfun
+			});
+        }
+        
+        function exeScriptToRight(){
+        	var jsfun = 'fromRemote()';
+			api.execScript({
+			    name: 'rightPane1',
+			    script: jsfun
+			});
+        }
+        
+        function exeScriptToDrawer(){
+        	var jsfun = 'fromRemote()';
+			api.execScript({
+			    name: 'drawer',
+			    script: jsfun
+			});
+        }
+        
+        function fromRemote(){
+    		apialert('Im Drawer!');
+    	}
+    	
+    	function allwindows(){
+    		var list = api.windows();
+    		apialert('共' + (list ? list.length : 0) + '个\n详情：' + JSON.stringify(list));
+    	}
+	</script>	
+</html>

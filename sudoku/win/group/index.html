@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>首页</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width" />
+    <link rel="stylesheet" href="css/api.css">
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <style>
+		body {
+			position:absolute;
+			display:-webkit-box;
+			-webkit-box-orient:vertical;
+		}
+		
+		section {
+			display:-webkit-box;
+			-webkit-box-orient:vertical;
+			-webkit-box-align:center;
+	    	-webkit-box-pack:center;
+		}
+		
+		header{
+		  width:100%;
+		  height:45px;
+		  display:-webkit-box;
+		  background:#1E98D8;
+		}
+		
+		header #title{
+		  width:100%;
+		  height:45px;
+		  font-size:19px;
+		  color:#FFF;
+		  display:-webkit-box;
+		  -webkit-box-pack:center;
+		  -webkit-box-align:center;
+		}
+		
+		#content{
+			-webkit-box-flex:1;
+		}
+		
+		footer{
+			width:auto; 
+			height:50px;
+			padding:0 8px; 
+			display:-webkit-box;
+			-webkit-box-orient:horizontal;
+			background:#313131;
+		}
+		
+		input{
+			-webkit-appearance:none;
+		}
+		
+		.tab-item {
+		    height:49px;
+		  	margin:0 3px;
+		  	-webkit-box-flex:1;
+		  	display:-webkit-box;
+		  	-webkit-box-orient:vertical;
+		  	-webkit-box-pack:center;
+		  	-webkit-box-align:center;
+		}
+		
+		center{
+			color:#FFF;
+			margin-top:3px;
+		    font-size:0.7em;
+		}
+		
+		.active {
+			background:url(image/tab_sle.png) no-repeat center; 
+			background-size:100% 49px;
+		}
+		
+		#footer input[type='radio']:checked + div{
+    		background:url(image/tab_sle.png) no-repeat center; 
+			background-size:100% 49px;
+		}
+		
+		#buy + div div{
+			width:40px;
+		    height:28px;
+			background:url(image/buy_icon.png) no-repeat center; 
+			background-size:40px 28px;
+		}
+		#buy:checked + div div{
+    		background:url(image/buy_icon_on.png) no-repeat center!important; 
+			background-size:40px 28px!important;
+		}
+		
+		#order + div div{
+			width:40px;
+		    height:28px;
+			background:url(image/order_icon.png) no-repeat center; 
+			background-size:40px 28px;
+		}
+		#order:checked + div div{
+			background:url(image/order_icon_on.png) no-repeat center!important;
+			background-size:40px 28px!important;  
+		}
+		
+		#my + div div{
+			width:40px;
+		    height:28px;
+			background:url(image/my_icon.png) no-repeat center; 
+			background-size:40px 28px;
+		}
+		#my:checked + div div{
+			background:url(image/my_icon_on.png) no-repeat center!important;
+			background-size:40px 28px!important;  
+		}
+		
+		#more + div div{
+			width:40px;
+		    height:28px;
+			background:url(image/more_icon.png) no-repeat center; 
+			background-size:40px 28px;
+		}
+		#more:checked + div div{
+			background:url(image/more_icon_on.png) no-repeat center!important; 
+			background-size:40px 28px!important; 
+		}
+	</style>
+</head>
+    
+    <body>
+        <header id='header'>
+        	<div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+            <div id="title">窗口组</div>
+            <div class="adpt" ></div>
+        </header>
+        <section id='content'>
+        	<div style='font-size:20px;'>加载中...</div>
+        </section>
+        <footer id='footer'>
+        	<input id='buy' type="radio" name='tab' checked>
+	            <div class='tab-item' tapmode='active' onclick='toggleTab(0)'>
+	            	<div></div>
+	            	<center>选项一</center>
+	            </div>
+            </input>
+            <input id='order' type="radio" name='tab'>
+	            <div class='tab-item' tapmode='active' onclick='toggleTab(1)'>
+	            	<div></div>
+	            	<center>选项二</center>
+	            </div>
+	        </input>
+	        <input id='my' type="radio" name='tab'>
+	            <div class='tab-item' tapmode='active' onclick='toggleTab(2)'>
+	            	<div></div>
+	            	<center>选项三</center>
+	            </div>
+	        </input>
+	        <input id="more" type="radio" name='tab'>
+	            <div class='tab-item' tapmode='active' onclick='toggleTab(3)'>
+	            	<div></div>
+	            	<center>选项四</center>
+	            </div>
+	        </input>
+        </footer>
+    </body>
+    <script>
+    	
+    	apiready = function(){
+    		api.setScreenOrientation({
+				orientation: 'auto'
+			});
+			initTabs();
+		};
+    
+    	var curTab = 0;//当前选项卡索引
+    	
+    	/**
+    	 * 定义frameGroup中对应的4个frame
+    	 * 其中name、url、bounces是打开frame所需的
+    	 * 其余字段用于本页面使用
+    	 */
+    	var alltabs = [
+  			{name:'buy', url:'html/ticket_booking.html', bounces:false, title:'选项一'},
+  			{name:'order', url:'html/order_query.html', bounces:false, title:'选项二'},
+  			{name:'my', url:'html/my_zone.html', bounces:false, title:'选项三'},
+  			{name:'more', url:'html/more_option.html', bounces:false, title:'选项四'}
+        ];
+		
+		function initTabs(){//初始化4个frame
+			var headerHeight = 45;//css中定义的header高度
+			var footerHeight = 50;//css中定义的footer高度
+			api.openFrameGroup({
+                  name:'tabs',
+                  frames:alltabs,
+                  index: 0,
+                  preload:0,
+                  rect:{
+                  	h:'auto', 
+                  	w:'auto',
+                  	marginTop: statusBarHeight + headerHeight, 
+                  	marginBottom:footerHeight
+                  }
+            }, onTabShown);
+        }
+        
+        //当底部导航栏选中某个tab时，相应的切换frameGroup的frame至屏幕上
+        var shown = true;
+        function toggleTab(indx){
+        	if(indx == curTab){
+        		return;
+        	}
+			curTab = indx;
+			onTabShown(curTab);
+			api.setFrameGroupIndex({name:'tabs', index:indx, scroll:false});
+        }
+		
+		//frameGroup中某个frame被显示到屏幕上时的回调
+		function onTabShown(o){
+			var indx = (o && o.name) ? o.index : o;
+			$(alltabs[indx].name).checked = true;
+			$('title').innerHTML = alltabs[indx].title;
+		}
+		
+	</script>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>MCM_功能索引</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <style>
+    	.center{
+			display:-webkit-box;
+			-webkit-box-orient:vertical;
+			-webkit-box-pack:center;
+			-webkit-box-align:center;
+		}
+		img{
+			border:0;
+		}
+		
+		section {
+		    display:-webkit-box;
+		    -webkit-box-orient:vertical;
+			padding:10px;
+		}
+
+		#info{
+			background-color:#FFF;
+			border-radius:3px 3px 0px 0px;
+			/**-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,0.05);
+			box-shadow:inset 0 1px 1px rgba(0,0,0,.05);**/
+		}
+		
+		.item{
+		   padding:5px;
+		   border-bottom:#CCC solid 1px;
+		   display:-webkit-box;
+		   -webkit-box-orient: horizontal;
+		   -webkit-box-align:center;
+		}
+		.item-active{
+		   background-color:#CCC;
+		}
+		
+		.item-icon{
+			width:40px;
+			height:40px;
+			padding:5px;
+		}
+		
+		img{
+			width:40px;
+			height:40px;
+		}
+		.wap{
+			-webkit-box-flex:1;
+		}
+		
+		.name{
+			color:#000;
+			font-size:1.1em;
+		}
+		
+		.des{
+			color:#A9A9A9;
+			font-size:0.9em;
+		}
+		
+		.load{
+			
+			padding:5px 10px;
+			color:#FFF;
+			font-size:0.8em;
+			/**background-image:-webkit-linear-gradient(#49B3DD, #004E83);**/
+			background:#49B3DD;
+			-webkit-border-radius:4px;
+		}
+    </style>
+</head>
+<body style='background:#EDEDED;'>
+    <section>
+		<div id="info">
+			<ul id='list'>
+				<li class='item' tapmode='item-active' >
+					<div class='item-icon'>
+						<img src='./image/ticon0.png'/>
+					</div>
+					<div class='wap'>
+						<div class='name'>应用名</div>
+						<div class='des'>描述描述描述描述</div>
+					</div>
+					<div class='load'>下载</div>
+				</li>
+				<li class='item' tapmode='item-active' >
+					<div class='item-icon'>
+						<img src='./image/ticon0.png'/>
+					</div>
+					<div class='wap'>
+						<div class='name'>应用名</div>
+						<div class='des'>描述描述描述描述</div>
+					</div>
+					<div class='load'>下载</div>
+				</li>
+				<li class='item' tapmode='item-active' >
+					<div class='item-icon'>
+						<img src='./image/ticon0.png'/>
+					</div>
+					<div class='wap'>
+						<div class='name'>应用名</div>
+						<div class='des'>描述描述描述描述</div>
+					</div>
+					<div class='load'>下载</div>
+				</li>
+				<li class='item' tapmode='item-active' >
+					<div class='item-icon'>
+						<img src='./image/ticon0.png'/>
+					</div>
+					<div class='wap'>
+						<div class='name'>应用名</div>
+						<div class='des'>描述描述描述描述</div>
+					</div>
+					<div class='load'>下载</div>
+				</li>
+				<li class='item' tapmode='item-active' >
+					<div class='item-icon'>
+						<img src='./image/ticon0.png'/>
+					</div>
+					<div class='wap'>
+						<div class='name'>应用名</div>
+						<div class='des'>描述描述描述描述</div>
+					</div>
+					<div class='load'>下载</div>
+				</li>
+				<li class='item' tapmode='item-active' >
+					<div class='item-icon'>
+						<img src='./image/ticon0.png'/>
+					</div>
+					<div class='wap'>
+						<div class='name'>应用名</div>
+						<div class='des'>描述描述描述描述</div>
+					</div>
+					<div class='load'>下载</div>
+				</li>
+				<li class='item' tapmode='item-active' >
+					<div class='item-icon'>
+						<img src='./image/ticon0.png'/>
+					</div>
+					<div class='wap'>
+						<div class='name'>应用名</div>
+						<div class='des'>描述描述描述描述</div>
+					</div>
+					<div class='load'>下载</div>
+				</li>
+				<li class='item' tapmode='item-active' >
+					<div class='item-icon'>
+						<img src='./image/ticon0.png'/>
+					</div>
+					<div class='wap'>
+						<div class='name'>应用名</div>
+						<div class='des'>描述描述描述描述</div>
+					</div>
+					<div class='load'>下载</div>
+				</li>
+			</ul>
+		</div>
+	</section>
+</body>
+<script>
+function vv(){
+	var inner = '';
+	for(var i = 0; i < 8; ++i){
+		var item = "<li class='item' tapmode='item-active' > " +   
+			  "<div class='item-icon'> " +  
+				"<img src='./image/ticon" + i + ".png'/> " +  
+			  "</div> " +  
+			  "<div class='wap'> " +  
+				"<div class='name'>应用" + i + "</div> " +       
+				"<div class='des'>描述描述描述描述" + i + "</div> " +        
+			  "</div> " +  
+			  "<div class='load'>下载</div> " +  
+			"</li>";
+		inner += item;
+	}
+	$('list').innerHTML = inner;
+}
+</script>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>设备按键</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+	<script type="text/javascript">
+		function registerBack(){
+			api.addEventListener({
+			    name:'keyback'
+			},function(ret,err){
+			    if(ret.longPress) {
+			    	api.toast({msg:'Back键被长按！'});
+			    }else{
+			    	api.toast({msg:'点击了Back键！'});
+			    }
+			});
+			apialert('监听成功，点击或者长按back键看看');
+		}
+		
+		function unRegisterBack(){
+			api.removeEventListener({
+			    name:'keyback'
+			});
+			apialert('取消成功，点击back键将默认关闭当前窗口');
+		}
+		
+		function registerMenu(){
+			api.addEventListener({
+			    name:'keymenu'
+			},function(ret,err){
+			    if(ret.longPress) {
+			    	api.toast({msg:'Menu键被长按！'});
+			    }else{
+			    	api.toast({msg:'点击了Menu键！'});
+			    } 
+			});
+			apialert('监听成功，点击或者长按Menu键看看');
+		}
+		
+		function unRegisterMenu(){
+			api.removeEventListener({
+			    name:'keymenu'
+			});
+			apialert('取消成功');
+		}
+		
+		function registerVolumeup(){
+			api.addEventListener({
+			    name:'volumeup'
+			},function(ret,err){
+			    if(ret.longPress) {
+			    	api.toast({msg:'音量+键被长按！'});
+			    }else{
+			    	api.toast({msg:'点击了音量+键！'});
+			    }  
+			});
+			apialert('监听成功，点击或者长按音量+键看看');
+		}
+		
+		function unRegisterVolumeup(){
+			api.removeEventListener({
+			    name:'volumeup'
+			});
+			apialert('取消成功');
+		}
+		
+		function registerVolumedown(){
+			api.addEventListener({
+			    name:'volumedown'
+			},function(ret,err){
+			    if(ret.longPress) {
+			    	api.toast({msg:'音量-键被长按！'});
+			    }else{
+			    	api.toast({msg:'点击了音量-键！'});
+			    }
+			});
+			apialert('监听成功，点击或者长按音量-键看看');
+		}
+
+		function unRegisterVolumedown(){
+			api.removeEventListener({
+			    name:'volumedown'
+			});
+			apialert('取消成功');
+		}
+	</script>
+</head>
+<body>
+	<div id="wrap">
+		<div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>设备按键</h1>
+	        <div class="adpt" ></div>
+		</div> 
+		<div class="itemtitle">1、Back键</div>
+			<div class="clickbtn" tapmode="active" onclick="registerBack()" >点击监听Back键</div>
+			<div class="clickbtn" tapmode="active" onclick="unRegisterBack()" >点击取消监听</div>
+		<div class="itemtitle">2、菜单键</div>
+			<div class="clickbtn" tapmode="active" onclick="registerMenu()" >点击监听菜单键</div>
+			<div class="clickbtn" tapmode="active" onclick="unRegisterMenu()" >点击取消监听</div>
+		<div class="itemtitle">3、音量+键</div>
+			<div class="clickbtn" tapmode="active" onclick="registerVolumeup()" >点击监听</div>
+			<div class="clickbtn" tapmode="active" onclick="unRegisterVolumeup()" >点击取消监听</div>
+		<div class="itemtitle">4、音量-键</div>
+			<div class="clickbtn" tapmode="active" onclick="registerVolumedown()" >点击监听</div>
+			<div class="clickbtn" tapmode="active" onclick="unRegisterVolumedown()" >点击取消监听</div>
+		<br>
+	</div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>Video</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+	<script type="text/javascript">
+	    apiready = function(){
+			//打开主frame
+			openContent('main.html', 'main');
+	        $('year').innerHTML = new Date().getFullYear();
+	        api.addEventListener({
+			    name:'keyback'
+			},function(ret,err){
+				api.execScript({
+					frameName:'main',
+					script:'setVideoStop()'
+				});
+			});
+	    };
+	</script>
+</head>
+<body>
+    <div id="wrap">
+        <!-- <div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>音视频测试</h1>
+	        <div class="adpt" ></div>
+		</div> -->
+        <div id="main">
+                
+        </div>
+        <div id="footer">
+            <h5>APICloud Copyright &copy;<span id="year"></span> </h5>
+        </div>
+    </div>
+</body>
+</html>

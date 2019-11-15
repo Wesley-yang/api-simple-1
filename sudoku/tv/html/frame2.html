@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frame2</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width" />
+    <link rel="stylesheet" href="../css/api.css">
+    <script type="text/javascript" src="../script/tv.js"></script>
+    <style>
+		body {
+			position:absolute;
+			display:-webkit-box;
+			-webkit-box-pack:center;
+			-webkit-box-align:center;
+			background:#008000;
+			width:94%;
+			height:95%;
+		}
+	</style>
+</head>
+    <body>
+		<div id="info">
+			Frame Two
+		</div>
+    </body>
+    <script>
+    	
+    	apiready = function(){
+			api.addEventListener({name:'focuschange'}, function(ret){
+    			if(ret.focused){
+					document.body.style.border = "5px solid #008000";
+				}else{
+					document.body.style.border = "none";
+				}
+    		});
+    		api.addEventListener({name:'telecontroller'}, function(ret){
+				var code = ret.keyCode;
+				console.log("[frame2]telecontroller: " + code);
+				switch (code) {
+					case 19://KEYCODE_DPAD_UP
+					case 20://KEYCODE_DPAD_DOWN
+					case 21://KEYCODE_DPAD_LEFT
+					case 22://KEYCODE_DPAD_RIGHT
+						api.onTvPeak({keyCode:code});
+						break;
+					case 23://KEYCODE_DPAD_CENTER
+						api.toast({msg:'Frame2 Clicked!'});
+						api.openWin({name:'winFrame2', url:'frame2.html'});
+						break;
+				}
+    		});
+		};
+
+	</script>
+</html>

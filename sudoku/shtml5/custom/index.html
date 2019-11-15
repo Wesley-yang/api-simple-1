@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>自定义标签</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script src="../../script/public.js"></script>
+    <style>
+    	img{
+    		width:85px;
+    		height:85px;
+    		margin-top:10px;
+    	}
+    	
+    </style>
+    <script type="text/javascript">
+		
+		apiready = function(){
+	    		
+	    }
+		
+		function showImg(){
+			var list = document.getElementsByTagName('img');
+			var l = list ? list.length : 0;
+			if(0 == l){
+				return;
+			}
+			for(var i = 0; i < l; ++i){
+				var url = list[i].dataset.url;
+				url = 'http://a631aa25874caa1814bd.upyuncdn.apicloud-system.com/apicloud/3935f30f55949d382016cf266694827b.png';
+				if(url){
+					list[i].src = url;
+				}else{
+					apialert('data-url未赋值');
+				}
+			}
+			/**
+			var imgs= $('imgs');
+			var url = imgs.dataset.url;
+			//url = 'http://a631aa25874caa1814bd.upyuncdn.apicloud-system.com/apicloud/3935f30f55949d382016cf266694827b.png';
+			if(url){
+				imgs.src = url;
+			}else{
+				apialert('data-url未赋值');
+			}
+			**/
+		}
+	</script>
+</head>
+<body>
+    <div id="wrap">
+    	<!-- <div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>自定义标签</h1>
+	        <div class="adpt" ></div>
+		</div> -->
+        <div>
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<img src='../../image/hold.png' data-url="../../image/refresh.png">
+        	<div class='itemtitle'>1、dataset</div>
+            	<div class="clickbtn" tapmode="active" onclick="showImg()" >点击显示图片</div>
+        	<br>
+        </div>
+    </div>   
+</body>
+</html>

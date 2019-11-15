@@ -1,0 +1,572 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>NETWORK</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script type="text/javascript" src="../script/public.js"></script>
+    <style>
+    	
+    	
+    </style>
+    <script type="text/javascript">
+		
+		apiready = function(){
+	    	
+	    }
+		
+		//标准XMLHttpRequest，会有跨域问题
+		function GetXmlRequest(){
+			var host = $('xmlGethost').value;
+			if(!host){
+				//host = 'http://www.w3school.com.cn/ajax/demo_get.asp';
+				host = 'file:///android_asset/widget/sudoku/index.html';
+				host = 'http://www.hkstv.tv/?mod=App&do=Index';
+			}
+    		var xhr = new XMLHttpRequest();
+    		xhr.onreadystatechange = function(){
+    			if(xhr.readyState == 4){
+    				api.hideProgress();
+    				if(xhr.status == 200){
+    					apialert('请求成功：\n' + xhr.responseText);
+    				}else{
+    					apialert('请求失败：\n状态码：' + xhr.status + "\n结果：" + xhr.responseText);
+    				}
+    			}
+    			console.log('onreadystatechange: ' + xhr.readyState);
+    		}
+    		api.showProgress();
+    		xhr.open('GET', host, true);
+    		xhr.send(null);
+		}
+		
+		//普通Get请求
+		function GetRequest(){
+			var host = $('httpGethost').value;
+			if(!host){
+				//host = 'http://www.weather.com.cn/adat/sk/101010100.html';
+            	//host = 'http://www.w3school.com.cn/ajax/demo_get.asp';
+            	host = 'https://www.opgap.com/test/list';
+            	//host = 'http://www.hkstv.tv/?mod=App&do=Index';
+			}
+            var option = {
+            	url: host,
+            	method: 'get',
+            	cache: true,
+            	timeout: 100,
+            	//dataType: 'text',
+            	//charset: 'utf-8',
+            	//returnAll: true,
+            	certificate:{
+            		//path:'widget://res/https.p12',
+	        		//password:'123456'
+            	},
+            	headers:{
+            		'ext-field-1':'value-11',
+            		'ext-field-2':'value-22',
+            		'Cookie':'aaa=哈哈哈哈哈',
+            	}
+            }
+    		api.showProgress();
+    		var starttime = curtime();
+    		api.ajax(option, function (ret, err) {
+	        	api.hideProgress();
+	            if (ret) {
+	                apialert('用时：' + ((curtime() - starttime) / 1000) + "秒\n请求结果：\n" + JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+		
+		//代理请求
+		function deleGetRequest(){
+			var host = $('delehttpGethost').value;
+			if(!host){
+            	host = 'https://www.opgap.com/test/list';
+			}
+            var option = {
+            	url: host,
+            	proxy:{
+            		host: '192.168.13.48',
+	        		port: 8888
+            	}
+            }
+    		api.showProgress();
+    		var starttime = curtime();
+    		api.ajax(option, function (ret, err) {
+	        	api.hideProgress();
+	            if (ret) {
+	                apialert('用时：' + ((curtime() - starttime) / 1000) + "秒\n请求结果：\n" + JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+		
+		//Url自动编码
+		function encodeRequest(){
+			var host = $('enc').value;
+			if(!host){
+				host = 'http://docs.apicloud.com/APICloud/%E6%8A%80%E6%9C%AF%E4%B8%93%E9%A2%98/Custom_Loader';
+			}
+            var option = {
+            	url: host,
+            	method: 'get',
+            	timeout: 10,
+            	dataType: 'text'
+            }
+    		api.showProgress();
+    		var starttime = curtime();
+    		api.ajax(option, function (ret, err) {
+	        	api.hideProgress();
+	            if (ret) {
+	                apialert('用时：' + ((curtime() - starttime) / 1000) + "秒\n请求结果：\n" + JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+		
+		//重定向Get请求
+		function RedirectGetRequest(){
+			var host = $('redirectHttpGethost').value;
+			if(!host){
+				host = 'http://www.baidu.com';//百度将会自动重定向到http://m.baidu.com
+			}
+            var option = {
+            	url: host,
+            	method: 'get',
+            	cache: true,
+            	timeout: 10,
+            	dataType: 'text',
+            	returnAll: false,
+            	//safeMode:'both'
+            }
+    		api.showProgress();
+    		var starttime = curtime();
+    		api.ajax(option, function (ret, err) {
+	        	api.hideProgress();
+	            if (ret) {
+	                apialert('用时：' + ((curtime() - starttime) / 1000) + "秒\n请求结果：\n" + JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+		
+		var tagxx = 200;//用于区分请求
+		//超时请求
+		function TimeoutRequest(){
+			tagxx++;
+			var timeout = $('timeout').value;
+			timeout = timeout ? timeout : 10;
+			var host = 'http://www.google.com?tagxx=' + tagxx;//访问google一般都超时
+            var option = {
+            	url: host,
+            	method: 'get',
+            	timeout: timeout,
+            	dataType: 'text',
+            	returnAll: false
+            }
+    		api.showProgress({
+    			modal:false
+    		});
+    		var starttime = curtime();
+    		api.ajax(option, function (ret, err) {
+	        	api.hideProgress();
+	            if (ret) {
+	                apialert('用时：' + ((curtime() - starttime) / 1000) + "秒\n请求结果：\n" + JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+		
+		//https 的Get请求
+		function GetHttpsRequest(){
+			var host = $('httpsGethost').value;
+			if(!host){
+				host = 'https://www.opgap.com/test/';//证书有问题的网站
+			}else{
+				if(host.indexOf('https') < 0){
+					apialert('请输入一个https的地址！');
+					return;
+				}
+			}
+            var cert = {//需要CA证书，则配置此字段即可
+            	//path:'widget://res/https.p12',
+	        	//password:'123456'
+            }
+            var option = {
+            	url: host,
+            	method: 'get',
+            	cache: false,
+            	timeout: 10,
+            	dataType: 'text',
+            	returnAll: true,
+	        	certificate:cert
+            }
+    		api.showProgress();
+    		var starttime = curtime();
+    		api.ajax(option, function (ret, err) {
+	        	api.hideProgress();
+	            if (ret) {
+	                apialert('用时：' + ((curtime() - starttime) / 1000) + "秒\n请求结果：\n" + JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+
+		function GetErrHttpsRequest(){
+			//如果开启了https证书校验，不受信任的CA证书将导致请求失败
+			var host = $('httpsGethostErr').value;
+			if(!host){
+				host = 'https://kyfw.12306.cn/otn/';//证书有问题的网站
+			}else{
+				if(host.indexOf('https') < 0){
+					apialert('请输入一个https的地址！');
+					return;
+				}
+			}
+			api.showProgress();
+			api.ajax({
+				url: host,
+				dataType:'text'
+			}, function (ret, err) {
+	        	api.hideProgress();
+	            if (ret) {
+	                apialert("请求结果：\n" + JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+
+		//Post请求-键值对form表单提交
+		function PostFormRequest(){
+			var host = 'http://www.w3school.com.cn/ajax/demo_post.asp';
+            var formvalue1 = $('formvalue1').value;
+            var formvalue2 = $('formvalue2').value;
+            formvalue1 = formvalue1 ? formvalue1 : 'zhangsan';
+            formvalue2 = formvalue2 ? formvalue2 : 'function abv();';
+            var postdata = {
+                values: {//键值对，每一项对应form表单中的一个input text
+                	name:formvalue1,
+                	password:formvalue2
+                }
+            }
+            var option = {
+            	url: host,
+            	method: 'post',
+            	cache: false,
+            	timeout: 10,
+            	dataType : 'text',
+            	returnAll: false,
+	        	data:postdata,
+	        	//safeMode:'both'
+            }
+    		api.showProgress();
+    		var starttime = curtime();
+    		api.ajax(option, function (ret, err) {
+	        	api.hideProgress();
+	            if (ret) {
+	                apialert('用时：' + ((curtime() - starttime) / 1000) + "秒\n请求结果：\n" + JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+		
+		//Post请求-字符串body，json格式数据等提交
+		function PostBodyRequest(){
+			var jsonHeader = null;
+			var bodyValue = $('bodyValue').value;
+			if(!bodyValue){
+				bodyValue = {
+            		name:'Donald Duck',
+            		city:'Duckburg'
+            	}
+            	//提交JSON格式时，需设置json头，通知服务器我提交的是JSON格式的数据
+            	jsonHeader = {
+            		'Content-Type': 'application/json'
+            	}
+			}
+			var host = 'http://www.w3school.com.cn/example/jquery/demo_test_post.asp';
+            var postdata = {
+            	body: bodyValue
+            }
+            var option = {
+            	url: host,
+            	method: 'post',
+            	cache: false,
+            	timeout: 10,
+            	dataType: 'text',
+            	//returnAll: true,
+	        	data:postdata
+            }
+            if(jsonHeader){
+            	option.headers = jsonHeader;
+            }
+    		api.showProgress();
+    		var starttime = curtime();
+    		api.ajax(option, function (ret, err) {
+	        	api.hideProgress();
+	            if (ret) {
+	                apialert('用时：' + ((curtime() - starttime) / 1000) + "秒\n请求结果：\n" + JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+		
+		var filestream = null;
+		//Post请求-二进制文件流提交
+		function PostStreamRequest(){
+			if(!filestream){
+				apialert('请选择本地文件后再试！');
+				return;
+			}
+			//换成你自己的服务器
+			var host = 'https://www.opgap.com/test/post';
+            var postdata = {
+            	stream: filestream
+            }
+            var option = {
+            	url: host,
+            	method: 'post',
+            	cache: false,
+            	timeout: 10,
+            	dataType: 'text',
+            	returnAll: true,
+	        	data:postdata
+            }
+    		api.showProgress();
+    		var starttime = curtime();
+    		api.ajax(option, function (ret, err) {
+	        	api.hideProgress();
+	            if (ret) {
+	                apialert('用时：' + ((curtime() - starttime) / 1000) + "秒\n请求结果：\n" + JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+		
+		var fileArray = new Array();
+		//Post请求-form表单文件上传（multipart/form-data）
+		//支持多文件
+		function PostFileRequest(){
+			if(0 == fileArray.length){
+				apialert('请至少选择一个本地文件！');
+				return;
+			}
+			//换成你自己的服务器
+			var host = 'https://www.opgap.com/test/post';
+			var files = null;
+			if(1 == fileArray.length){
+				files = fileArray[0];
+			}else{
+				files = fileArray;
+			}
+            var postdata = {
+            	values: {//键值对，每一项对应form表单中的一个input text
+            		name:'system',
+            		fuck:'true'
+            	},
+               	files:{//文件键值对，每一项对应form表单中的一个input file，如果是文件组，则对应form表单中相同name的input file
+               		filename:files
+               	}
+            }
+            var option = {
+            	url: host,
+            	method: 'post',
+            	cache: false,
+            	timeout: 10,
+            	dataType: 'text',
+            	returnAll: true,
+	        	data:postdata
+            }
+    		api.showProgress();
+    		var starttime = curtime();
+    		api.ajax(option, function (ret, err) {
+	        	api.hideProgress();
+	            if (ret) {
+	                apialert('用时：' + ((curtime() - starttime) / 1000) + "秒\n请求结果：\n" + JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+		
+		//查询快递信息-圆通快递
+		function ajaxRequest(){
+			var num = document.getElementById('hphmid').value;
+			if(!num){
+				apialert('快递单号不能为空！');
+			}
+			var host = 'http://www.kuaidi100.com/query?type=yuantong&postid=' + num;
+			api.showProgress({
+				text:'查询中...'
+			});
+			api.ajax({
+				url:host,
+				dataType: 'text'
+			}, function(ret, err){
+				api.hideProgress();
+				if(ret){
+					apialert('查询结果：\n' + JSON.stringify(ret));
+				}else{
+					apialert('查询失败：\n' + JSON.stringify(err));
+				}
+			});
+		}
+		
+		function anyRequest(){
+			api.showProgress();
+			api.ajax({
+				url: "https://suggest.taobao.com/sug?code=utf-8&q=卫衣",
+				headers:{
+	        		'Content-Type':'application/json'
+	        	}
+			}, function(ret, err) {
+				api.hideProgress();
+				if (ret) {
+					apialert('成功：' + JSON.stringify(ret));
+					return;
+				}
+				apialert('失败：' + JSON.stringify(err));
+			})
+		}
+		
+		function request401(){
+			var host = 'http://linux.linuxidc.com';
+            var option = {
+            	url: host,
+            	method: 'get',
+            	dataType: 'text',
+            }
+    		api.showProgress();
+    		var starttime = curtime();
+    		api.ajax(option, function (ret, err) {
+	        	api.hideProgress();
+	            if (ret) {
+	                apialert('用时：' + ((curtime() - starttime) / 1000) + "秒\n请求结果：\n" + JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+		
+		function imageCache(){
+			var imgurl = $('imgurl').value;
+			if(!imgurl){
+				imgurl = 'http://a631aa25874caa1814bd.upyuncdn.apicloud-system.com/apicloud/b54fc01f489fee06f477ee748a7b1c9d.jpg';
+	    		//imgurl = 'http://www.w3school.com.cn/svg/circle1.svg'
+			}
+    		api.imageCache({
+    			url:imgurl,
+    			thumbnail:false
+    		}, function(ret){
+    			apialert(JSON.stringify(ret));
+    			$('img').src = ret.url;
+    		});
+    	}
+		
+		function dataCache(){
+			var host = $('dataurl').value;
+            var option = {
+            	url: host,
+            	cache: true,
+            	timeout: 10,
+            	dataType: 'text',
+            	returnAll: true,
+            }
+    		api.showProgress();
+    		var starttime = curtime();
+    		api.ajax(option, function (ret, err) {
+	        	api.hideProgress();
+	            if (ret) {
+	                apialert('用时：' + ((curtime() - starttime) / 1000) + "秒\n请求结果：\n" + JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+		
+	</script>
+</head>
+<body>
+    <div >
+        <div id="wrap">
+        	<!-- <div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>网络请求测试</h1>
+		        <div class="adpt" ></div>
+			</div> -->
+            <div  >
+            	<div class='itemtitle'>1、图片缓存</div>
+	            	<lable>输入远程图片资源地址：</lable><br>
+	            	<input type="text" id="imgurl" value=""/>
+	            	<div class="clickbtn" tapmode="active" onclick="imageCache()" >发起请求</div>
+	            	<div >
+	            		<img src='../image/tmp_icon.png' id='img' width=91% height=150 style='border:1px dashed #CCCCCC;'>
+	            	</div>
+	            	<div class="clickbtn" tapmode="active" onclick="openWin('image_cache.html')" >深入使用 >></div>
+            	<div class='itemtitle'>2、标准XMLHttpRequest</div>
+	            	<input type="text" id="xmlGethost" placeholder="host"/>
+	            	<div class="clickbtn" tapmode="active" onclick="GetXmlRequest()" >发起请求</div>
+            	<div class='itemtitle'>3、普通Get请求</div>
+	            	<input type="text" id="httpGethost" placeholder="host"/>
+	            	<div class="clickbtn" tapmode="active" onclick="GetRequest()" >发起请求</div>
+	            <div class='itemtitle'>3、代理请求</div>
+	            	<input type="text" id="delehttpGethost" placeholder="host"/>
+	            	<div class="clickbtn" tapmode="active" onclick="deleGetRequest()" >发起请求</div>
+	            <div class='itemtitle'>4、重定向Get请求</div>
+	            	<input type="text" id="redirectHttpGethost" placeholder="host"/>
+	            	<div class="clickbtn" tapmode="active" onclick="RedirectGetRequest()" >发起请求</div>
+	            <div class='itemtitle'>5、超时请求</div>
+	            	<lable>设置超时时间，单位：秒</lable><br>
+	            	<input type="number" id="timeout" placeholder="timeout"/>
+	            	<div class="clickbtn" tapmode="active" onclick="TimeoutRequest()" >发起请求</div>
+	            <div class='itemtitle'>6、Https Get请求</div>
+	            	<input type="text" id="httpsGethost" placeholder="host"/>
+	            	<div class="clickbtn" tapmode="active" onclick="GetHttpsRequest()" >发起Https请求</div>
+	            <div class='itemtitle'>7、CA证书不受信任的Https请求</div>
+	            	<input type="text" id="httpsGethostErr" value='https://kyfw.12306.cn/otn/' placeholder="host"/>
+	            	<div class="clickbtn" tapmode="active" onclick="GetErrHttpsRequest()" >发起Https请求</div>
+	            <div class='itemtitle'>8、Post请求-键值对form表单提交</div>
+	            	<input type="text" id="formvalue1" placeholder="formvalue1"/>
+					<input type="text" id="formvalue2" placeholder="formvalue2"/>
+	            	<div class="clickbtn" tapmode="active" onclick="PostFormRequest()" >发起请求</div>
+	            <div class='itemtitle'>9、Post请求-字符串body，json格式数据等提交</div>
+	            	<input type="text" id="bodyValue" placeholder="JSON或者XML或者任意纯文本"/>
+	            	<div class="clickbtn" tapmode="active" onclick="PostBodyRequest()" >发起请求</div>
+	            <div class='itemtitle'>10、Url编码测试</div>
+	            	<input type="text" id="enc" placeholder="带中文的Url"/>
+	            	<div class="clickbtn" tapmode="active" onclick="encodeRequest()" >发起请求</div>
+	            <div class='itemtitle'>11、查询快递信息-圆通快递</div>
+	            	<input type="text" id="hphmid" value='Y88888' placeholder="请输入快递号"/>
+	            	<div class="clickbtn" tapmode="active" onclick="ajaxRequest()" >发起请求</div><br>
+	            <div class='itemtitle'>12、任意测验</div>
+	            	<div class="clickbtn" tapmode="active" onclick="anyRequest()" >发起请求</div><br>
+	            <div class='itemtitle'>13、401请求</div>
+	            	<div class="clickbtn" tapmode="active" onclick="request401()" >发起请求</div><br>
+	            <div class='itemtitle'>14、标准304缓存</div>
+	            	<lable>输入远程静态资源地址：</lable><br>
+	            	<input type="text" id="dataurl" value="https://docs.apicloud.com/bower_components/highlightjs/styles/vs.css"/>
+	            	<div class="clickbtn" tapmode="active" onclick="dataCache()" >发起请求</div>
+	            <!-- <div class='itemtitle'>15、阿里OSS</div>
+	            	<div class="clickbtn" tapmode="active" onclick="openWin('oss_index.html')" >点击进入</div>
+	            <div class='itemtitle'>16、Websocket</div>
+	            	<div class="clickbtn" tapmode="active" onclick="openWin('websocket/index.html')" >点击进入</div> -->
+	            	<br>
+            </div>
+        </div>   
+    </div>
+</body>
+</html>

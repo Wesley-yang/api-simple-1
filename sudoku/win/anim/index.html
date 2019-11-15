@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    	<meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+		<title> anim </title>
+		<link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    	<link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    	<script src="../../script/public.js"></script>
+		<style>
+
+			body, html{ 
+				height: 100%; 
+				width:100%; 
+				background:#ccc; 
+				margin:0;
+				border:0; 
+				padding:0; 
+				position:absolute;
+				display:-webkit-box; 
+				-webkit-box-orient:vertical; 
+			}
+			
+			select{
+				font-size:25px;
+			}
+		</style>
+		<head>
+			<body>
+			<!-- <div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>动画测试</h1>
+		        <div class="adpt" ></div>
+			</div> -->
+			<div id='main'>
+				<lable>动画类型:</lable><br>
+				<select id="anim">
+				  <option value="none">none</option>
+				  <option value="push">push</option>
+				  <option value="movein">movein</option>
+				  <option value="fade">fade</option>
+				  <option value="flip">flip</option>
+				  <option value="reveal">reveal</option>
+				  <option value="ripple">ripple</option>
+				  <option value="curl">curl</option>
+				  <option value="un_curl">un_curl</option>
+				  <option value="suck">suck</option>
+				  <option value="cube">cube</option>
+				</select><br>
+				<lable>动画子类型:</lable><br>
+				<select id="anim_sub">
+				  <option value="from_right">from_right</option>
+				  <option value="from_left">from_left</option>
+				  <option value="from_top">from_top</option>
+				  <option value="from_bottom">from_bottom</option>
+				</select><br>
+				<lable>动画时长（毫秒）:</lable><br>
+				<input type="number" id="dur" placeholder="默认为350毫秒"/>
+				<div class="clickbtn" tapmode='' id='i4' onclick="openanim()">开始动画</div><br>
+			</div>
+			</body>
+			<script type="text/javascript">
+				function openanim(){
+					var anim = $("anim");
+					var anim_sub = $("anim_sub");
+  					var anim_str = anim.options[anim.selectedIndex].value;
+  					var anim_sub_str = anim_sub.options[anim_sub.selectedIndex].value;
+  					var anim_dur = $('dur').value;
+  					api.openWin({
+  						name:'winx',
+  						url:'color.html',
+  						animation:{
+  							type:anim_str,
+						    subType:anim_sub_str,
+						    duration:anim_dur  
+  						}
+  					});
+				}
+			</script>
+</html>

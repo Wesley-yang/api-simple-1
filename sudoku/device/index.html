@@ -1,0 +1,400 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>device</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script type="text/javascript" src="../script/public.js"></script>
+    <style>
+    	.marg{
+    		margin:3px 15px;
+    		font-size:15px;
+    	}
+    	
+    	.mail_atta{
+    		width:100px;
+    		height:100px;
+    		border:1px;
+    	}
+    	
+    </style>
+    <script type="text/javascript">
+		
+		window.domReady = function(){
+			//标准Html5监听屏幕 旋转
+	    	window.addEventListener("orientationchange", function(){
+	    		console.log('orientationchange......');
+	    		screenInfo();
+	    	});
+	    }
+		
+		function sendsms(){
+			var _silent = $('sms_sli').checked
+			var _text = $('sms_msg').value;
+			var _num = $('sms_num').value;
+			api.sms({
+				text:_text,
+				silent: _silent,
+				numbers:[_num]
+			}, function(ret, err){
+				console.log('sendsms:\n' + JSON.stringify(ret));
+				toast('发送结果:' + ret.status);
+			});
+		}
+		
+		function checkboxOnclick(checkbox){
+			if(checkbox.checked){
+				if(!isAndroid){
+					checkbox.checked = false;
+					toast('仅Android支持');
+				}
+			}
+		}
+		
+		function callnum(){
+			var _tel = $('call_tel').checked ? 'tel' : 'tel_prompt';
+			var _num = $('call_num').value;
+			api.call({
+				type: _tel,
+				number: _num
+			});
+		}
+    	
+		function deviceInfo(){
+			var str = '';
+			str += '引擎版本: ' + api.version + '\n';
+			str += '系统类型: ' + api.systemType + '\n';
+			str += '系统版本: ' + api.systemVersion + '\n';
+			str += 'APP版本: ' + api.appVersion + '\n';
+			str += '设备类型: ' + api.uiMode + '\n';
+			str += '设备标识: ' + api.deviceId + '\n';
+			str += '设备型号: ' + api.deviceModel + '\n';
+			str += '设备名称: ' + api.deviceName + '\n';
+			str += '网络状态: ' + api.connectionType + '\n';
+			str += '是否越狱: ' + api.jailbreak + '\n';
+			str += '应用渠道: ' + api.channel + '\n';
+			str += '主窗口名字: ' + api.winName + '\n';
+			str += '主窗口宽度: ' + api.winWidth + '\n';
+			str += '主窗口高度: ' + api.winHeight + '\n';
+			str += '子窗口名字: ' + api.frameName + '\n';
+			str += '子窗口宽度: ' + api.frameWidth + '\n';
+			str += '子窗口高度: ' + api.frameHeight + '\n';
+			str += '屏幕绝对宽度: ' + api.screenWidth + '\n';
+			str += '屏幕绝对高度: ' + api.screenHeight + '\n';
+			str += '状态栏高度: ' + api.safeArea.top + '\n';
+			str += '屏幕密度: ' + window.devicePixelRatio + '\n';
+			if(api.fingerPrint){
+				str += 'fingerPrint: ' + api.fingerPrint + '\n';
+			}
+			apialert(str);
+		}
+		
+		function codeInfo(){
+			var str = '';
+			str += '--wgtRootDir: ' + api.wgtRootDir + '\n';
+			str += '--fsDir: ' + api.fsDir + '\n';
+			str += '--cacheDir: ' + api.cacheDir + '\n';
+			str += '--boxDir: ' + api.boxDir + '\n';
+			str += '--urlDir: ' + window.location + '\n';
+			apialert(str);
+		}
+		
+		function alertPhoneNumber(){
+			api.getPhoneNumber(function(ret){
+				if(ret && ret.value){
+					apialert('本机号码为：' + ret.value);
+				}else{
+					apialert('该手机无法获取');
+				}
+			});
+		}
+		
+		function setBadge(){
+			var count = $('brg').value;
+			if(!count){
+				count = 0;
+			}
+			api.setAppIconBadge({
+			    badge: count
+			});
+			apialert('设置成功，回到桌面看看本app图标是否发生变化');
+		}
+		
+		var _portrait = true;
+    	function setOrientation(){
+    		_portrait = !_portrait;
+    		api.setScreenOrientation({
+    			orientation: _portrait ? 'portrait_up' : 'auto_landscape'
+    		});
+    		//screenInfo();
+    	}
+    	
+    	var _full = false;
+    	function setFullScreen(){
+    		_full = !_full;
+    		api.setFullScreen({
+				fullScreen: _full,
+				optNav: $('vir_bar').checked
+			});
+    		//screenInfo();
+    	}
+    	
+    	function setStatusBarColor(){
+    		var _color = radioValue('s_color');
+    		api.setStatusBarStyle({
+    			color: _color,
+    			//colorPrimary:'#FF00FF'
+    		});
+    	}
+    	
+    	function setStatusBarStyle(){
+    		var _style = radioValue('s_style');
+    		api.setStatusBarStyle({
+			    style: _style
+			});
+    	}
+    	
+    	function androidSecure(_flag){
+    		api.setScreenSecure({
+			    secure: _flag
+			});
+			if(_flag){
+				apialert('设置成功！截个屏看看效果？');
+			}else{
+				apialert('取消成功！截个屏看看效果？');
+			}
+    	}
+    	
+    	function screenInfo(){
+    		var str = '';
+    		str += '主窗口宽度: ' + api.winWidth + '\n';
+			str += '主窗口高度: ' + api.winHeight + '\n';
+			str += '子窗口名字: ' + api.frameName + '\n';
+			str += '子窗口宽度: ' + api.frameWidth + '\n';
+			str += '子窗口高度: ' + api.frameHeight + '\n';
+			str += '屏幕绝对宽度: ' + api.screenWidth + '\n';
+			str += '屏幕绝对高度: ' + api.screenHeight + '\n';
+			str += '屏幕密度: ' + window.devicePixelRatio + '\n';
+			str += '『屏幕绝对宽高=主窗口宽高×屏幕密度』';
+			console.log('winWidth=' + api.winWidth + ', winHeight=' + api.winHeight);
+    		apialert(str);
+    	}
+    	
+		function startLoction(){
+			api.startLocation({
+				autoStop:false
+			}, function(ret, err){
+				apialert('定位结果：' + JSON.stringify(ret));
+			});
+		}
+		
+		function stopLoction(){
+			api.stopLocation();
+		}
+		
+		function getLocation(){
+			api.getLocation(function(ret, err){
+				apialert('获取定位结果：' + JSON.stringify(ret));
+			});
+		}
+		
+		var lastSensortype = null;
+		var infoView = null;
+		var rowCounter = 0;//测试计数，防止卡死
+		function registerSensor(){
+			infoView = $('sen_ret');
+			infoView.innerHTML = '';
+			var _type = selectValue('sen_type');
+			api.startSensor({
+			    type: _type
+			}, function(ret, err){
+			    if(ret.status){
+			    	rowCounter++;
+			    	var x = twoDec(ret.x);
+			    	var y = twoDec(ret.y);
+			    	var z = twoDec(ret.z);
+			    	var prox = twoDec(ret.proximity);
+			        //console.log(JSON.stringify(ret));
+			        var str = 'x =' + x + ', y=' + y + ', z=' + z + ', proximity=' + prox;
+			        infoView.innerHTML = infoView.innerHTML + str + '<br>';
+			        if(rowCounter >= 15){
+			        	infoView.innerHTML = '';
+			        	rowCounter = 0;
+			        }
+			    } else{
+			        apialert(JSON.stringify(err));
+			    }
+			});
+			lastSensortype = _type;
+		}
+		
+		function unRegisterSensor(){
+			if(!lastSensortype){
+				apialert('未注册传感器监听');
+				return;
+			}
+			api.stopSensor({
+			    type: lastSensortype
+			});
+		}
+		
+		function openContacts(){
+			api.openContacts(function(ret, err) {
+			    if (ret && ret.status) {
+			        apialert('获取结果：\n name:' + ret.name + '\n phone:' + ret.phone);
+			    } else {
+			        apialert(JSON.stringify(err));
+			    }
+			});
+		}
+		
+		function toLauncher(){
+			api.toLauncher();
+		}
+		
+		function sendMail(){
+			var _subject = $('mail_title').value;
+			var _body = $('mail_body').value;
+			var _recipients = $('mail_addr').value;
+			if(_recipients){
+				_recipients = _recipients.split(';');
+			}
+			api.mail({
+			    recipients: _recipients,
+			    subject: _subject,
+			    body: _body,
+			    attachments: [_atta]
+			}, function(ret, err) {
+				toast('发送结果：' + ret.status);
+			});
+		}
+		
+		var _atta = null;
+		function catchMedia(){
+    		var data = {
+            	sourceType: 'library',
+            	mediaValue: 'pic'
+        	};
+    		api.getPicture(data, function(ret, err){
+	            if (ret.data) {
+	            	_atta = ret.data;
+	            	$('mail_atta').src = ret.data;
+	            } 
+        	});
+    	}
+    	//保留两位小数
+    	function twoDec(x) {
+			var f_x = parseFloat(x);
+			if (isNaN(f_x)) {
+				return x;
+			}
+			f_x = Math.round(f_x * 100) / 100;
+			var s_x = f_x.toString();
+			var pos_decimal = s_x.indexOf('.');
+			if (pos_decimal < 0) {
+				pos_decimal = s_x.length;
+				s_x += '.';
+			}
+			while (s_x.length <= pos_decimal + 2) {
+				s_x += '0';
+			}
+			return s_x;
+		}
+	</script>
+</head>
+<body>
+    <div >
+        <div id="wrap">
+        	<!-- <div id='header'>
+	            <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	            <h1>设备相关</h1>
+	            <div class="adpt" ></div>
+        	</div> -->
+        	<div class='itemtitle'>1、设备信息</div>
+            	<div class="clickbtn" tapmode="active" onclick="deviceInfo()" >点击查看</div>
+            <div class='itemtitle'>2、代码信息</div>
+            	<div class="clickbtn" tapmode="active" onclick="codeInfo()" >点击展示</div>
+        	<div class='itemtitle'>3、设置全屏&非全屏</div>
+        		<div class='marg'>同时操作虚拟按键栏：<input type="checkbox" id="vir_bar"/></div>
+            	<div class="clickbtn" tapmode="active" onclick="setFullScreen()" >设置</div>
+        	<div class='itemtitle'>4、设置屏幕方向</div>
+            	<div class="clickbtn" tapmode="active" onclick="setOrientation()" >设置</div>
+            <div class='itemtitle'>5、获取屏幕宽高</div>
+            	<div class="clickbtn" tapmode="active" onclick="screenInfo()" >获取</div>
+            <div class='itemtitle'>6、设置状态栏颜色</div>
+            	<lable>选择一个颜色：（只支持Android5.0及以上）</lable><br>
+				<div style='margin:10px 15px;'>
+					无<input type="radio" name="s_color" checked value="rgba(0,0,0,0)" />
+					红<input type="radio" name="s_color" value="#F00" />
+					黄<input type="radio" name="s_color" value="#FF0" />
+					蓝<input type="radio" name="s_color" value="#00F" />
+				</div>
+            	<div class="clickbtn" tapmode="active" onclick="setStatusBarColor()" >设置</div>
+            <div class='itemtitle'>7、设置状态栏样式</div>
+            	<lable>支持Android部分手机（频繁设置不一定生效），IOS所有手机</lable><br>
+            	<div style='margin:10px 15px;'>
+					light<input type="radio" name="s_style" checked value="light" />
+					dark<input type="radio" name="s_style" value="dark" />
+				</div>
+            	<div class="clickbtn" tapmode="active" onclick="setStatusBarStyle()" >设置</div>
+            <div class='itemtitle'>8、禁止系统截屏本应用</div>
+            	<lable>只支持Android部分手机</lable><br>
+            	<div class="clickbtn" tapmode="active" onclick="androidSecure(true)" >禁止截屏</div>
+            	<div class="clickbtn" tapmode="active" onclick="androidSecure(false)" >恢复截屏</div>
+        	<div class='itemtitle'>9、发送短信</div>
+        		<lable>输入短信内容：</lable><br>
+				<input type="text"  id="sms_msg" value="短信内容" /><br>
+				<lable>输入目标手机号码：</lable><br>
+				<input type="number"  id="sms_num" value="10086" /><br>
+				<div class='marg'>后台发送(需要花费短信费用)：<input type="checkbox" id="sms_sli" onclick="checkboxOnclick(this)"/></div>
+            	<div class="clickbtn" tapmode="active" onclick="sendsms()" >发送</div>
+            <div class='itemtitle'>10、拨打电话</div>
+				<lable>输入目标手机号码：</lable><br>
+				<input type="number"  id="call_num" value="10086" /><br>
+				<div class='marg'>直接拨打(需要花费短信费用)：<input type="checkbox" id="call_tel"/></div>
+            	<div class="clickbtn" tapmode="active" onclick="callnum()" >拨打</div>
+            <div class='itemtitle'>11、获取本机号码</div>
+            	<lable>仅部分Android手机生效</lable><br>
+            	<div class="clickbtn" tapmode="active" onclick="alertPhoneNumber()" >获取</div>
+            <div class="itemtitle">12、设置角标</div>
+				<lable>输入数字：</lable><br>
+				<input type="number"  id="brg" value="10" /><br>
+				<div class="clickbtn" tapmode="active" onclick="setBadge()" >点击设置</div>
+			<div class="itemtitle">13、定位监听</div>
+				<div class="clickbtn" tapmode="active" onclick="startLoction()" >点击开始定位</div>
+				<div class="clickbtn" tapmode="active" onclick="stopLoction()" >点击结束定位</div>
+				<div class="clickbtn" tapmode="active" onclick="getLocation()" >获取一次定位</div>
+			<div class="itemtitle">14、传感器</div>
+				<lable>选择传感器类型：</lable><br>
+				<select id='sen_type'>
+				  <option value ="accelerometer">accelerometer</option>
+				  <option value ="gyroscope">gyroscope</option>
+				  <option value="magnetic_field">magnetic_field</option>
+				  <option value="proximity">proximity</option>
+				  <option value="orientation">orientation</option>
+				  <option value="pressure">pressure</option>
+				</select>
+				<div class="info-area" id='sen_ret' style='height:150px;'>结果：</div>
+				<div class="clickbtn" tapmode="active" onclick="registerSensor()" >点击注册传感器监听</div>
+				<div class="clickbtn" tapmode="active" onclick="unRegisterSensor()" >点击取消监听</div>
+			<div class="itemtitle">15、打开系统通讯录</div>
+				<div class="clickbtn" tapmode="active" onclick="openContacts()" >点击打开</div>
+			<div class="itemtitle">16、回到手机桌面</div>
+				<div class="clickbtn" tapmode="active" onclick="toLauncher()" >点击回到桌面</div>
+			<div class="itemtitle">17、发送邮件</div>
+				<lable>输入邮件主题：</lable><br>
+				<input type="text"  id="mail_title" value="会议通知" /><br>
+				<lable>输入邮件内容：</lable><br>
+				<input type="text"  id="mail_body" value="今晚8点准时在102会议室开会" /><br>
+				<lable>输入收件人(多个用半角;隔开)：</lable><br>
+				<input type="text"  id="mail_addr" value="test@163.com;test@qq.com" /><br>
+				<img class='mail_atta' alt='添加附件' id='mail_atta' onclick='catchMedia()'>
+				<div class="clickbtn" tapmode="active" onclick="sendMail()" >点击发送</div>
+	         <br>
+        </div>   
+    </div>
+</body>
+</html>

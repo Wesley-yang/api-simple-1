@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>域</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script type="text/javascript" src="../script/public.js"></script>
+    <style>
+    	.btn{
+    		margin-left:10px;
+    	}
+    	
+    </style>
+    <script type="text/javascript">
+		
+		apiready = function(){
+	    	
+	    }
+		
+		//
+		function changeDomain(){
+			apialert('domain: ' + document.domain);
+			//document.domain = 'h.china-sss.com';
+			localStorage.setItem("_FormCache",'哈啊啊啊啊');
+			apialert('localStorage_FormCache: ' + localStorage._FormCache);
+		}
+		
+		function openLocFrame(){
+    		var bts = ['widget://', 'fs://', 'box://', '相对路径(./)', '从网络下载到本地'];
+			api.actionSheet({
+			    title: '请选择Scheme',
+			    buttons: bts
+			},function(ret, err){
+				var indx = ret.buttonIndex;
+				if(6 == indx){//取消
+					return;
+				}
+				var _url = '';
+				if(1 == indx){
+					_url = 'widget://sudoku/schemes/local.html';
+				}else if(2 == indx){
+					//将local.html拷贝到fs下。代码加密情况下会乱码，因为fs不在加密域下，而local.html文件是加密的，不在加密域下的文件不会产生解密行为
+					_url = 'fs://index.html';
+					copydata('widget://sudoku/schemes/local.html', _url);
+				}else if(3 == indx){
+					//将local.html拷贝到box下。代码加密情况下会乱码，因为fs不在加密域下，而local.html文件是加密的，不在加密域下的文件不会产生解密行为
+					_url = 'box://index.html';
+					copydata('widget://sudoku/schemes/local.html', _url);
+				}else if(4 == indx){
+					_url = './local.html';
+				}else if(5 == indx){
+					api.download({
+					    url: "http://a631aa25874caa1814bd.b0.upaiyun.com/apicloud/e314d30bf90fac7c86ed295abf1f70e8.html",
+					    report: false,
+					    cache: false
+					}, function(ret, err) {
+					    if (ret.state == 1) {
+					    	openFrame(ret.savePath);
+					    } else {
+							toast('下载失败');
+					    }
+					});
+					return;
+				}
+				openFrame(_url);
+			});
+    	}
+		
+		function openFrame(_url){
+			api.openFrame({
+				name: 'TEST',
+				url: _url,
+				rect: {
+					w:'auto',
+					h:'200',
+					marginBottom: 0
+				},
+				animation:{
+					type: 'movein',
+				    subType: 'from_bottom'
+				}
+			});
+		}
+		
+		function copydata(_infile, _outfile, callback){
+			var _data = api.readFile({
+			    sync: true,
+			    path: _infile
+			});
+			api.writeFile({
+			    path: _outfile,
+			    data: _data
+			}, function(ret){
+				if(callback){
+					callback();
+				}
+			});
+		}
+	</script>
+</head>
+<body>
+    <div >
+        <div id="wrap">
+        	<!-- <div id='header'>
+	            <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	            <h1>域测试</h1>
+	            <div class="adpt" ></div>
+        	</div> -->
+        	<div class='itemtitle'>1、不同scheme打开frame/win</div>
+        		<div tapmode='active' class='clickbtn' onclick="openLocFrame()">打开Frame</div>
+        	<div class='itemtitle'>1、设置dom的域</div>
+            	<div class="clickbtn" tapmode="active" onclick="changeDomain()" >更新</div>
+            <div class='itemtitle'>2、a标签跳转，http/https协议</div>
+	            <a class="btn" href="http://detail.tmall.com/item.htm?id=41886644704" >去天猫</a>
+            	<a class="btn" href="http://www.baidu.com" >去百度</a>
+            	<a class="btn" href="local.html" >去本地页面</a>
+            <div class='itemtitle'>3、调用A标签http协议-需验证</div>
+            	<div class="clickbtn" >
+            		<a href='http://linux.linuxidc.com/'>点击调用</a>
+            	</div>
+            <div class='itemtitle'>4、调用A标签http协议-需登录</div>
+            	<div class="clickbtn" >
+            		<a href='http://user:password@game-images.domain.com/images/image.png'>点击调用</a>
+            	</div>
+            <div class='itemtitle'>5、调用A标签http协议-会发出调APP客户端动作</div>
+            	<div class="clickbtn" >
+            		<a href='http://m.toutiao.com/?W2atlF=1'>点击调用</a>
+            	</div>
+            <br>
+        </div>   
+    </div>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>MCM_文件操作</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <script type="text/javascript" src="component.js"></script>
+    <style>
+    	#progress{
+			position:fixed;
+			top:10px;
+			right:10px;
+			z-index:99;
+			width:100px;
+			height:100px;
+			display:-webkit-box;
+			-webkit-box-pack:center;
+		  	-webkit-box-align:center;
+			-webkit-box-orient: vertical;
+			display:none;
+		}
+		
+		#txt{
+			width:100px;
+			height:100px;
+			position:absolute;
+			top:0;
+			left:0;
+			display:-webkit-box;
+			-webkit-box-pack:center;
+		  	-webkit-box-align:center;
+			-webkit-box-orient: vertical;
+		}
+		
+		img{
+    		width:85px;
+    		height:85px;
+    		margin-top:10px;
+    	}
+    </style>
+    <script type="text/javascript">
+    
+		var model = null;
+		var query = null;
+
+		apiready = function(){
+	    	model = api.require('model');
+	    	query = api.require('query');
+	    }
+	    
+	    //获取本地图库里面的图片或者视频
+		function captureMedia(mediaType, callback) {
+		    mediaType = mediaType ? mediaType : 'pic';
+		    api.getPicture({
+		        sourceType: 'library',
+		        mediaValue: mediaType
+		    }, function (ret, err) {
+		    	console.log('获取结果：\n' + JSON.stringify(ret));
+		        callback(ret.data, err);
+		    });
+		}
+		
+		var imgFileTmp = null;
+		
+		function loadImgToSrc(){
+			captureMedia('pic', function(filePath){
+				if(filePath){
+					$('img').src = filePath;
+					imgFileTmp = filePath;
+				}
+			});
+		}
+		
+		function uploadImage(){
+			if(!imgFileTmp){
+				apialert('请先获取本地图片');
+				return;
+			}
+			uploadFileToCloud(imgFileTmp);
+		}
+		
+		var videoFileTmp = null;
+		
+		function loadVideoToSrc(){
+			captureMedia('video', function(filePath){
+				if(filePath){
+					$('video').src = filePath;
+					videoFileTmp = filePath;
+				}
+			});
+		}
+		
+		function uploadVideo(){
+			if(!videoFileTmp){
+				apialert('请先获取本地视频');
+				return;
+			}
+			uploadFileToCloud(videoFileTmp);
+		}
+		
+		//上传文件到数据云
+		function uploadFileToCloud(filePath){
+			if(!filePath){
+				apialert('请选择本地文件！');
+				return;
+			}
+			//filename对应数据云file表中的name字段
+			var filename = $('filename').value;
+			if(!filename){
+				apialert('请填写文件名');
+				return;
+			}
+			var rm = curtime();
+			filename += rm;//加个随机值，保证每次请求的filename不一样
+			arcProgress.reset();
+			model.uploadFile({
+				report:true,//回调上传进度
+				data:{
+					file:{
+						name:filename,
+						url:filePath //文件本地地址
+					},
+					values:{
+						des:'哈哈哈哈哈哈哈哈' + rm
+						//保留字段
+					}
+				}
+			}, updatePercent);
+		}
+		
+		function loadCloudFile(){
+			//var cloudRes = 'http://a631aa25874caa1814bd.b0.upaiyun.com/apicloud/4ebed8eb30357564920e6a6a656e1d45.jpg';
+			var cloudRes = $('fileRes').value;
+			if(!cloudRes){
+				apialert('请输入资源地址');
+				return;
+			}
+			arcProgress.reset();
+			model.downloadFile({
+				//id:'54af3e1a6e1edd0f45f1ff9d',//id不为空时，mcm会先根据id到file表里查找到相应的数据后，取其url再进行下载
+				url:cloudRes,
+				report:true,
+				//savePath:'fs://aaaaa.jpg'//设置下载文件的存储地址，不设置时，mcm自动分配
+			}, updatePercent);
+		}
+		
+		function loadCloudFileByAPI(){
+			//var cloudRes = 'http://120.24.230.196:8125/App/GetStyleImg?ImgName=A\\1.jpg';
+			//cloudRes = encodeURI(cloudRes);
+			var cloudRes = 'http://a631aa25874caa1814bd.b0.upaiyun.com/apicloud/4ebed8eb30357564920e6a6a656e1d45.jpg';
+			//var cloudRes = $('fileRes').value;
+			if(!cloudRes){
+				apialert('请输入资源地址');
+				return;
+			}
+			arcProgress.reset();
+			api.download({
+				url:cloudRes,
+				report:true,
+				allowResume:true,
+				cache:true,
+				//savePath:'fs://aaaaa.jpg'//设置下载文件的存储地址，不设置时，自动分配
+			}, updatePercent);
+		}
+		
+		//更新进度
+		function updatePercent(ret, err){
+			if(err){
+				apialert('请求失败\n' + JSON.stringify(err));
+				return;
+			}
+			switch (ret.state) {
+				case 0://上传/下载中
+					arcProgress.step(ret.progress);
+					console.log("progress: " + ret.progress);
+					break;
+				case 1://上传/下载成功
+					arcProgress.step(100);
+					apialert('成功：\n' + JSON.stringify(ret));
+					break;
+				case 2://上传/下载失败
+					arcProgress.step(100);
+					apialert('失败了：\n' + JSON.stringify(ret));
+					break;
+			}
+			if(1 == ret.state){
+				//如果是图片上传成功则将上传结果显示到页面上
+	  			if(isImage(ret.type)){
+					$('downloadimg').src = ret.url;
+				}
+				if(isImage(ret.savePath)){
+					$('downloadimg').src = ret.savePath
+				}
+			}
+		}
+		
+		function displayAllCloudImg(){
+			var clazz = 'file';//指定查询表为文件表
+			query.createQuery(function(ret){
+				var QID = ret.qid;
+				query.limit({
+					qid:QID, 
+					value:300
+				});//分页100条/页
+				query.skip({
+					qid:QID, 
+					value:0
+				});
+				loading('查询中...');
+				model.findAll({
+					class:clazz, 
+					qid:QID
+				}, function(ret, err){
+					finishing();
+					if(ret){
+						apialert("查询结果记录数：" + ret.length);
+					}else{
+						apialert('查询失败：\n' + JSON.stringify(err));
+						return;
+					}
+					queryImageOk(ret);
+				});
+			});
+		}
+		
+		function queryImageOk(images){
+			var l = images.length;
+			if(0 == l){
+				return;
+			}
+			var str = '';
+			for(var i = 0; i < l; ++i){
+				var item = images[i];
+				//文件mimeType为"image/*"则显示
+				if(!isImage(item.type)){
+					continue;
+				}
+				str += "<img src='../../image/mini_refresh.jpg' id='s" + i + "'> ";
+			}
+			$('imglist').innerHTML = str;
+			for(var j = 0; j < l; ++j){
+				var item = images[j];
+				//文件mimeType为"image/*"则显示
+				if(!isImage(item.type)){
+					continue;
+				}
+				api.imageCache({
+				    url: item.url,
+				    tag: 's' + j,
+				    thumbnail: true
+				}, function(ret, err) {
+					$(ret.tag).src = ret.url;
+                	if(!ret || !ret.status){
+						console.log('imageCache fail...');
+					}
+				});
+			}
+		}
+		
+		function isImage(type){
+			if(!type){
+				return false;
+			}
+			if(type.indexOf('image') >= 0){
+				return true;
+			}
+			if(type.indexOf('jpg') >= 0){
+				return true;
+			}
+			if(type.indexOf('jpeg') >= 0){
+				return true;
+			}
+			if(type.indexOf('png') >= 0){
+				return true;
+			}
+			return false;
+		}
+		
+		function PostFileRequest(){
+			if(!imgFileTmp){
+				apialert('请至少选择一个本地文件！');
+				return;
+			}
+			var host = 'http://10.1.2.37/post.asp';
+            var postdata = {
+            	values: {//键值对，每一项对应form表单中的一个input text
+            		name:'system',
+            		fuck:'true'
+            	},
+               	files:{
+               		'img':imgFileTmp
+               	}
+            }
+            var option = {
+            	url: host,
+            	method: 'post',
+            	cache: false,
+            	timeout: 10,
+            	dataType: 'text',
+            	returnAll: true,
+	        	data:postdata
+            }
+    		api.showProgress();
+    		var starttime = curtime();
+    		api.ajax(option, function (ret, err) {
+	        	api.hideProgress();
+	            if (ret) {
+	                apialert('用时：' + ((curtime() - starttime) / 1000) + "秒\n请求结果：\n" + JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+	</script>
+</head>
+<body>
+	<!-- 显示进度用 -->
+<div id="progress">
+	<canvas id="myCanvas" width="100" height="100"></canvas>
+	<div id="txt">
+		<div>
+			<font id="per" size="2">0</font>
+			<font size="2">%</font>
+  		</div>
+  		<div><font size="2">已花费时间</font></div>
+  		<div><font id="time" size="2">0s</font></div>
+	</div>
+</div>
+	<div id='header'>
+        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+        <h1>文件操作</h1>
+        <div class="adpt" ></div>
+	</div>
+	<div id="main">
+	 
+		<div class="itemtitle">1、数据云文件上传/下载</div>
+		<lable>输入文件名，服务器通过此名获取该文件：</lable><br>
+		<input type="text" value="img" id="filename"/>
+		<div class="clickbtn" tapmode="active" onclick="loadImgToSrc()" >获取本地图片</div>
+		<div>
+			<img id='img' width=100 height=100 src='hold.png'>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="uploadImage()" >点击上传图片</div>
+		<div class="itemtitle"></div>
+		<div class="clickbtn" tapmode="active" onclick="loadVideoToSrc()" >获取本地视频</div>
+		<div>
+			<!-- <video id="video" style="width:100%;height:150px;" controls >
+				<source src="http://a631aa25874caa1814bd.b0.upaiyun.com/apicloud/36e77b3f95222ac1fd546f7229c5083b.mp4" type="video/mp4" />
+			</video> -->
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="uploadVideo()" >点击上传视频</div>
+		<div class="clickbtn" tapmode="active" onclick="PostFileRequest()" >AJAX上传</div>
+		<div class="itemtitle"></div>
+		<lable>输入数据云文件地址：</lable><br>
+		<input type="text"  id="fileRes" value="http://a631aa25874caa1814bd.b0.upaiyun.com/apicloud/36e77b3f95222ac1fd546f7229c5083b.mp4" /><br>
+		<div>
+			<img id='downloadimg' width=90% height=120 src='hold.png'>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="loadCloudFile()" >点击使用MCM下载文件</div>
+		<div class="clickbtn" tapmode="active" onclick="loadCloudFileByAPI()" >点击使用API下载文件</div>
+		<div class="itemtitle"></div>
+		<div class="clickbtn" tapmode="active" onclick="displayAllCloudImg()" >显示云端file表里所有图片</div>
+	    <lable>图片列表：</lable><br>
+	    <div id="imglist">
+			
+	    </div>   
+	</div>
+	</body>
+	<script>
+
+	function Progress(){
+		this.begin = 0;
+		this.self = null;
+		this.per = null
+		this.time = null;
+		this.context = null;
+		this.init = function(){
+			this.per = $('per');
+			this.time = $('time');
+			this.self = $('progress');
+			var canvas = $('myCanvas');
+			this.context = canvas.getContext('2d');
+			this.context.clearRect(0, 0, 100, 100);
+		}
+		this.reset = function(){
+			this.begin = curtime();
+			this.time.innerHTML = '0秒'; 
+			this.per.innerHTML = '0'; 
+			this.self.style.display = 'block';
+			this.step(0);
+		}
+		this.step = function(process){
+			var now = curtime();
+			var step = (now - this.begin) / 1000;
+			this.time.innerHTML = parseInt(step) + '秒'; 
+			this.per.innerHTML = parseInt(process);
+			var ctx = this.context; 
+			ctx.beginPath();  
+			ctx.moveTo(50, 50);  
+			ctx.arc(50, 50, 50, 0, Math.PI * 2, false);  
+			ctx.closePath();  
+			ctx.fillStyle = '#ddd';  
+			ctx.fill();  
+			ctx.beginPath();  
+			ctx.moveTo(50, 50);  
+			ctx.arc(50, 50, 50, 0, Math.PI * 2 * process / 100, false);  
+			ctx.closePath();  
+			ctx.fillStyle = '#e74c3c';  
+			ctx.fill();  
+			ctx.beginPath();  
+			ctx.moveTo(50, 50);  
+			ctx.arc(50, 50, 45, 0, Math.PI * 2, true);  
+			ctx.closePath();  
+			ctx.fillStyle = 'rgba(125,125,125,0.3)';  
+			ctx.fill();
+			ctx.beginPath();  
+			ctx.arc(50, 50, 40, 0, Math.PI * 2, true);  
+			ctx.closePath();  
+			ctx.strokeStyle = '#ddd';  
+			ctx.stroke();
+			if(100 == process){//100%时2秒后自动隐藏
+				setTimeout(function(){
+					arcProgress.self.style.display = 'none';
+				}, 2000);
+			}
+		}
+	}
+
+	var arcProgress = new Progress();
+	arcProgress.init();
+
+</script>
+</html>

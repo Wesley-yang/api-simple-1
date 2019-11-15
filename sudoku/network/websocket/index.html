@@ -1,0 +1,214 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+	<meta name="keywords" content="跨平台开发,小程序,APP"/>
+    <meta name="description" content="中国领先的跨平台开发,小程序,APP提供商" />
+	<link rel="stylesheet" type="text/css" href="css/public.css" />
+    <title>我是小红</title>  
+    <style>
+
+        #container {   
+            width: 100%;   
+            height: 100%;   
+            background: #EEE;
+        }   
+        #header {   
+            background:#000;   
+            height: 8%;   
+            color: #fff;   
+            line-height: 40px; 
+            font-size: 20px; 
+            padding: 0px 10px;
+			text-align: center;
+        }   
+        #footer {   
+            width: 100%;   
+            height: 9%;
+			line-height: 9%;
+            background: #666;   
+            position: absolute;   
+            bottom: 0;
+			text-align: center;
+            padding: 10px 0px;   
+        }  
+        #footer input {   
+            width: 70%;
+            height: 48px;
+            outline: none;   
+            font-size: 20px;   
+            text-indent: 10px;  
+            border-radius: 5px;
+        }   
+        #footer span {
+            width: 12%;   
+            height: 48px;
+            background: #ccc;
+			font-size: 15px;   
+            line-height: 45px;
+            cursor: pointer;   
+            text-align: center;  
+            border-radius: 5px;
+        }
+		
+		#file{
+			float: left;
+			margin-left:1%;
+		}
+
+		#send{
+			float: right;
+			margin-right:1%;
+		}
+
+        #footer span:hover {   
+            color: #fff;   
+            background: #999;   
+        } 
+		 
+        img {   
+            width: 50px;   
+            height: 50px;
+			border-radius: 45px; 
+        }   
+        #content {   
+            font-size: 17px;   
+            width: 100%;    
+            height: 80%;   
+            overflow: auto;
+        }   
+        #content li {   
+            margin: 10px;     
+            display: block;   
+            clear: both;   
+            overflow: hidden;
+        }   
+        #content li img {   
+            float: left;   
+        }   
+        #content li span{   
+            background: #00bc0c;   
+            padding: 10px;   
+            border-radius: 8px;   
+            float: left;   
+            margin: 6px 10px 0 10px;   
+            max-width: 180px;   
+            border: 1px solid #ccc;   
+            box-shadow: 0 0 3px #ccc; 
+        }   
+        #content li img.imgleft {    
+            float: left;    
+        }   
+        #content li img.imgright {    
+            float: right;    
+        }   
+        #content li span.spanleft {    
+            float: left;   
+            background: #fff;   
+        }   
+        #content li span.spanright {    
+            float: right;   
+            background: #00bc0c;   
+        }   
+    </style>  
+</head>  
+<body>  
+    <div id="container">  
+        <div id="header">  
+            <span style="float: left;">聊天</span>
+			<span>访客</span> 
+            <a style="float: right;" href='javascript:void(0);'>帮助</a>  
+        </div>
+        <ul id="content">
+			<!-- <li>
+				<img src='./image/default_visiter.jpg' class='imgright'>
+				<span class='spanright'>方法发沙发沙发沙发是发沙发沙发沙发是发沙发沙发沙发是fafasfasfasfasfasfasasfasfasfasfasf1</span>
+			</li>
+			<li>
+				<img src='./image/default_visiter.jpg' class='imgright'>
+				<span class='spanright'>滴滴滴滴滴滴2</span>
+			</li>
+			<li>
+				<img src='./image/default_visiter.jpg' class='imgright'>
+				<span class='spanright'>滴滴滴滴滴滴3</span>
+			</li>
+			<li>
+				<img src='./image/default_xiaohong.jpg' class='imgleft'>
+				<span class='spanleft'>急急急1</span>
+			</li>
+			<li>
+				<img src='./image/default_xiaohong.jpg' class='imgleft'>
+				<span class='spanleft'>急急急2</span>
+			</li>
+			<li>
+				<img src='./image/default_xiaohong.jpg' class='imgleft'>
+				<span class='spanleft'>急急急3</span>
+			</li>
+			<li>
+				<img src='./image/default_xiaohong.jpg' class='imgleft'>
+				<span class='spanleft'>急急急3</span>
+			</li>-->
+		</ul>  
+        <div id="footer">
+			<span id="file">文件</span>  
+            <input id="text" type="text" placeholder="说点什么吧...">  
+            <span id="send">发送</span>  
+        </div>  
+    </div>
+</body>
+<script type="text/javascript" src="script/public.js"></script>
+<script type="text/javascript" src="script/chat.js"></script>
+<script>
+   
+	var text = null;    
+	var content = null;
+	var arrIcon = ['./image/default_visiter.jpg','./image/default_xiaohong.jpg']; 
+
+	window.onload = function(){
+		text = $('text');
+		content = $('content');
+		$('send').onclick = function(){   
+			var msg = text.value;
+			if(!msg){   
+				toast('不能发送空消息');   
+			}else{
+				if(sendMessage(msg)){
+					updateList(msg, 0);
+				}
+			}
+			text.value = ''; 
+		};
+		document.onkeypress = function(e){
+		    var key = e.which;
+			console.log('keypress: ' + key);
+		    if(key == 13){
+				// the enter key code
+			    $('send').onclick();
+			    return false;
+			}
+		};
+		$('file').onclick = function(){   
+			toast('发送文件暂不支持');                   
+		};
+		initChat();
+	}
+
+	function updateList(msg, who){
+		//who: 0-右边; 1-左边
+		var newItem;
+		if(who == 0){
+			newItem = '<li><img class="imgright" src="' + arrIcon[who]+'"><span class="spanright" >' + msg + '</span></li>';
+		}else{
+			newItem = '<li><img class="imgleft" src="' + arrIcon[who]+'"><span class="spanleft" >' + msg + '</span></li>';
+		}
+		content.innerHTML += newItem;
+		content.scrollTop = content.scrollHeight;
+	}
+
+	window.onrecMessage = function(data){
+		updateList(data, 1);
+	}
+</script>
+</html>

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="chs">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,user-scalable=0">
+    <title>Socket</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script src="base64.js"></script>
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <script type="text/javascript">
+    
+    	var socket = null;
+    	apiready = function(){
+    		socket = api.require('socketManager');
+    	}
+    	
+    	var ip = '192.168.14.48';
+    	var prt = 5000;
+    	var needreturnBase64 = true;
+    	
+    	function create(){
+    		socket.createSocket({
+    			host:ip,
+    			port:prt,
+    			returnBase64: needreturnBase64,
+    		}, onstate);
+    	}
+    	
+    	function closes(cmd){
+    		if(curSocket){
+    			if(cmd){
+    				senddata(cmd);
+    			}else{
+    				socket.closeSocket({sid:curSocket});
+    			}
+    		}
+    	}
+    	
+    	var curSocket = null;
+    	function onstate(ret, err){
+    		if(!ret){
+    			apialert('error！');
+    			return;
+    		}
+    		var state = ret.state;
+    		curSocket = ret.sid
+    		var stateStr = "创建成功";
+    		if(101 === state){
+    			stateStr = "创建成功";
+    		}else if(102 === state){
+    			stateStr = "连接成功";
+    		}else if(103 === state){
+    			stateStr = "收到消息";
+    		}else if(201 === state){
+    			stateStr = "创建失败";
+    		}else if(202 === state){
+    			stateStr = "连接失败";
+    		}else if(203 === state){
+    			stateStr = "异常断开";
+    		}else if(204 === state){
+    			stateStr = "正常断开";
+    		}else if(205 === state){
+    			stateStr = "发生未知错误";
+    		}
+    		var tmp = $('result').innerHTML;
+			tmp += '<br>';
+			var str = ret.data;
+			if((103 === state) && needreturnBase64){
+				str = new Base64().decode(str);
+			}
+			tmp += stateStr + ' : ' + str;
+			$('result').innerHTML = tmp;
+    		console.log('-----------------------------------');
+    		console.log('ID-' + curSocket + ', ' + tmp);
+    		console.log('-----------------------------------');
+    	}
+    	
+    	function senddata(data){
+    		var writeData = null;
+    		//data = "{\"wifi\":{\"ssid\":\"CDLYTC\"}}";
+    		//data = "123456";
+    		if(data){
+    			writeData = data;
+    		}else{
+    			writeData = $('data').value;
+    			$('data').value = "";
+    		}
+    		if(!writeData){
+    			//apialert('请输入数据');
+    			//return;
+    			writeData = 'Ag3qAwRFAgQBAw==';
+    		}
+    		var enc = $('enc');
+    		var b64 = enc.options[enc.selectedIndex].value;
+    		apialert('data:\n' + writeData);
+    		if(b64 == 'true'){
+    			//var base64 = new Base64();
+    			//writeData = base64.encode(writeData);
+    		}
+    		socket.write({
+    			sid:curSocket,
+    			data:writeData,
+    			base64:b64
+    		});
+    	}
+    	
+    	function hexCharCodeToStr(hexCharCodeStr) {
+		　　var trimedStr = hexCharCodeStr.trim();
+		　　var rawStr = trimedStr.substr(0, 2).toLowerCase() === "0x" ? trimedStr.substr(2) : trimedStr;
+		　　var len = rawStr.length;
+		　　if(len % 2 !== 0) {
+		　　　　alert("Illegal Format ASCII Code!");
+		　　　　return "";
+		　　}
+		　　var curCharCode;
+		　　var resultStr = [];
+		　　for(var i = 0; i < len;i = i + 2) {
+		　　　　curCharCode = parseInt(rawStr.substr(i, 2), 16); // ASCII Code Value
+		　　　　resultStr.push(String.fromCharCode(curCharCode));
+		　　}
+		　　return resultStr.join("");
+		}
+    </script>
+</head>
+<body>
+    <div >
+        <div id="wrap">
+        	<!-- <div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>Socket测试</h1>
+		        <div class="adpt" ></div>
+			</div> -->
+        	<div class='itemtitle'>1、Socket实例</div>
+        		<div class="clickbtn" tapmode="active" onclick="create();" >创建一个</div>
+        	<div class='itemtitle'>2、发送数据</div>
+        		<lable>输入发送内容：</lable>
+	        	<input id='data' type='text' value='Ag3qAwRFAgQBAw==' /><br>
+	        	<lable>是否发送base64数据：</lable>
+	        	<select id="enc">
+					<option value="false" selected="selected">否</option>
+					<option value="true">是</option>
+				</select>
+        		<div class="clickbtn" tapmode="active" onclick="senddata();" >发送数据</div>
+        	<div class='itemtitle'>3、主动结束连接</div>
+        		<div class="clickbtn" tapmode="active" onclick="closes();" >结束连接</div>
+        	<div class='itemtitle'>4、要求服务器结束连接</div>
+        		<div class="clickbtn" tapmode="active" onclick="closes('exit');" >结束连接</div><br>
+        	<lable>收到服务返回数据：</lable>
+            	<div id="result" class="clickbtn" style="word-wrap:break-word;word-break:normal;text-align:start;padding-left:5px;"></div>
+        </div>   
+    </div>
+</body>
+</html>

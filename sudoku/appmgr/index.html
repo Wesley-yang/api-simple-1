@@ -1,0 +1,246 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>urlScheme</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script type="text/javascript" src="../script/public.js"></script>
+    
+    <script type="text/javascript">
+		
+		function openapp(){
+			api.openApp({
+			    //androidPkg: 'android.intent.action.VIEW',
+			    //mimeType: 'text/html',
+			    uri: 'http://www.baidu.com'
+			    //uri:'market://details?id=com.tencent.mm'
+			},function(ret,err){
+			    var msg = JSON.stringify(ret);
+			    apialert({
+			        title: 'openApp',
+			        msg: msg,
+			        buttons: ['确定']
+			    });
+			});
+		}
+		
+		function jumpToMarket(ident){
+			var identifier = '';
+			if('qq' == ident){
+				identifier = 'com.tencent.mobileqq';
+			}else if('mm' == ident){
+				identifier = 'com.tencent.mm';
+			}else{
+				apialert('暂不支持该打开APP');
+				return;
+			}
+			window.location.href = "market://details?id=" + identifier;
+		}
+		
+		function uninstallapp(){
+			var pkg = $('appPkg').value;
+			if(!pkg){
+				apialert('请输入应用包名');
+				return;
+			}
+			if(!appinstalled(pkg)){
+				return;
+			}
+			api.unInstallApp({
+			    packageName: pkg
+			});
+		}
+		
+		function installapp(){
+			var uri = $('appUri').value;
+			if(!uri){
+				apialert('应用资源地址不能为空');
+				return;
+			}
+			api.installApp({
+			    appUri: uri
+			}, function(ret, err){
+				apialert(JSON.stringify(err));
+			});
+		}
+		
+		function appinstalled(_bundle){
+			var bundle = $('appBundle').value;
+			if(_bundle){
+				bundle = _bundle;
+			}
+			if(!bundle){
+				apialert('应用资源地址不能为空');
+				return;
+			}
+			var i = api.appInstalled({
+				sync: true, 
+			    appBundle: bundle
+			});
+			apialert(i ? '已安装' : '未安装');
+			return i;
+			/*
+			api.appInstalled({
+			    appBundle: bundle
+			}, function(ret){
+				if(ret.installed){
+					apialert('已安装');
+				}else{
+					apialert('未安装');
+				}
+			});
+			*/
+		}
+		
+		function openAppWidthResult(){
+			//手机上未安装能够响应该获取动作的APP，将直接返回
+			api.openApp({
+			    androidPkg: 'android.intent.action.GET_CONTENT'//android应用action或者包名
+			},function(ret,err){
+			    var msg = JSON.stringify(ret);
+			    apialert({
+			        title: 'openApp',
+			        msg: msg,
+			        buttons: ['确定']
+			    });
+			});
+		}
+		
+		function reStartApp(){
+			if(confirm('确定重启APP？')){
+				api.rebootApp();
+			}
+		}
+		
+		function openMttbrowser(){
+			api.appInstalled({
+			    appBundle: 'com.tencent.mtt'
+			},function(ret){
+			    if(ret && ret.installed){
+			        api.openApp({
+					    androidPkg: 'com.tencent.mtt',
+						appParam: {
+					        url: 'http://www.baidu.com'
+					    }
+					});
+			        
+			    }else{
+			        api.toast({msg:'未安装QQ浏览器'});
+			    }
+			});
+		}
+		
+		function callnum(){
+			var num = $('number').value;
+			if(!num){
+				apialert('请输入号码');
+				return;
+			}
+			api.call({
+				number: num
+			});
+		}
+		
+		function silentExit(){  
+    	    api.closeWidget({
+                silent : true
+            });
+	    }
+		
+		function openSub(aid){
+			var appId = aid;
+			if(!appId){
+				appId = '123456';//项目根目录：widget/wgt/目录下对应appid的子widget
+			}
+			api.openWidget({
+				//path:'fs://3456765'//如果是下载到fs目录的子widget，可通过传入fs://加载
+				id: appId,
+				animation:{
+					type:"fade"      
+				},
+				wgtParam:{
+					key1:'aaaaaaa',
+					key2:'bbbbbbb',
+					key3:'ccccccc'
+				}
+			});
+		}
+	</script>
+</head>
+<body>
+    <div >
+        <div id="wrap">
+        	<!-- <div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>应用管理</h1>
+		        <div class="adpt" ></div>
+			</div> -->
+            <div>
+            	<div class='itemtitle'>1、urlScheme加载腾讯QQ客户端</div>
+            		<div class="clickbtn" >
+	            		<a href='mqqwpa://im/chat?chat_type=wpa&uin=378757&version=1&src_type=web&web_src=null'>点击调用（未安装将无法调用）</a>
+	            	</div>
+	            <div class='itemtitle'>2、urlScheme加载百度地图客户端</div>
+	            	<div class="clickbtn" >
+	            		<a href='bdapp://map/line?coordtype=&zoom=&region=北京&name=28&src=yourCompanyName|yourAppN'>点击调用（未安装将无法调用）</a>
+	            	</div>
+	            <div class='itemtitle'>3、urlScheme调用微信扫一扫</div>
+	            	<div class="clickbtn" >
+	            		<a href='weixin://dl/scan'>点击调用（未安装将无法调用）</a>
+	            	</div>
+	            <div class='itemtitle'>4、urlScheme拨打电话</div>
+	            	<div class="clickbtn" >
+	            		<a href='tel:10086'>点击调用</a>
+	            	</div>
+	            <div class='itemtitle'>5、urlScheme打开邮件客户端</div>
+	            	<div class="clickbtn" >
+	            		<a href='mailto:test@163.com'>点击调用（未安装将无法调用）</a>
+	            	</div>
+	            <div class='itemtitle'>6、urlScheme发送短信</div>
+	            	<div class="clickbtn" >
+	            		<a href='sms:10086?'>点击调用</a>
+	            	</div>
+	            <div class='itemtitle'>7、urlScheme打开应用市场</div>
+	            	<div class="clickbtn" >
+	            		<a href='market://details?id=com.tencent.mm'>点击调用（未安装将无法调用）</a>
+	            	</div>
+	            <div class='itemtitle'>8、api打开手机系统浏览器并加载百度</div>
+	            	<div class="clickbtn" tapmode='' onclick="openapp()">点击调用</div>
+	            <div class='itemtitle'>9、api打开手机QQ浏览器并加载百度</div>
+	            	<div class="clickbtn" tapmode='' onclick="openMttbrowser()">点击调用</div>
+	            <div class='itemtitle'>10、打开app并获取结果，Android有效</div>
+	            	<div class="clickbtn" tapmode='' onclick="openAppWidthResult()">点击调用</div>
+	            <div class='itemtitle'>11、api拨打电话</div>
+	            	<lable>输入电话号码：</lable><br>
+            		<input type='text' id='number' value='01010086' /><br>
+	            	<div class="clickbtn" tapmode='' onclick="callnum()">点击调用</div>
+	            <div class='itemtitle'>12、应用内操作</div>
+	            	<div class="clickbtn" tapmode='' onclick="silentExit()">静默退出App</div>
+	            	<div class="clickbtn" tapmode='' onclick="openSub()">加载子widget</div>
+	            	<div class="clickbtn" tapmode='' onclick="reStartApp()">重启App</div>
+	            <div class='itemtitle'>13、卸载App（仅支持Android）</div>
+	            	<lable>请输入被卸载App的包名</lable><br>
+            		<input type='text' id='appPkg' value='com.apicloud.pkg.any' /><br>
+	            	<div class="clickbtn" tapmode='' onclick="uninstallapp()">点击调用</div>
+	            <div class='itemtitle'>14、判断应用是否安装</div>
+	            	<lable>对应APP的信息。Android平台为应用包名，iOS平台为应用定义的URL Scheme。iOS中的URL Scheme与包名不一样，一个应用只有一个包名，但是可以配置多个URL Scheme</lable><br>
+            		<input type='text' id='appBundle' value='com.UCMobile' /><br>
+	            	<div class="clickbtn" tapmode='' onclick="appinstalled()">点击调用</div>
+	            <div class='itemtitle'>15、安装App</div>
+	            	<lable>请输入APP安装包地址。
+	            	Android上为apk包的本地路径，如file://xxx.apk；iOS上为应用在itunes里面的地址，或者安装包对应的plist文件地址</lable><br>
+            		<input type='text' id='appUri' value='fs://test.apk' /><br>
+	            	<div class="clickbtn" tapmode='' onclick="installapp()">点击调用</div>
+	            <div class='itemtitle'>16、下载附件</div>
+	            	<div class="clickbtn">
+	            		<a href='http://A6965066952332.qiniucdn.apicloud-system.com/8e437b3671c3bc7a1db65f75130cc5ff_d'>点击下载</a>
+	            	</div>
+	            <br>
+            </div>
+        </div>   
+    </div>
+</body>
+</html>

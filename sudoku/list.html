@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>API索引</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css" />
+    <script type="text/javascript" src="./script/public.js"></script>
+    <style>
+    	html,body{
+			background-color:#f8f8f8;
+		}
+		img{
+			border:0;
+		}
+		.px-line {
+			position: relative;
+		}
+		.px-line:after {
+			content: "";
+			position: absolute;
+			bottom: 0px;
+			left: 0px;
+			right: 0px;
+			border-bottom: 1px solid #E3E4E0;
+			box-sizing: border-box;
+			-webkit-transform: scaleY(0.5);
+			-webkit-transform-origin: 0 0;
+		}
+		#section {
+			padding:10px;
+		}
+
+		#info{
+			background-color:#FFF;
+			border-radius:8px;
+		}
+		
+		.item{
+		   padding:10px;
+		   display:-webkit-box;
+		   -webkit-box-orient: horizontal;
+		   -webkit-box-align:center;
+		   background: url(./image/right.png) no-repeat right;
+  			background-size:14px 15px;
+			background-origin:content-box;
+		}
+		.item-active{
+		   opacity:0.7;
+		}
+		
+		.item-icon{
+			display:-webkit-box;
+			width:25px;
+			height:25px;
+			-webkit-box-align:center;
+			-webkit-box-pack:center;
+			-webkit-border-radius: 100%;
+			background:red;
+		}
+		.wap{
+			-webkit-box-flex:1;
+			margin-left:10px;
+		}
+		
+		.des{
+			color:#A9A9A9;
+			font-size:12px;
+			margin-top:5px;
+		}
+    </style>
+</head>
+<body>
+    <div id='section'>
+		<div id="info">
+			<ul id='list'>
+				<li class='item' tapmode='item-active' onclick="openWin('win/index.html')">
+					<div class='item-icon'></div>
+					<div class='wap'>
+						<div class='name'>窗口系统</div>
+						<div class='des'>演示APICloud窗口系统使用</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</body>
+<script>
+
+var apilist = [
+	{name:'窗口系统', des:'演示APICloud窗口系统使用', url:'win/index.html'},
+	{name:'应用管理', des:'演示应用管理相关API使用', url:'appmgr/index.html'},
+	{name:'网络通讯', des:'演示网络相关API使用', url:'network/index.html'},
+	{name:'数据存储', des:'演示数据存储相关API使用', url:'storages/index.html'},
+	{name:'消息事件', des:'演示消息事件相关API使用', url:'event/index.html'},
+	{name:'设备访问', des:'演示设备访问相关API使用', url:'device/index.html'},
+	{name:'UI组件', des:'演示UI组件使用', url:'component/index.html'},
+	{name:'多媒体', des:'演示多媒体相关API使用', url:'media/index.html'},
+	{name:'模块', des:'演示模块使用', url:'module/index.html'},
+	{name:'同步接口', des:'演示同步API使用', url:'sync/index.html'},
+	{name:'权限管理', des:'演示动态权限使用', url:'permission/index.html'},
+	{name:'Scheme操作', des:'演示Scheme操作使用', url:'schemes/index.html'},
+	{name:'文本输入', des:'演示输入相关使用', url:'input/index.html'},
+	{name:'标准HTML5', des:'演示标准HTML5的一些效果和功能', url:'shtml5/index.html'},
+	{name:'渲染能力', des:'演示渲染能力及效果', url:'render/index.html'},
+	{name:'TV开发', des:'演示TV开发相关', url:'tv/index.html'},
+	{name:'SuperWebview', des:'演示SuperWebview相关使用', url:'superwebview/sudoku.html'},
+
+];
+var inner = '';
+for(var i in apilist){
+	inner += "<li class='item px-line' tapmode='item-active' onclick=\"openWin('" + apilist[i].url + "')\"> " +   
+			//"<div class='item-icon'></div> " +   
+			"<div class='wap'> " +   
+				"<div class='name'>" + apilist[i].name + "</div> " +   
+				"<div class='des'>" + apilist[i].des + "</div> " +   
+			"</div> " +   
+		"</li> ";
+}
+$('list').innerHTML = inner;
+
+</script>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>MCM_使用AJAX自定义操作</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="component.js"></script>
+    <script type="text/javascript" src="../../script/public.js"></script>
+	<script type="text/javascript" src="../../script/SHA1.js"></script>
+</head>
+<body>
+    <div id="wrap">
+    	<div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>AJAX自定义操作数据云</h1>
+	        <div class="adpt" ></div>
+		</div> 
+        <div>
+        	<div class="itemtitle">使用AJAX自定义操作</div>
+        	<div class="clickbtn" tapmode="active" onclick="uploadVideoFile()" >点击上传视频文件</div>
+        	<div class="clickbtn" tapmode="active" onclick="uploadImageFile()" >点击上传图片文件</div>
+        	<div class="clickbtn" tapmode="active" onclick="submitData()">提交数据</div>
+        	<div class="clickbtn" tapmode="active" onclick="reisUser()">注册用户</div> 
+        	
+        	
+        	<div class="clickbtn" tapmode="active" onclick="sss()">任意测试</div>            	
+        </div>
+    </div>   
+</body>
+<script type="text/javascript">
+
+	//获取本地图库里面的图片或者视频
+	function captureMedia(mediaType, callback) {
+	    mediaType = mediaType ? mediaType : 'pic';
+	    api.getPicture({
+	        sourceType: 'library',
+	        mediaValue: mediaType
+	    }, function (ret, err) {
+	    	console.log('获取结果：\n' + JSON.stringify(ret));
+	        callback(ret.data, err);
+	    });
+	}
+	
+    function uploadVideoFile(){
+	    captureMedia('video', function(url){
+	    	if(url){
+	    		uploadfile(url, function(ret, err){
+	    			if(0 == ret.status){
+	  					api.showProgress({title:'提交中', text:'进度：' + ret.progress});
+	    			}else{
+	    				api.hideProgress();
+	    				apialert('上传结果：\n' + JSON.stringify(ret));
+	    			}
+	    		});
+	    	}
+	    });
+    }
+    
+    function uploadImageFile(){
+	    captureMedia('pic', function(url){
+	    	if(url){
+	    		uploadfile(url, function(ret, err){
+	    			if(0 == ret.status){
+	  					api.showProgress({title:'提交中', text:'进度：' + ret.progress});
+	    			}else{
+	    				api.hideProgress();
+	    				apialert('上传结果：\n' + JSON.stringify(ret));
+	    			}
+	    		});
+	    	}
+	    });
+    }
+
+    var dataCount = 0;
+    
+    function submitData(){
+    	dataCount++;
+    	var ac = 'aaaa-' + dataCount;
+    	var bc = 'bbbb-' + dataCount;
+    	var ax = ['1111', '2222', '3333', '4444'];
+    	var dc = {A:ac, B:bc, C:ax};
+    	console.log('提交数据：\n' + JSON.stringify(dc));
+    	api.showProgress();
+    	comitData(dc, function(ret, err){
+    		api.hideProgress();
+			if(ret){
+				apialert('上传结果：\n' + JSON.stringify(ret));
+			}
+    	});
+    }
+    
+    var imgcount = 0;
+	function uploadfile(fileurl, callback) {
+		imgcount++;
+	    var appId = 'A6964774665539';
+	    var appKey = '1E4DC0BD-06DD-F21D-D0A3-05899926188B';
+	    var now = Date.now();
+	    var appKeyCode = SHA1(appId + 'UZ' + appKey + 'UZ' + now) + '.' + now;
+		var fn = 'img-' + imgcount;
+	    api.ajax({
+	        url: 'https://d.apicloud.com/mcm/api/file',
+	        method: 'post',
+	        report: true,
+	        headers: {
+	            'X-APICloud-AppId': appId,
+	            'X-APICloud-AppKey': appKeyCode
+	        },
+	        data: {
+	            values: {filename:fn},
+	            files: {file: fileurl}
+	        }
+	    }, function (ret, err) {
+	        var url = null;
+	        if (ret) {
+	            console.log('上传结果：\n' + JSON.stringify(ret));
+	        }
+	        if(err){
+	            console.log('上传文件失败 错误码：' + err.code + '；错误信息：' + err.msg + '网络状态码：' + err.statusCode);
+	            apialert('上传文件失败 错误码：' + err.code + '；错误信息：' + err.msg + '网络状态码：' + err.statusCode);
+	        }
+	        callback(ret, err);
+	    });
+	}
+	
+	var u = 0;
+	function reisUser(){
+		u++;
+		var l = "柚子风" + u;
+		var e = "ldxc" + u + "@163.com";
+    	var user = {username:l, password:'123456', email:e};
+    	console.log('注册用户：\n' + JSON.stringify(user));
+    	api.showProgress();
+    	comitData(user, function(ret, err){
+    		api.hideProgress();
+			if(ret){
+				apialert('注册结果：\n' + JSON.stringify(ret));
+			}
+    	}, 'user');
+    }
+	
+	function comitData(forms, callback, clazz) {
+	    var appId = 'A6965066817858';
+	    var appKey = 'E4A8865D-EDD8-6484-A018-98D6F72EA2CA';
+	    var now = Date.now();
+	    var appKeyCode = SHA1(appId + 'UZ' + appKey + 'UZ' + now) + '.' + now;
+	    console.log('appKeyCode: ' + appKeyCode);
+	    appId = 'A6974086810804';
+	    appKeyCode = '4be8897f16ce4e863f1c877e5bfd3ae274d001c2.1432379498420';
+	    var ul = 'https://d.apicloud.com/mcm/api/Endo';
+	    if(clazz){
+	    	ul = 'https://d.apicloud.com/mcm/api/' + clazz;
+	    }
+	    ul = 'https://r.apicloud.com/analytics/getAppStatisticDataById';
+	    api.ajax({
+	        url: ul,
+	        method: 'post',
+	        headers: {
+	            'X-APICloud-AppId': appId,
+	            'X-APICloud-AppKey': appKeyCode,
+	            //'Content-Type': 'application/json'
+	        },
+	        data: {
+	            //body: JSON.stringify(forms)
+	            values:{
+	            	startDate:'2015-08-20',
+	            	endDate:'2015-08-24'
+	            }
+	        }
+	    }, function (ret, err) {
+	        if (ret) {
+	            console.log('提交结果：\n' + JSON.stringify(ret));
+	        }
+	        if(err){
+	            console.log('提交失败：\n' + JSON.stringify(err));
+	        }
+	        callback(ret, err);
+	    });
+	}
+    
+    function sss(){
+    	var scoreURL = "https://d.apicloud.com/mcm/api/user/sendvercode";
+		var appId = 'A6964774665539';
+	    var appKey = '1E4DC0BD-06DD-F21D-D0A3-05899926188B';
+	    var now = Date.now();
+	    var appKeyCode = SHA1(appId + 'UZ' + appKey + 'UZ' + now) + '.' + now;
+	    var mobile = '13439363243';
+		api.ajax({
+            "url": "https://d.apicloud.com/mcm/api/user/sendvercode",
+            "method": "post",
+            "cache": false,
+            "headers": {
+                "X-APICloud-AppId": appId,
+                "X-APICloud-AppKey": appKeyCode
+            },
+            "data": {
+                "values": {
+                    "mobile": mobile
+                }
+            }
+        },function (ret, err) {
+            apialert(ret);
+            apialert(JSON.stringify(ret));
+            //手机不可重置
+        })
+			
+    }
+    
+</script>
+</html>

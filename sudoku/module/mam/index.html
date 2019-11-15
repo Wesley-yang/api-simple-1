@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+	<title>MAM</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    
+    <script type="text/javascript">
+		
+		var mam = null;
+		apiready = function(){
+			mam = api.require('mam');
+		}
+		
+		function checkUpdate(){
+			api.showProgress();
+			mam.checkUpdate(function(ret, err){
+				api.hideProgress();
+				console.log('checkUpdate：' + JSON.stringify(ret));
+				if(err || !ret.status){
+					apialert('出错了：' + JSON.stringify(err));
+					return;
+				}
+				var update = ret.result.update;
+				var closed = ret.result.closed;
+				var str = '';
+				var toLoading = false;
+				if(!update && !closed){
+					str = '无更新'
+				}else if(update && !closed){
+					str = '有更新:\n' + ret.result.updateTip;
+					toLoading = true;
+				}else if(update && closed){
+					str = '强制更新:\n' + ret.result.updateTip;
+					toLoading = true;
+				}else if(!update && closed){
+					str = '强制关闭'
+					//to do close app
+				}
+				apialert('检查结果-' + str, function(){
+					if(toLoading){
+						installapp(ret.result.source);
+					}
+				});
+			});
+		}
+		
+		function checkSmartUpdate(){
+			api.showProgress();
+			mam.checkSmartUpdate(function(ret, err){
+				api.hideProgress();
+				console.log('checkSmartUpdate：' + JSON.stringify(ret));
+				if(err){
+					apialert('出错了：' + JSON.stringify(err));
+					return;
+				}
+				var l = ret.packages.length;
+				var str = '检查结果，共' + l + '个更新包';
+				if(l > 0){
+					str = '检查结果，共' + l + '个更新包\n点击开始修复进行更新';
+				}
+				apialert(str);
+			});
+		}
+		
+		var DES = ["准备中", "下载更新", "安装更新", "更新完成", "更新发生错误"];
+		function startSmartUpdate(){
+			//api.showProgress();
+			var sdes = $('smart_des');
+			mam.startSmartUpdate(function(ret, err){
+				//api.hideProgress();
+				if(err){
+					apialert('出错了：' + JSON.stringify(err));
+					return;
+				}
+				//apialert('检查结果：' + JSON.stringify(ret));
+				sdes.innerHTML = "云修复进度：<br>" + "第" + ret.current + "/" + ret.total + "个更新包 " + DES[ret.state] + ", 进度" + ret.progress;
+				if(3 == ret.state){
+					apialert('修复完成！', function(){
+						api.rebootApp();
+					});
+				}
+			});
+		}
+		
+		function installapp(apk_url){
+			var udes = $('update_des');
+			api.download({
+				url: apk_url,
+				report:true
+			}, function(ret, err){
+				if(ret){
+					udes.innerHTML = "下载安装包进度：" + ret.percent + "%";
+					if(1 == ret.state){
+						api.installApp({
+						    appUri: ret.savePath
+						});
+					}
+				}else{
+					udes.innerHTML = "下载安装包进度：下载失败！";
+				}
+			});
+		}
+		
+	</script>
+</head>
+<body>
+    <div id='wrap'>
+    	<!-- <div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>MAM</h1>
+	        <div class="adpt" ></div>
+		</div> -->
+		<div class="itemtitle">1、检查更新</div>
+		<div class="clickbtn" tapmode="active" onclick="checkUpdate()" >点击开始</div>
+		<div class="info-area" id='update_des' style='height:50px;'>下载安装包进度：</div>
+		<div class="itemtitle">2、检查云修复</div>
+		<div class="clickbtn" tapmode="active" onclick="checkSmartUpdate()" >点击开始</div>
+		<div class="itemtitle">3、开始云修复</div>
+		<div class="clickbtn" tapmode="active" onclick="startSmartUpdate()" >开始修复</div>
+		<div class="info-area" id='smart_des' style='height:80px;'>云修复进度：</div>
+	</div>
+</body>
+</html>

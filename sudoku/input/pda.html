@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+	<meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+	<title></title>
+	<style>
+		body, html{ 
+			height: 100%; 
+			width:100%; 
+			background:#F0F; 
+			margin:0;
+			border:0; 
+			padding:0; 
+			position:absolute;
+			display:-webkit-box; 
+			-webkit-box-orient:vertical; 
+		}
+		 
+		input{ 
+			-webkit-appearance:none; 
+		}
+
+	</style>
+<head>
+	<body>
+		<div id='wrap'>
+			<p>InputA</p>
+			<input id='inputA' type='text' class="content" placeholder="等待输入" />
+			<p>InputB</p>
+			<input id='inputB' type='text' class="content" placeholder="等待输入" />
+		</div>
+	</body>
+	<script type="text/javascript">
+		
+		function $(id){
+			return document.getElementById(id);
+		}
+		
+		var inputA = null;
+		var inputB = null;
+		var focusNode = null;//当前应该focus的input
+		
+		window.onload = function(){
+			inputA = $('inputA');
+			inputB = $('inputB');
+			
+			document.body.onkeydown = function(e){ 
+				console.log("body onkeydown... " + e.keyCode);
+				if(e.keyCode !== 13){ 
+					return;
+				}
+				if(!focusNode){
+					inputA.focus();
+					focusNode = inputA;
+				}
+			};
+			
+			inputA.onkeydown = function(e){
+				console.log('inputA.onkeydown... ' + e.keyCode);
+			    if(e.keyCode == 13){ 
+			        inputA.blur(); 
+			        inputB.focus();
+			        focusNode = inputB;
+			    }
+			}
+			 
+			inputB.onkeydown = function(e){
+				console.log('inputB.onkeydown... ' + e.keyCode);
+			    if(e.keyCode == 13){
+			    	inputB.select(); 
+			    	doAjax(); 
+			    }
+			}
+		}
+		
+		//ajax，play等操作回调中，强制
+		function doAjax(){
+		    api.ajax({
+		    	url:'http://www.w3school.com.cn/ajax/demo_get.asp',
+		    	dateType:'text'
+		    }, function(ret, err){
+		    	console.log('doAjax over...');
+		    });
+		}
+		
+	</script>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>PUSH</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/SHA1.js"></script>
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <style>
+    	
+    	
+    </style>
+    <script type="text/javascript">
+		var push = null;
+		
+		apiready = function(){
+	    	push = api.require('push');
+	    }
+
+		function setListener(){
+			push.setListener(function(ret, err){
+				if(ret){
+					$('resmsg').innerHTML = "收到消息：" + JSON.stringify(ret);
+					apialert('收到推送消息：\n' + JSON.stringify(ret));
+				}
+			});
+			apialert('设置成功，收到的消息将通过此函数回调给网页，不再弹出通知到状态栏');
+		}
+		
+		function removeListener(){
+			push.removeListener();
+			apialert('移除成功，移除后网页将不再收到消息，消息将弹出通知到状态栏');
+		}
+
+		function bindUser(){
+			var uname = $('userName').value;
+			var uid = $('userId').value;
+			if(!uname && !uid){
+				apialert('请输入来自你的业务系统中的用户名或ID');
+				return;
+			}
+			api.showProgress();
+			push.bind({
+				userName:uname,
+				userId:uid
+			},function(ret, err){
+				api.hideProgress();
+				apialert(JSON.stringify(ret||err));
+			});
+		}
+		
+		function unBindUser(){
+			var uname = $('userName1').value;
+			var uid = $('userId1').value;
+			if(!uname && !uid){
+				apialert('请输入来自你的业务系统中的用户名或ID');
+				return;
+			}
+			api.showProgress();
+			push.unbind({
+				userName:uname,
+				userId:uid
+			},function(ret, err){
+				api.hideProgress();
+				apialert(JSON.stringify(ret||err));
+			});
+		}
+		
+		function JoinGroup(){
+			var gname = $('groupName').value;
+			if(!gname){
+				apialert('请输入群组名');
+				return;
+			}
+			api.showProgress();
+			push.joinGroup({
+				groupName:gname
+			},function(ret, err){
+				api.hideProgress();
+				apialert('操作结果：' + JSON.stringify(ret||err));
+			});
+		}
+		
+		function LeaveGroup(){
+			var gname = $('groupName').value;
+			if(!gname){
+				apialert('请输入群组名');
+				return;
+			}
+			api.showProgress();
+			push.leaveGroup({
+				groupName:gname
+			},function(ret, err){
+				api.hideProgress();
+				apialert('操作结果：' + JSON.stringify(ret||err));
+			});
+		}
+		
+		function LeaveAllGroup(){
+			if(!confirm('确定要退出所有群组吗？')){
+				return;
+			};
+			api.showProgress();
+			push.leaveAllGroup(function(ret, err){
+				api.hideProgress();
+				apialert('操作结果：' + JSON.stringify(ret||err));
+			});
+		}
+		
+		//使用ajax调用推送云api进行推送
+		function cloudPush(){
+			var pushText = $('pcon').value;
+			if(!pushText){
+				apialert('请输入推送内容');
+				return;
+			}
+			var appId = 'A6990860473925';//你的appId，在控制台概览界面获取，请保密
+		    var appKey = 'D6EA2D33-50F8-0338-1B98-4A3DA3800ACB';//你的appKey，在控制台概览界面获取，请保密
+		    var now = Date.now();
+		    var appKeyCode = SHA1(appId + 'UZ' + appKey + 'UZ' + now) + '.' + now;
+		    var ul = 'https://p.apicloud.com/api/push/message';
+		    var pushOption = {
+		    	title:'标题随意',
+            	content:pushText,
+            	type:'2',//推送的平台，0为全平台，参见推送云api文档
+            	//groupName:'ldx',//推送的群组，参见推送云api文档
+            	//userIds:'357139059244405'//单推，推送的用户，参见推送云api文档
+		    }
+		    api.showProgress();
+		    api.ajax({
+		        url: ul,
+		        method: 'post',
+		        headers: {
+		            'X-APICloud-AppId': appId,
+		            'X-APICloud-AppKey': appKeyCode
+		        },
+		        data: {
+		            values: pushOption
+		        }
+		    }, function (ret, err) {
+		    	api.hideProgress();
+		        if (ret) {
+		            apialert('提交结果：\n' + JSON.stringify(ret));
+		            console.log('提交结果：\n' + JSON.stringify(ret));
+		        }
+		        if(err){
+		            apialert('提交失败：\n' + JSON.stringify(err));
+		            console.log('提交失败：\n' + JSON.stringify(err));
+		        }
+		    });
+		}
+		
+	</script>
+</head>
+<body>
+    <div id="wrap">
+    	<!-- <div id='header'>
+            <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+            <h1>官方推送</h1>
+            <div class="adpt" ></div>
+        </div> -->
+        <div >
+        	<div class='itemtitle'>1、绑定推送用户（bind）</div>
+            	<input type="text" id="userName" placeholder="UserName"/>
+				<input type="text" id="userId" placeholder="UserId"/>
+            	<div class="clickbtn" tapmode="active" onclick="bindUser()" >绑定单推用户</div>
+            <div class='itemtitle'>2、解绑推送用户（unbind）</div>
+            	<input type="text" id="userName1" placeholder="UserName"/>
+				<input type="text" id="userId1" placeholder="UserId"/>
+            	<div class="clickbtn" tapmode="active" onclick="unBindUser()" >解绑单推用户</div>
+        	<div class='itemtitle'>3、监听/取消监听推送（setListener/removeListener）</div>
+            	<div class="clickbtn" tapmode="active" onclick="setListener()" >监听</div>
+            	<div class="clickbtn" tapmode="active" onclick="removeListener()" >取消监听</div>
+            	<div class="textbloack" id='resmsg'>收到内容：</div>
+        	<div class='itemtitle'>4、加入/离开群组（joinGroup/leaveGroup）</div>
+            	<input type="text" id="groupName" placeholder="GroupName"/>
+            	<div class="clickbtn" tapmode="active" onclick="JoinGroup()" >加入群组</div>
+            	<div class="clickbtn" tapmode="active" onclick="LeaveGroup()" >退出群组</div>
+            	<div class="clickbtn" tapmode="active" onclick="LeaveAllGroup()" >退出所有群组</div>
+        	<div class='itemtitle'>5、调用推送云api进行推送</div>
+            	<input type="text" id="pcon" placeholder="请输入推送内容"/>
+            	<div class="clickbtn" tapmode="active" onclick="cloudPush()" >点击调用</div>
+        	<div class='itemtitle'>6、偏好设置（setPreference）/div>
+        		<div class="clickbtn" tapmode="active" onclick="openWin('setting.html')" >去设置</div>
+        </div>
+    </div>   
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>窗口系统</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script src="../script/public.js"></script>
+    </head>
+    
+    <body >
+        <div id="wrap">
+        	<!-- <div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>窗口系统</h1>
+		        <div class="adpt" ></div>
+			</div> -->
+        	<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick="openWin('wins/wina.html', 'wina')">打开A窗口</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('fusewin/index.html')">TabLayout</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('anim/index.html')">窗口动画</div>
+        	</div>
+        	<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick="opensl()">打开SlidLayout</div>
+        		<div tapmode='active' class='clickitem' onclick="openDrawer()">打开Drawer</div>
+				<div tapmode='active' class='clickitem' onclick="openRoot()">打开root窗口</div>
+        	</div>
+        	<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick="addone()">打开一个Frame</div>
+        		<div tapmode='active' class='clickitem' onclick="openLocFrame()">打开固定位置Frame</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('group/index.html')">FrameGroup</div>
+        	</div>
+        	<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick="openWin('loaddata/index.html')">LoadData</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('cssanim/index.html')">CSS3动画</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('pull/index.html')">H5弹动</div>
+        	</div>
+        	<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick="openWin('module/index.html')">带UI模块窗口</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('browser/index.html')">内置浏览器</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('winbg/index.html')">背景层次</div>
+        	</div> 
+			<div class='row'>
+				<div tapmode='active' class='clickitem' onclick="exeBegin()">本win执行JS代码</div>
+				<div tapmode='active' class='clickitem' onclick="openWin('wins/win_single.html', 'win_single', {singleInstance:true})">打开单例窗口</div>
+        		<div tapmode='active' class='clickitem' onclick="sendone()">发送事件到Frame</div>
+        	</div>
+        </div>
+        
+    </body>
+    <script>
+    
+    	apiready = function(){
+    		console.log('pageParam: ' + JSON.stringify(api.pageParam));
+    		var _data = api.readFile({
+			    sync: true,
+			    path: 'widget://sudoku/win/wins/index_frm.html'
+			});
+			console.log('_data: ' + _data);
+			api.writeFile({
+			    path: 'box://index_frm.html',
+			    data: _data
+			}, function(ret, err) {
+			    if (ret.status) {
+			        console.log('writeFile OK');
+			    } else {
+					console.log('writeFile Fail');
+			    }
+			});
+    	}
+    
+    	var inity = 150;
+    	var count = 0;
+    	var subanimFlag = false;
+    	function addone(){
+    		inity += 80;
+    		count++;
+    		var frms = api.winWidth - 20;
+    		var subanim = "";
+    		if(subanimFlag){
+    			subanim = 'from_right';
+    			subanimFlag = false;
+    		}else{
+    			subanim = 'from_left';
+    			subanimFlag = true;
+    		}
+    		api.openFrame({
+    			name:'frm_' + count,
+    			url:'wins/index_frm.html',
+    			//url: api.wgtRootDir + '/sudoku/win/wins/index_frm.html',
+    			//url: api.boxDir + '/index_frm.html',
+    			pageParam:{
+    				id:count
+    			},
+    			rect:{
+    				x:10,
+    				y:inity,
+    				w:frms,
+    				h:400
+    			},
+    			animation:{
+					type:'push',
+				    subType:subanim,
+				    duration:300  
+				}
+    		});
+    	}
+    	
+    	function openLocFrame(){
+    		var bts = ['固定在window左边', '固定在window顶部', '固定在window右边', '固定在window底部'];
+			api.actionSheet({
+			    title: '请选择位置',
+			    buttons: bts
+			},function(ret, err){
+				var indx = ret.buttonIndex;
+				if(5 == indx){//取消
+					return;
+				}
+				var _rect = {};
+				var _anim = {
+					type:"movein"
+				};
+				if(1 == indx || 3 == indx){
+					_rect.w = 100;
+					_rect.h = 'auto';
+					if(1 == indx){
+						_rect.marginLeft = 0;
+						_anim.subType = "from_left"
+					}else{
+						_rect.marginRight = 0;
+						_anim.subType = "from_right"
+					}
+				}else{
+					_rect.w = 'auto';
+					_rect.h = 100;
+					if(2 == indx){
+						_rect.marginTop = 0;
+						_anim.subType = "from_top"
+					}else{
+						_rect.marginBottom = 0;
+						_anim.subType = "from_bottom"
+					}
+				}
+				api.openFrame({
+					name: 'TEST',
+					url: 'widget://demo/win/wins/index_frm.html',
+					rect: _rect,
+					animation: _anim,
+					pageParam:{
+	    				id:0
+	    			}
+				});
+			});
+    	}
+    	
+    	function sendone(){
+    		api.sendEvent({
+	    		name:'index_frm',
+	    		extra:{
+	    			key1:'value1',
+	    			key2:'value2'
+	    		}
+	    	});
+	    	toast('发送完毕，日志将在控制台输出');
+    	}
+    	
+    	function exeBegin(){
+    		var js = 'exeDone();';
+    		api.execScript({
+    			script:js
+    		});
+    	}
+    	
+    	function exeDone(){
+    		apialert('exeDone()函数被执行');
+    	}
+    	
+    	function opensl(){
+			api.openSlidLayout({
+		        type:'left',
+		        slidPaneStyle:{
+		        	leftEdge:200,
+		        },
+		        fixedPane:{
+		            name: 'homefixed',
+		            url: 'slid/homefixed.html',
+		            bounces: true,
+		            bgColor:'#000'
+		        },
+		        slidPane:{
+		            name: 'homeside',
+		            url: 'slid/homeside.html',
+		            bgColor:'#FFF'
+		        },
+	        }, function(ret) {
+	            //console.log(JSON.stringify(ret));
+	    	});
+		    //api.openSlidPane();
+		    //api.lockSlidPane();
+		}
+		
+		function openRoot(){
+			api.openWin({
+			    name : 'root'
+			});
+			//api.closeToWin({ name: 'root' });
+		}
+		
+		function openDrawer(){
+			api.openDrawerLayout({
+				name:'drawer',
+				url:'drawer/index.html',
+				//slidToOpenPane:false,
+				//slidToClosePane:false,
+				//tapToClosePane:false,
+				animation:{
+					type:'movein',
+				    duration:400  
+				},
+				leftPane:{
+					edge: 210,
+					name:'leftPane1',
+					url:'drawer/left_pane.html',
+					bounces:false,
+					pageParam:{},
+					allowEdit:false,
+					vScrollBarEnabled: false
+				},
+				rightPane:{
+					edge: 210,
+					name:'rightPane1',
+					url:'drawer/right_pane.html',
+					bounces:false,
+					pageParam:{a:'aaaa'}
+				}
+			});
+		}
+		
+		/**
+		 * 预加载frame
+		 * @returns
+		 */
+		function openWidthFrame(){
+			api.openWin({
+				name: 'width',
+				url: 'widthframe/index.html',
+				frame: {
+					name: 'frame',
+					url: 'widthframe/index_frm.html',
+					rect: {
+						marginTop: 44 + statusBarHeight,
+						marginBottom: 50
+					},
+					progress: {
+						type: 'page',
+						color: '#F0F'
+					}
+				}
+			});
+		}
+		
+		function openNativeWin(){
+			//openWin('nativewin/content.html', 'nativewin', {mini:true});
+			var parm = {
+				name: 'nativewin',
+				url: 'nativewin/main_content.html',
+				title:'Mini窗口',
+			  	navigationBar: {
+			  		height: 45,
+			    	background: "#303030",
+			    	//shadow: "rgba(0,0,0,0.2)",
+			    	color: "#FFF",
+			    	blurEffect: false,
+			    	hideBackButton: false
+			  	},
+			  	tabBar: {
+			  		height: 54,
+			    	background: "#FCFCFC",
+			    	//shadow: "#999",
+			    	color: "#999",
+			    	selectedColor: "#45C01A",
+			    	borderStyle: '#999',
+			    	index: 0,
+			    	list: [
+			    		{
+			      			text: "微信",
+			      			iconPath: "image/nav_tab_1.png",
+			      			selectedIconPath: "image/nav_tab_1_on.png"
+			    		}, {
+			      			text: "通讯录",
+			      			iconPath: "image/nav_tab_2.png",
+			      			selectedIconPath: "image/nav_tab_2_on.png"
+			    		}, {
+			      			text: "发现",
+			      			iconPath: "image/nav_tab_3.png",
+			      			selectedIconPath: "image/nav_tab_3_on.png"
+			    		}, {
+			      			text: "我",
+			      			iconPath: "image/nav_tab_4.png",
+			      			selectedIconPath: "image/nav_tab_4_on.png"
+			    		}
+			    	],
+			    	frames: [ //增加与tabBar一一对应的frameGroup，点击tab自动切换？
+						{
+							title: "微信",//tab切换时对应的标题
+				
+							name: "tab_frm_1",
+							url: "nativewin/tab_content_1.html",
+							//其他继承自openFrame的参数
+						}, {
+							title: "通讯录",
+				
+							name: "tab_frm_2",
+							url: "nativewin/tab_content_2.html"
+							//其他继承自openFrame的参数
+						}, {
+							title: "发现",
+				
+							name: "tab_frm_3",
+							url: "nativewin/tab_content_3.html"
+							//其他继承自openFrame的参数
+						}, {
+							title: "我",
+				
+							name: "tab_frm_4",
+							url: "nativewin/tab_content_4.html"
+							//其他继承自openFrame的参数
+						}
+					]
+			  	}
+			}
+			api.openMiniWin(parm);
+		}
+		
+    </script>
+
+</html>

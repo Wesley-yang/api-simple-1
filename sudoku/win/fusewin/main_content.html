@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>窗口系统</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css" />
+    <link rel="stylesheet" type="text/css" href="./css/box.css" />
+    <script src="./script/public.js"></script>
+        <style>
+        	body{
+        		background: #FCFCFC;
+        		display:-webkit-box;
+				-webkit-box-orient:vertical;
+				-webkit-box-pack:center;
+        	}
+        </style>
+    </head>
+    
+    <body>
+        <div class="clickbtn" tapmode="active" onclick="openWinB()" >打开普通窗口</div><br>
+    	<div class="clickbtn" tapmode="active" onclick="setRefrash()" >直接进入下拉刷新状态</div>
+    	<div class="clickbtn" tapmode="active" onclick="resetRefrash()" >结束下拉刷新状态</div>
+    	<div class="clickbtn" tapmode="active" onclick="setRefrashInfo()" >设置下拉刷新头信息</div>
+    	<div class="clickbtn" tapmode="active" onclick="setTile()" >更新标题栏文字</div>
+    	<div class="clickbtn" tapmode="active" onclick="opNavBar()" >隐藏/显示NavigationBar</div>
+        <div class="clickbtn" tapmode="active" onclick="opTabBar()" >隐藏/显示TabBar</div>
+    	<div class="clickbtn" tapmode="active" onclick="deviceInfo()" >设备信息</div>
+    	<div class="clickbtn" tapmode="active" onclick="showUiModule()" >显示UI模块</div>
+    	<div class="clickbtn" tapmode="active" onclick="openInput()" >打开输入框</div>
+    	<div class="info-area" id='smart_des' style='height:auto;max-height:10000px;'>
+			&nbsp;&nbsp;&nbsp;&nbsp;APICloud是中国领先的企业互联网化生态平台，通过拥有核心知识产权的混合开发技术帮助企业快速实现移动互联网布局，并以生态之力为开发者提供全面技术服务； 2014年1月，APICloud成立于北京，在上海、深圳、南京、青岛等地设有分支机构，服务能力贯穿业务互联网化、需求分析、产品原型、项目管理、app开发、应用运营、数据分析等全生命周期；凭借创新的开发技术和商业模式，APICloud曾被全球最具权威的IT研究与顾问咨询机构Gartner评为中国区Cool Vendor，成为全球企业客户部署移动战略时的推荐选择。
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;APICloud构建的应用开发者生态，已吸引超过60万用户在广泛使用和传播平台开发技术，并成长为国内最为完善的应用开发者生态平台之一。模块Store作为开发者生态中的重要组成部分，积累了大量成熟的App功能模块，在开发app时，可一键调用无需单独开发，从而大幅缩短开发周期。同时，APICloud与100余家主流第三方云服务提供商建立合作，涵盖支付、 IM、 直播、识别、地图等丰富功能，满足各类app的开发需求。
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;面对日益庞大的企业互联网化需求，APICloud以API重新定义行业应用解决方案，通过灵活、开放、标准化、轻量级、定制方便、积木式扩展的优势，对全行业移动信息化进行深度赋能，使定制开发服务具有“开发效率高”、“技术门槛低” 、“开发投入低”的特性，并率先做出 “保上线”的承诺。
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;在APICloud生态系统中，“快”是平台的核心价值，以此APICloud将围绕企业的业务场景和系统应用，展开互联与共享，积极推动产业变革，帮助传统行业加速互联网化转型，而APICloud所开创的平台化、模块化、生态化的模式，将赋予企业互联网化更加高效的生命力。
+		</div>
+    </body>
+    <script>
+    	apiready = function(){
+    		api.addEventListener({
+				name:'abc'
+			}, function(ret){
+				console.log('recevie event： ' + ret.value);
+			});
+			api.addEventListener({
+			    name:'viewappear'
+			},function(ret,err){
+			    console.debug('viewappear... ');
+			});
+			api.addEventListener({
+			    name:'viewdisappear'
+			},function(ret,err){
+			    console.debug('viewdisappear... ');
+			});
+			api.addEventListener({
+			    name:'pause'
+			},function(ret,err){
+			    console.debug('pause... ');
+			});
+			api.addEventListener({
+			    name:'resume'
+			},function(ret,err){
+			    console.debug('resume... ');
+			});
+			lisTabbar();
+    	}
+    	function openWinB(){
+    		api.openWin({
+    			name:'winb',
+    			url:'./norm/winb.html'
+    		});
+    	}
+    	
+    	function setRefrash(){
+			//setInfo();
+			api.refreshHeaderLoading();
+		}
+		
+		function resetRefrash(){
+			api.refreshHeaderLoadDone();
+		}
+    	
+    	function setRefrashInfo(){
+    		api.setRefreshHeaderInfo({
+    			loadingImg:'../image/163.png',
+    			//loadingImg:'widget://image/163.png',
+    			//visible:true
+    			textDown:'哇哈哈哈'
+    		}, function(){
+    			apialert('Refrash..');
+    		});
+	    }
+	    
+	    var title_diff = 0;
+    	function setTile(){
+    		title_diff++;
+    		api.setTabLayoutAttr({
+    			title: '标题-' + title_diff
+    		});
+    	}
+    	
+    	//监听tab项，处理“凸起点击”
+    	function lisTabbar(){
+    		api.addEventListener({
+			    name: 'tabitembtn'
+			}, function(ret, err) {
+			    console.log('点击了Tab选项：' + ret.index);
+			    if(2 == ret.index){
+			    	toast('中间凸起项被点击');
+			    	return;
+			    }
+				api.setTabBarAttr({
+	    			index: ret.index
+	    		});
+			});
+    	}
+    	
+    	var nav_flag = false;
+    	function opNavBar(){
+    		nav_flag = !nav_flag;
+    		api.setTabLayoutAttr({
+    			hideNavigationBar: nav_flag
+    		});
+    	}
+    	
+    	var tab_flag = false;
+    	function opTabBar(){
+    		tab_flag = !tab_flag;
+    		api.setTabLayoutAttr({
+    			hideTabBar: tab_flag
+    		});
+    	}
+    	
+    	function deviceInfo(){
+			var str = '';
+			str += '引擎版本: ' + api.version + '\n';
+			str += '系统类型: ' + api.systemType + '\n';
+			str += '系统版本: ' + api.systemVersion + '\n';
+			str += 'APP版本: ' + api.appVersion + '\n';
+			str += '设备类型: ' + api.uiMode + '\n';
+			str += '设备标识: ' + api.deviceId + '\n';
+			str += '设备型号: ' + api.deviceModel + '\n';
+			str += '设备名称: ' + api.deviceName + '\n';
+			str += '网络状态: ' + api.connectionType + '\n';
+			str += '是否越狱: ' + api.jailbreak + '\n';
+			str += '应用渠道: ' + api.channel + '\n';
+			str += '主窗口名字: ' + api.winName + '\n';
+			str += '主窗口宽度: ' + api.winWidth + '\n';
+			str += '主窗口高度: ' + api.winHeight + '\n';
+			str += '子窗口名字: ' + api.frameName + '\n';
+			str += '子窗口宽度: ' + api.frameWidth + '\n';
+			str += '子窗口高度: ' + api.frameHeight + '\n';
+			str += '屏幕绝对宽度: ' + api.screenWidth + '\n';
+			str += '屏幕绝对高度: ' + api.screenHeight + '\n';
+			str += '状态栏高度: ' + api.safeArea.top + '\n';
+			str += '屏幕密度: ' + window.devicePixelRatio + '\n';
+			if(api.fingerPrint){
+				str += 'fingerPrint: ' + api.fingerPrint + '\n';
+			}
+			apialert(str);
+		}
+		
+		//接收来自normal窗口的执行脚本动作
+		function fromNormal(){
+			apialert("main_content'alert!");
+		}
+		
+		function showUiModule(){
+			/*
+			var test = api.require('test');
+			test.show({
+				y: 0
+			});
+			*/
+			toast('需要在代码中配置UI模块');
+		}
+		
+		function openInput(){
+			/*
+			var UIInput = api.require('UIInput');
+				UIInput.open({
+				    rect: {
+				        x: 0,
+				        y: 0,
+				        w: api.winWidth,
+				        h: 45
+				    },
+				    styles: {
+				        bgColor: '#fff',
+				        size: 20,
+				        color: '#000',
+				        placeholder: {
+				            color: '#ccc'
+				        }
+				    },
+				    autoFocus: false,
+				    maxRows: 1,
+				    placeholder: '搜索',
+				    keyboardType: 'search',
+				    fixedOn: api.frameName
+				}, function(ret) {
+				    if (ret.eventType == 'change') {
+				    } else {
+				        alert(JSON.stringify(ret));
+				    }
+				});
+				*/
+			toast('需要在代码中配置input相关模块');
+		}
+    </script>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>MCM_删除操作</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <script type="text/javascript" src="component.js"></script>
+    
+    <script type="text/javascript">
+		var mcm = null;
+		var query = null;
+		apiready = function(){
+	    	mcm = api.require('model');
+	    	query = api.require('query');
+	    }
+	    
+		var clazz = "Endo";
+		
+		function checkClass(){
+			clazz = $('clzz').value;
+		}
+		
+		function mcm_deleteAll(){
+			toast('暂不支持');
+			/**
+			checkClass();
+			var param = {class:clazz, id:'5498e15bd88ac7930d2d437a'};
+			mcm.deleteAll(param, function(ret, err){
+				if(ret){
+					apialert(JSON.stringify(ret));
+				}else{
+					apialert(JSON.stringify(err));
+				}
+			});
+			**/
+		}
+		
+		function mcm_deleteById(){
+			var objectId = $('objectId').value;
+			if(!objectId){
+				apialert('数据Id不能为空');
+				return;
+			}
+			doBefore();
+			var param = {
+				class:clazz, 
+				id:objectId
+			};
+			mcm.deleteById(param, doComplete);
+		}
+		
+	</script>
+</head>
+<body>
+    <div >
+        <div id="wrap">
+        	<div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>删除操作</h1>
+		        <div class="adpt" ></div>
+			</div> 
+            <div >
+            	<div class="itemtitle">1、删除操作</div>
+            	<lable>请输入操作对象：</lable><br><input type="text" value="Endo" id="clzz"/>
+            	<div class="itemtitle"></div>
+            	<lable>被删除数据的ID：</lable><br><input type="text" value="5498e15bd88ac7930d2d437a" id="objectId"/>
+            	<div class="clickbtn" tapmode="active" onclick="mcm_deleteById()" >根据ID删除</div>    
+            	<div class="clickbtn" tapmode="active" onclick="mcm_deleteAll()" >删除一组（暂不支持）</div>        	
+            </div>
+        </div>   
+    </div>
+</body>
+</html>

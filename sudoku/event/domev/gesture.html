@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>Gesture</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+	<script type="text/javascript">
+		apiready = function(){
+			
+		}
+		
+		function regGesture(){
+			api.addEventListener({
+			    name:'swipedown'
+			},function(){
+			    console.log('swipedown...');
+			});
+			api.addEventListener({
+			    name:'swipeup'
+			},function(){
+			    console.log('swipeup...');
+			});
+			api.addEventListener({
+			    name:'swipeleft'
+			},function(){
+			    console.log('swipeleft...');
+			});
+			api.addEventListener({
+			    name:'swiperight'
+			},function(){
+			    console.log('swiperight...');
+			});
+			api.addEventListener({
+			    name:'tap'
+			},function(){
+			    console.log('tap...');
+			});
+			apialert('监听成功！');
+		}
+		
+		function unregGesture(){
+			api.removeEventListener({
+			    name:'swipedown'
+			});
+			api.removeEventListener({
+			    name:'swipeup'
+			});
+			api.removeEventListener({
+			    name:'swipeleft'
+			});
+			api.removeEventListener({
+			    name:'swiperight'
+			});
+			api.removeEventListener({
+			    name:'tap'
+			});
+			apialert('取消成功！');
+		}
+		
+		function regLongClick(){
+			api.addEventListener({
+			    name:'longpress'
+			},function(){
+			    apialert('当前win/frame被长按！');
+			    console.log('longpress：' + window.event.currentTarget);
+			});
+			apialert('监听成功！在win/frame中长按试试');
+		}
+		
+		function unregLongClick(){
+			api.removeEventListener({
+			    name:'longpress'
+			});
+			apialert('取消成功！');
+		}
+		
+	</script>
+</head>
+<body>
+	<div id='wrap'>
+	    <!-- <div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>手势相关</h1>
+	        <div class="adpt" ></div>
+		</div> -->
+		<div >
+			<div class="itemtitle">1、手势</div>
+				<lable>将同时开启tap/swipeleft/swipetop/swiperight/swipedown的监听</lable><br>
+				<div class="clickbtn" tapmode="active" onclick="regGesture()" >点击注册监听手势</div>
+				<div class="clickbtn" tapmode="active" onclick="unregGesture()" >点击取消监听手势</div>
+			<div class="itemtitle">2、长按事件</div>
+				<lable>长按事件是针对win/frame全局的，并不针对dom</lable><br>
+				<div class="clickbtn" tapmode="active" onclick="regLongClick()" >点击注册监听长按</div>
+				<div class="clickbtn" tapmode="active" onclick="unregLongClick()" >点击取消监听长按</div>
+		</div>
+	</div>
+</body>
+</html>

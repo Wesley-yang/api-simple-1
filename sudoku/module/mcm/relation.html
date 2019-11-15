@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>MCM_关系操作</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <script type="text/javascript" src="component.js"></script>
+    <script type="text/javascript">
+		var mcm = null;
+		var query = null;
+		var relation = null;
+		
+		apiready = function(){
+	    	mcm = api.require('model');
+	    	query = api.require('query');
+	    	relation = api.require('relation');
+	    }
+	    
+		var clazz = "Endo";
+		
+		function checkClass(){
+			clazz = $('clzz').value;
+		}
+
+		function mcm_relationInsert(){
+			doBefore();
+			var param = {};
+			param.class = clazz;
+			param.id = '54b3d0698e40473a64f16cfe';
+			param.column = 'detail';
+			param.value = {name:'GGGGGG哈哈哈哈哈', des:'HHHHHHH啊啊啊啊', user:['sss', 'ddd', 'vvv']};
+			relation.insert(param, doComplete);
+		}
+		
+		function mcm_relationFindAll(){
+			doBefore();
+			var param = {};
+			param.class = clazz;
+			param.id = '54b3d0698e40473a64f16cfe';
+			param.column = 'detail';
+			relation.findAll(param, doComplete);
+		}
+		
+		function mcm_relationCount(){
+			doBefore();
+			var param = {};
+			param.class = clazz;
+			param.id = '54b3d0698e40473a64f16cfe';
+			param.column = 'detail';
+			relation.count(param, doComplete);
+		}
+		
+		function mcm_relationDeleteAll(){
+			doBefore();
+			var param = {};
+			param.class = clazz;
+			param.id = '54b3d0698e40473a64f16cfe';
+			param.column = 'detail';
+			relation.deleteAll(param, doComplete);
+		}
+		
+	</script>
+</head>
+<body>
+    <div id='wrap'>
+    	<div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>关系操作</h1>
+	        <div class="adpt" ></div>
+		</div>
+    	<div class="itemtitle">1、关系操作</div>
+    	<lable>请输入操作对象：</lable><br>
+    	<input type="text" id="clzz" class="input" value="Endo" placeholder="请输入class" />
+		<div class="itemtitle">（1）、insert</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_relationInsert()" >insert</div>
+		<div class="itemtitle">（2）、findAll</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_relationFindAll()" >findAll</div>
+		<div class="itemtitle">（3）、count</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_relationCount()" >relationCount</div>
+		<div class="itemtitle">（4）、deleteAll</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_relationDeleteAll()" >deleteAll</div> 
+    </div>
+</body>
+</html>

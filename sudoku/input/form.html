@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>模块测试</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script src="../script/public.js"></script>
+    <script>
+    	
+    </script>
+    </head>
+    <body >
+        <div id="wrap">
+        	<div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>form表单</h1>
+		        <div class="adpt" ></div>
+			</div>
+        	<div class='itemtitle'>1、form表单发送按钮</div>
+        		<form>
+        			<lable>name:</lable><br>
+		      		<input type="text" name="name" value="zhangsan" maxlength="10"><br>
+		      		<lable>nick:</lable><br>
+		      		<input type="text" name="nick" value="1234" ><br>
+		    	</form> 
+		    <div class='itemtitle'>2、form表单文件选择</div>
+        		<form>
+        			<lable>选择一个:</lable><br>
+		      		<input type="file" name="img" /><br>
+		      		<lable>选择多个:</lable><br>
+		      		<input type="file" name="img" multiple="multiple" /><br>
+		    	</form> 
+        </div>
+    </body>
+</html>

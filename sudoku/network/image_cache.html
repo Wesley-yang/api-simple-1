@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>自定义标签</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script src="../script/public.js"></script>
+    <style>
+    	img{
+    		width:85px;
+    		height:85px;
+    		margin-top:10px;
+    	}
+    	
+    </style>
+    <script type="text/javascript">
+		
+		apiready = function(){
+	    		
+	    }
+		
+		function showImg(){
+			var l = 50;
+			var str = '';
+			for(var i = 0; i < l; ++i){
+				str += "<img src='../image/mini_refresh.jpg' id='s" + i + "'> ";
+			}
+			$('imgs').innerHTML = str;
+			for(var j = 0; j < l; ++j){
+				var _url = 'http://a631aa25874caa1814bd.upyuncdn.apicloud-system.com/apicloud/658978733f461776de959263d45de83e.jpg';
+				if((j % 2) == 1){
+					_url = "http://a631aa25874caa1814bd.upyuncdn.apicloud-system.com/apicloud/3fc6d052d9f112b0775ad83757999ec4.jpg";
+				}
+				api.imageCache({
+                    url: _url,
+                    thumbnail: true,
+                    tag: 's' + j
+                }, function (ret, err) {
+			    	document.images[ret.tag].src = ret.url;
+                	if(!ret || !ret.status){
+						console.log('imageCache fail...');
+					}
+                });
+			}
+		}
+		
+		function showImg1(){
+			var arr = api.readFile({path:'widget://sudoku/network/remote_img.json', sync: true});
+			var jsona = JSON.parse(arr);
+			var l = jsona.length;
+			var str = '';
+			for(var i = 0; i < l; ++i){
+				str += "<img src='../image/mini_refresh.jpg' id='s" + i + "'> ";
+			}
+			$('imgs').innerHTML = str;
+			for(var j = 0; j < l; ++j){
+				api.imageCache({
+				    url: jsona[j].url,
+				    tag: 's' + j,
+				    thumbnail: true
+				}, function(ret, err) {
+					document.images[ret.tag].src = ret.url;
+                	if(!ret || !ret.status){
+						console.log('imageCache fail...');
+					}
+				});
+			}
+		}
+		
+		function showImg2(){
+			var arr = api.readFile({path:'widget://sudoku/network/remote_img.json', sync: true});
+			var jsona = JSON.parse(arr);
+			var l = jsona.length;
+			var str = '';
+			for(var i = 0; i < l; ++i){
+				var url = "api://imageCache?url=" + jsona[i].url + "&thumbnail=true";
+				str += "<img src='" + url + "' id='s" + i + "'> ";
+			}
+			$('imgs').innerHTML = str;
+		}
+		
+		function showImgInfo(){
+			apialert('图片元素个数：' + document.images.length);
+			//apialert('图片元素：' + document.images['s5'].src);
+		}
+		
+	</script>
+</head>
+<body>
+    <div id="wrap">
+    	<!-- <div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>自定义标签</h1>
+	        <div class="adpt" ></div>
+		</div> -->
+        <div id='imgs'>
+        	<!-- <img src='../image/hold.png' id="s1">
+        	<img src='../image/hold.png' id="s2">
+        	<img src='../image/hold.png' id="s3">
+        	<img src='../image/hold.png' id="s4">
+        	<img src='../image/hold.png' id="s5" name='cc'>
+        	<img src='../image/hold.png' id="s6">
+        	<img src='../image/hold.png' id="s7">
+        	<img src='../image/hold.png' id="s8">
+        	<img src='../image/hold.png' id="s9">
+        	<img src='../image/hold.png' id="s10">
+        	<img src='../image/hold.png' id="s11">
+        	<img src='../image/hold.png' id="s12">
+        	<img src='../image/hold.png' id="s13">
+        	<img src='../image/hold.png' id="s14">
+        	<img src='../image/hold.png' id="s15">
+        	<img src='../image/hold.png' id="s16">
+        	<img src='../image/hold.png' id="s17">
+        	<img src='../image/hold.png' id="s18">
+        	<img src='../image/hold.png' id="s19">
+        	<img src='../image/hold.png' id="s20"> -->
+        </div>
+        <div class='itemtitle'>1、大量重复图片</div>
+        	<div class="clickbtn" tapmode="active" onclick="showImg()" >点击显示图片</div>
+        <div class='itemtitle'>2、部分重复图片</div>
+        	<div class="clickbtn" tapmode="active" onclick="showImg1()" >点击显示图片</div>
+        <div class='itemtitle'>3、api协议加载图片（即将支持）</div>
+        	<div class="clickbtn" tapmode="active" onclick="showImg2()" >点击显示图片</div>
+        <div class='itemtitle'>4、显示图片元素信息</div>
+        	<div class="clickbtn" tapmode="active" onclick="showImgInfo()" >点击显示</div>
+    	<br>
+    </div>   
+</body>
+</html>

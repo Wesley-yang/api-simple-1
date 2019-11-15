@@ -1,0 +1,28 @@
+html,body,header,section,footer,nav,div,ul,ol,li,img,a,span,em,del,center,strong,var,fieldset,form,label,dt,dd,cite,input,hr,time,mark,code,figcaption,figure,textarea{
+	margin:0;
+	border:0;
+	padding:0;
+	color:rgb(50,50,50);
+}
+
+html,body {
+	-webkit-text-size-adjust:none;
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
+	-webkit-user-select:none;
+	/** 引起输入框不聚焦
+	-webkit-touch-callout:none;
+	-webkit-user-select:none;**/
+}
+
+input{
+	font-family: sans-serif;
+	font-style:normal;
+}
+
+body{
+  width:100%; 
+  height:100%;
+}
+.adpt {
+    width: 20%;
+}

@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>baiduLocation</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <style type="text/css">
+    
+    </style>
+</head>
+<body>
+	<!-- <div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>百度定位</h1>
+	        <div class="adpt" ></div>
+		</div> -->
+    <div id="main">
+        <div class='clickbtn' tapmode onclick='locstart();'>开始定位</div>
+        <div class='clickbtn' tapmode onclick='locstop();'>停止定位</div>
+        <div class='clickbtn' tapmode onclick='loconece();'>定位一次</div>
+    </div>
+</body>
+
+<script type="text/javascript">
+
+	function waitting(){
+		api.showProgress({
+			title:'定位中...'
+		});
+	}
+	
+	function finaling(){
+		api.hideProgress();
+	}
+	
+	var bdloction = null;
+    apiready = function(){
+        bdloction = api.require('baiduLocation');
+    };
+    
+    function locstart(){
+    	waitting();
+    	bdloction.startLocation({
+    		autoStop:false
+    	}, function(ret){
+    		finaling();
+    		apialert(JSON.stringify(ret));
+    	});
+    }
+    
+    function locstop(){
+    	bdloction.stopLocation();
+    }
+    
+    function loconece(){
+    	waitting();
+    	bdloction.getLocation(function(ret){
+    		finaling();
+    		apialert(JSON.stringify(ret));
+    	});
+    }
+</script>
+</html>

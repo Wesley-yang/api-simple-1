@@ -1,0 +1,248 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>JS/CSS框架</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script src="../../script/public.js"></script>
+    <script src="require.js.js"></script>
+    <style>
+    	
+    	
+    </style>
+    <script type="text/javascript">
+		
+		apiready = function(){
+	    	
+	    }
+		
+		//JQ ajax
+		function JQGetRequest(){
+			var host = $('xmlGethost').value;
+			if(!host){
+				host = 'http://m.biquge.la/book/176/143150.html';
+			}
+			api.showProgress();
+			$.ajax({
+                url:host,
+                type:'get',
+                dataType:'text',
+                //data:{CAB:'',STRAIN:'',DRIVE:'',GASOLINETYPE:'',DISCHARGESTANDARD:'',MAXSOUP:[{min:'0',max:'140'}],CARRIAGE:[]},
+                success: function(data){
+                	apialert(JSON.stringify(data));
+                },
+                error: function(xhr, type, err){
+                	apialert('error:\n' + xhr.status + "\n" + JSON.stringify(err));
+                },
+                complete: function(xhr, state){
+                	api.hideProgress();
+                }
+             });
+		}
+		
+		//JQ ajax，401
+		function JQ401Request(){
+			var host = $('host401').value;
+			if(!host){
+				host = 'http://linux.linuxidc.com';
+			}
+			api.showProgress();
+			$.ajax({
+                url:host,
+                type:'get',
+                success: function(data){
+                	apialert('success:\n' + JSON.stringify(data));
+                },
+                error: function(xhr, type, err){
+                	apialert('error:\n' + xhr.status + "\n" + JSON.stringify(err));
+                },
+                complete: function(xhr, state){
+                	api.hideProgress();
+                }
+             });
+		}
+		
+		function APIAJAX(){
+			var jv = {CAB:'',STRAIN:'',DRIVE:'',GASOLINETYPE:'',DISCHARGESTANDARD:'',MAXSOUP:[{min:'0',max:'140'}],CARRIAGE:[]};
+			api.showProgress();
+			api.ajax({
+			    url: 'http://116.10.187.230:8083/api/Products/getCarlistByGk',
+			    method: 'post',
+			    timeout: 30,
+			    dataType: 'json',
+			    returnAll: false,
+			    headers : {
+					//"Content-type" : "application/json"
+				},
+			    data: {
+			        values: jv
+			
+			    }
+			},function( ret, err ){
+				api.hideProgress();
+			    if( ret ){
+			         apialert( JSON.stringify( ret ) );
+			    }else{
+			         apialert( JSON.stringify( err) );
+			    }
+			}); 
+		}
+		
+		function apiPostByBodyData() {
+			/**
+			var da = {
+				userId:1000, 
+				aaa:{
+					a:'aaa', 
+					b:'bbb', 
+					bbb:['xxxx', {ddd:'dddd'}]
+				},
+				ccc:['aaaa', 'bbbb', 'cccc'],
+				ddd:[{a:'a', b:'b', c:'c'}, 'bbbb', 'cccc']
+			};
+			da = "userId=1000";
+			var host = 'http://120.24.230.196:8125/api/Home/getDesignTable'
+			api.showProgress();
+			api.ajax({ 
+				url : host, 
+				method : 'get',
+				data:{
+					body:da
+				} 
+			 }, function(ret, err) {
+			 	api.hideProgress();
+			 	if (ret) { 
+			 		apialert(JSON.stringify(ret));
+			 	} else { 
+			 		apialert("执行失败"); 
+			 		apialert(err.msg);
+			 	} 
+			 });
+			**/
+			var params=new Array();
+			params.push("uId=123");
+			params.push("uToken=dadasdasd");
+			for(var i = 0; i < 3; i++){
+					params.push("bkIds=bkId" + i);
+					params.push("counts=schoolBagCount" + i);
+			}
+			//params.join("&");
+			var da = {
+				userId:1000, 
+				aaa:{
+					a:'aaa', 
+					b:'bbb', 
+					bbb:['xxxx', {ddd:'dddd'}]
+				},
+				ccc:['aaaa', 'bbbb', 'cccc'],
+				ddd:[{a:'a', b:'b', c:'c'}, 'bbbb', 'cccc']
+			};
+			
+			var host = 'http://120.24.230.196:8125/api/Home/getDesignTable'
+			$.ajax({
+                url:host,
+                type:'post',
+                data:params.join("&"),
+                success: function(data){
+                	apialert('success:\n' + JSON.stringify(data));
+                },
+                error: function(xhr, type, err){
+                	apialert('error:\n' + xhr.status + "\n" + JSON.stringify(err));
+                },
+                complete: function(xhr, state){
+                	apialert('complete:\n' + xhr.status + "\n" + JSON.stringify(state));
+                }
+             });
+             
+		}
+		
+		function loadRequireJS(){
+			var script = document.createElement('script');
+            script.setAttribute("src", 'require.js');
+            script.setAttribute("data-main", 'index.js');
+            document.body.appendChild(script);
+		}
+		
+		var now = Date.now();
+        var appKey = SHA1("A6964774665539" + "UZ" + "1E4DC0BD-06DD-F21D-D0A3-05899926188B" + "UZ" + now) + "." + now;
+
+        function push() {
+            api.ajax({
+                url : 'https://p.apicloud.com/api/push/message',
+                method : "post",
+                headers : {
+                    "X-APICloud-AppId" : "A6964774665539",
+                    "X-APICloud-AppKey" : appKey
+                },
+                dataType : "json",
+                data : {
+                    "values" : {
+                        "title" : "消息标题",
+                        "content" : "消息内容",
+                        "type" : 1, //– 消息类型，1:消息 2:通知
+                        "platform" : 0
+                    }
+                }
+            }, function(ret, err) {
+                //coding...
+                apialert(JSON.stringify(ret))
+                apialert(JSON.stringify(err))
+            });
+        }
+        
+        function Jqpush() {
+            $.ajax({
+                url : 'https://p.apicloud.com/api/push/message',
+                type : "post",
+                headers : {
+                    "X-APICloud-AppId" : "A6964774665539",
+                    "X-APICloud-AppKey" : appKey
+                },
+                data : {
+                    "title" : "消息标题",
+                    "content" : "消息内容",
+                    "type" : 1, //– 消息类型，1:消息 2:通知
+                    "platform" : 0
+                },
+                success: function(data){
+                	apialert('success:\n' + JSON.stringify(data));
+                },
+                error: function(xhr, type, err){
+                	apialert('error:\n' + xhr.status + "\n" + JSON.stringify(err));
+                },
+                complete: function(xhr, state){
+                	apialert('complete:\n' + xhr.status + "\n" + JSON.stringify(state));
+                }
+            });
+        }
+		
+	</script>
+</head>
+<body>
+    <div id="wrap">
+    	<div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>require框架</h1>
+	        <div class="adpt" ></div>
+		</div> 
+        <div  >
+        	<div class='itemtitle'>1、JQuery普通AJAX</div>
+            	<input type="text" id="xmlGethost" placeholder="host"/>
+            	<div class="clickbtn" tapmode="active" onclick="Jqpush()" >发起请求</div>
+        	<div class='itemtitle'>2、JQuery 401 AJAX</div>
+            	<input type="text" id="host401" value="http://linux.linuxidc.com"/>
+            	<div class="clickbtn" tapmode="active" onclick="JQ401Request()" >发起请求</div>
+            <div class='itemtitle'>3、API AJAX Form</div>
+            	<div class="clickbtn" tapmode="active" onclick="APIAJAX()" >发起请求</div>
+            <div class='itemtitle'>4、JQ AJAX Form</div>
+            	<div class="clickbtn" tapmode="active" onclick="apiPostByBodyData()" >发起请求</div>
+            <div class='itemtitle'>5、require</div>
+            	<div class="clickbtn" tapmode="active" onclick="loadRequireJS()" >加载RequireJS</div>
+            <br>
+        </div>
+    </div>   
+</body>
+</html>

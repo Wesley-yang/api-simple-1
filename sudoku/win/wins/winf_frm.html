@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>窗口系统</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script src="../../script/public.js"></script>
+        <style>
+        	body{
+        		background: #AAaa00;
+        		display:-webkit-box;
+				-webkit-box-orient:vertical;
+				-webkit-box-pack:center;
+        	}
+        	
+        </style>
+    </head>
+    
+    <body >
+        <div class="clickbtn" tapmode onclick="openWin()" >打开G窗口</div>
+        <div class="clickbtn" tapmode onclick="exeSScript()" >在后台单例窗口中执行代码</div>
+    </body>
+    <script>
+    	apiready = function(){
+    		api.addEventListener({
+				name:'abc'
+			}, function(ret){
+				//console.log('recevie event： ' + ret.value);
+			});
+    	}
+    	
+    	function openWin(){
+    		api.openWin({
+    			name:'wing',
+    			url:'wing.html'
+    		});
+    	}
+    	
+    	function exeSScript(){
+    		var jsfun = 'sinfun();';
+			api.execScript({
+			    name: 'win_single',
+			    script: jsfun
+			});
+    	}
+    </script>
+
+</html>

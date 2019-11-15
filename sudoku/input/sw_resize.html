@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>
+    </title>
+    <script type="text/javascript" src="../script/public.js"></script>
+    <style>
+      body, html{ 
+      	height: 100%; 
+      	width:100%; 
+      	background:#F0F; 
+      	margin:0; 
+      	border:0; 
+      	padding:0; 
+      	position:absolute;
+      	display:-webkit-box; 
+      	-webkit-box-orient:vertical; 
+      } 
+      input{ 
+      	-webkit-appearance:none; 
+      	z-index:99; 
+      } 
+      .content{
+      	-webkit-appearance:none; 
+      	padding:5px; 
+      	resize:none; 
+      	overflow:auto;
+      }
+    </style>
+    <head>
+      <body>
+        <div id='wrap'>
+          <br>
+          <br>
+          <br>
+          <br>
+          <div>
+            <p class="name">
+              请选择服务时间
+            </p>
+            <input id="serviceTime" type="file" class="kg_time radius_p" placeholder="选择预约时间文件" value=""/>
+          </div>
+          <div id="searchResultList" >
+            <p class="name">
+              请选择服务地点
+            </p>
+            <input id="address" type="text"	placeholder="请输入服务地点" class="kg_adress radius_p" value=""/>
+            <button id="mapBtn"	class="adressBtn">
+              <i class="icon-fa-map-o">
+              </i>
+            </button>
+          </div>
+          <div>
+            <span>
+              <input type="tel" placeholder="范围" value=""/>
+            </span>
+            <span>
+              公里有效
+            </span>
+            <span>
+              <input type="tel" placeholder="时间" value=""/>
+            </span>
+            <span>
+              分钟内有效
+            </span>
+          </div>
+          <div>
+            <p class="name">
+              您还有什么其他的要求
+            </p>
+            <p class="radius_p input-voice">
+              <input rows="3"	class="content" wrap="virtual" placeholder="输入文字或语音" />
+            </p>
+          </div>
+          <div>
+            <p class="name">
+              您还有什么其他的要求
+            </p>
+            <p class="radius_p input-voice">
+              <input id='focus_able' class="content" placeholder="输入文字或语音" />
+            </p>
+          </div>
+          <button id="submitBtn" class="releaseBtn radius_p blue_color" >
+            <p class="issue">
+            </p>
+            <p>
+              发布
+            </p>
+          </button>
+          <input id='test' type='number' class="content" placeholder="输入文字或语音" />
+        </div>
+        <div>
+        	<div contenteditable="true">
+        		请输入直播间名称
+        	</div>
+        	<div>
+        		点击设置封面页
+        	</div>
+        </div>
+      </body>
+      <script type="text/javascript">
+        function openccc(){
+          api.openContacts(function(ret){
+            apialert(JSON.stringify(ret));
+            });
+          }
+
+          window.onload = function(){
+            $("test").onkeyup = function(e){
+              console.log("onkeyup: " + e.keyCode);
+              };
+              $("test").onkeydown = function(e){
+                console.log("onkeydown: " + e.keyCode);
+                };
+                $("focus_able").onkeyup = function(e){
+                  console.log("onkeyup: " + e.keyCode);
+                  };
+                  $("focus_able").onkeydown = function(e){
+                    console.log("onkeydown: " + e.keyCode);
+                    };
+                    $('focus_able').blur();
+                    //$('focus_able').focus();
+                    document.body.onkeyup = function(e){
+                      console.log("body onkeyup: " + e.keyCode);
+                      //apialert('onkeyup: ' + e.keyCode);
+                      };
+                      document.body.onkeydown = function(e){
+                        console.log("body onkeydown: " + e.keyCode);
+                        //apialert('onkeydown: ' + e.keyCode);
+                        };
+                      }
+                    </script>
+                  </html>

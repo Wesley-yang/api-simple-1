@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>应用列表</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../css/api.css">
+<script src="../../script/api.js"></script>
+<script src="../../frmwork/template.js"></script>
+<script src="../../frmwork/hammer.js"></script>
+<style>
+section{
+    margin:20px;
+    display:-webkit-box;
+    overflow:hidden;
+}
+section hr{
+    width:100%;
+    -webkit-box-flex:1;
+}
+a {
+    width:70px;
+}
+a>div {
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+    width:70px;
+    height:70px;
+    overflow:height;
+}
+a>div>img {
+    width:57px;
+    height:57px;
+    border:0;
+}
+a>center{
+    margin-top:8px;
+    height:14px;
+    line-height:14px;
+    font-size:14px;
+    color:black;
+    font-weight:bold;
+}
+.tapActive {
+    background-color:#eee;
+}
+</style>
+</head>
+<body>
+</body>
+<script>
+function onGetWidgetsResult(ret, err) {
+    api.hideProgress();
+    if (ret.data) {
+        if (ret.data.length > 0) {
+            if ((ret.data.length+1)%3===0) {
+                ret.data.push({isPlaceholder:true});
+            }
+            var html = baidu.template('applist_template',ret);
+            document.body.innerHTML = html;
+
+            //del widget
+            // var list = $app3c.dom('section');
+            // Hammer(list).on("hold", function(event) {
+            //     var cur = event.target;
+            //     var parent = $app3c.closest(cur, 'a');
+            //     if(parent){
+            //         var wgtId = $app3c.attr(parent, 'wid');
+            //         app3c.confirm({
+            //             msg: '确定删除吗？'
+            //         }, function(ret, err){
+            //             if(ret.buttonIndex === 2){
+            //                 var fs = app3c.require('fs');
+            //                 fs.remove({
+            //                     path: 'fs://wgt/'+ wgtId
+            //                 }, function(ret, err){
+            //                     if(ret){
+            //                         location.reload();
+            //                     }else{
+            //                         app3c.apialert({msg: err.msg});
+            //                     }
+            //                 });
+            //             }
+            //         });
+            //     }
+                    
+            // });
+
+            api.parseTapmode();
+            
+        }
+    } else {
+        apialert({title:'数据加载失败'});
+    }
+}
+apiready = function() {
+    api.showProgress();
+    api.getFsWidgets(onGetWidgetsResult);
+}
+</script>
+<script id="applist_template" type="text/html">
+<%for(var i=0;i<data.length;i++){
+    var wgtId = data[i].widgetId;
+    var icon = data[i].iconPath+'/icon57x57.png';
+    var name = data[i].name;
+    var isHolder = data[i].isPlaceholder;
+    if(i%3==0) {%><section><%}%>
+    <a tapmode="tapActive" wid="<%=wgtId%>" onclick="api.openWidget({wgtParam:{name:'<%=name%>'},id:'<%=wgtId%>',animation:{type:'flip',subType:'from_left'}});">
+    <div><%if(!isHolder){%><img src="<%=icon%>" /><%}%></div>
+    <center><%=name%></center>
+    </a>
+    <%if((i+1)%3==0){%></section><%}else{%><hr /><%}%>
+<%}%>
+</script>
+</html>

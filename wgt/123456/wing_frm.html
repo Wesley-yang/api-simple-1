@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <title>G窗口</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="base.css">
+        <link rel="stylesheet" type="text/css" href="common.css" />
+        <script src="api.js"></script>
+        <style>
+        	body{
+        		background: #aaaaaa;
+        	}
+        	.btn {
+				background-color: #EEEEEE;
+				background-image: -webkit-linear-gradient(top, #EEEEEE, #CCCCCC);
+				border-color: #CCCCCC #CCCCCC #BBBBBB;
+				-webkit-border-radius: 4px;
+				border-style: solid;
+				border-width: 1px;
+				color: #333333;
+				font: bold 18px;
+				padding: 8px 0;
+				text-align: center;
+				text-shadow: 0 1px 0 #EEEEEE;
+				width: 220px;
+				margin-top:15px;
+				margin-left:auto;
+				margin-right:auto;
+				display:block;
+			}
+			
+			.active {
+				background-color: #CCCCCC;
+				background-image: -webkit-linear-gradient(top, #CCCCCC, #DDDDDD);
+				border-color: #CCCCCC #CCCCCC #BBBBBB;
+			}
+			
+        </style>
+    </head>
+    
+    <body >
+		<div id="wrap">
+        <div id="header">
+            <h1>我是G窗口</h1>
+        </div>
+        <div id="main">
+             <div  >
+            	<br><br><br><br><br><br>
+            	<div class="btn" onclick="closeToWin()" >回到A窗口</div><br><br>
+            	<div class="btn" onclick="initFrames()" >打开九宫格Frame</div>
+            	<br><br><br><br><br><br>
+            </div>   
+        </div>
+        <div id="footer">
+            <h5>©2014</h5>
+        </div>
+    </div>
+    </body>
+    <script>
+    	apiready = function(){
+    		api.addEventListener({
+				name:'abc'
+			}, function(ret){
+				//console.log('recevie event： ' + ret.value);
+			});
+    	}
+    	
+    	function closeToWin(){
+    		api.closeToWin({
+    			name:'wina'
+    		});
+    	}
+    	
+    	var headerHeight = 44;//定义标题栏默认高度
+		var footerHeight = 30;//定义底部导航栏默认高度
+    	
+    	function initFrames(){//初始化4个frame
+			var cw = api.winWidth;//可使用区域宽
+			var ch = api.winHeight - headerHeight - footerHeight;//可使用区域高
+			var padding = 10;//可使用区域内间距
+			var fw = (cw - (padding * 3)) / 2;//frame的宽度动态算法：可使用区域高减去上下padding及两个frame之间的padding，再除以2平分
+			var fh = (ch - (padding * 3)) / 2;//frame的高度动态算法：可使用区域高减去上下padding及两个frame之间的padding，再除以2平分
+			//第1个frame的区域
+			var rect = {};
+			rect.x = padding;
+			rect.y = headerHeight + padding;
+			rect.w = fw;
+			rect.h = fh;
+			api.openFrame({
+                  name:'frame1',
+                  rect:rect,
+                  url:'html/frame1.html'
+            });
+            //第2个frame的区域
+			rect = {};
+			rect.x = fw + (padding * 2);
+			rect.y = headerHeight + padding;
+			rect.w = fw;
+			rect.h = fh;
+			api.openFrame({
+                  name:'frame2',
+                  rect:rect,
+                  url:'html/frame2.html'
+            });
+            //第3个frame的区域
+			rect = {};
+			rect.x = padding;
+			rect.y = headerHeight + fh + (padding * 2);
+			rect.w = fw;
+			rect.h = fh;
+			api.openFrame({
+                  name:'frame3',
+                  rect:rect,
+                  url:'html/frame3.html'
+            });
+            //第4个frame的区域
+			rect = {};
+			rect.x = fw + (padding * 2);
+			rect.y = headerHeight + fh + (padding * 2);
+			rect.w = fw;
+			rect.h = fh;
+			api.openFrame({
+                  name:'frame4',
+                  rect:rect,
+                  url:'html/frame4.html'
+            });
+        }
+    </script>
+
+</html>

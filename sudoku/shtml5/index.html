@@ -1,0 +1,219 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>标准Html5</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script src="../script/public.js"></script>
+    </head>
+    
+    <body >
+        <div id="wrap">
+        	<!-- <div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>标准Html5</h1>
+		        <div class="adpt" ></div>
+			</div> -->
+        	<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick="openWin('iframe/index.html')">标准iframe</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('custom/index.html')">自定义标签</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('frmwork/index.html')">框架</div>
+        	</div>
+			<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick="openWin('image/index.html')">图片</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('camera/index.html')">照相机</div>
+        	</div> 
+        </div>
+        
+    </body>
+    <script>
+    
+    	apiready = function(){
+    		console.log('pageParam: ' + JSON.stringify(api.pageParam));
+    	}
+    
+    	var inity = 100;
+    	var count = 0;
+    	var subanimFlag = false;
+    	function addone(){
+    		inity += 80;
+    		count++;
+    		var frms = api.winWidth - 20;
+    		var subanim = "";
+    		if(subanimFlag){
+    			subanim = 'from_right';
+    			subanimFlag = false;
+    		}else{
+    			subanim = 'from_left';
+    			subanimFlag = true;
+    		}
+    		api.openFrame({
+    			name:'frm_' + count,
+    			url:'wins/index_frm.html',
+    			pageParam:{
+    				id:count
+    			},
+    			rect:{
+    				x:10,
+    				y:inity,
+    				w:frms,
+    				h:400
+    			},
+    			animation:{
+					type:'push',
+				    subType:subanim,
+				    duration:300  
+				}
+    		});
+    	}
+    	
+    	function openLocFrame(){
+    		var bts = ['固定在window左边', '固定在window顶部', '固定在window右边', '固定在window底部'];
+			api.actionSheet({
+			    title: '请选择位置',
+			    buttons: bts
+			},function(ret, err){
+				var indx = ret.buttonIndex;
+				if(5 == indx){//取消
+					return;
+				}
+				var _rect = {};
+				if(1 == indx || 3 == indx){
+					_rect.w = 100;
+					_rect.h = 'auto';
+					if(1 == indx){
+						_rect.marginLeft = 0;
+					}else{
+						_rect.marginRight = 0;
+					}
+				}else{
+					_rect.w = 'auto';
+					_rect.h = 100;
+					if(2 == indx){
+						_rect.marginTop = 0;
+					}else{
+						_rect.marginBottom = 0;
+					}
+				}
+				api.openFrame({
+					name: 'TEST',
+					url: 'wins/index_frm.html',
+					rect: _rect,
+					pageParam:{
+	    				id:0
+	    			}
+				});
+			});
+    	}
+    	
+    	function sendone(){
+    		api.sendEvent({
+	    		name:'index_frm',
+	    		extra:{
+	    			key1:'value1',
+	    			key2:'value2'
+	    		}
+	    	});
+    	}
+    	
+    	function exeBegin(){
+    		var js = 'exeDone();';
+    		api.execScript({
+    			script:js
+    		});
+    	}
+    	
+    	function exeDone(){
+    		apialert('exeDone()函数被执行');
+    	}
+    	
+    	function opensl(){
+			api.openSlidLayout({
+		        type:'left',
+		        slidPaneStyle:{
+		        	leftEdge:200,
+		        },
+		        fixedPane:{
+		            name: 'homefixed',
+		            url: 'slid/homefixed.html',
+		            bounces: true,
+		            bgColor:'#000'
+		        },
+		        slidPane:{
+		            name: 'homeside',
+		            url: 'slid/homeside.html',
+		            bgColor:'#FFF'
+		        },
+	        }, function(ret) {
+	            console.log(JSON.stringify(ret));
+	    	});
+		    //api.openSlidPane();
+		    //api.lockSlidPane();
+		}
+		
+		function openRoot(){
+			api.openWin({
+			    name : 'root'
+			});
+			//api.closeToWin({ name: 'root' });
+		}
+		
+		function openDrawer(){
+			api.openDrawerLayout({
+				name:'drawer',
+				url:'drawer/index.html',
+				//slidToOpenPane:false,
+				//slidToClosePane:false,
+				//tapToClosePane:false,
+				animation:{
+					type:'movein',
+				    duration:400  
+				},
+				leftPane:{
+					edge: 210,
+					name:'leftPane1',
+					url:'drawer/left_pane.html',
+					bounces:false,
+					pageParam:{},
+					allowEdit:false,
+					vScrollBarEnabled: false
+				},
+				rightPane:{
+					edge: 210,
+					name:'rightPane1',
+					url:'drawer/right_pane.html',
+					bounces:false,
+					pageParam:{a:'aaaa'}
+				}
+			});
+		}
+		
+		/**
+		 * 预加载frame
+		 * @returns
+		 */
+		function openWidthFrame(){
+			api.openWin({
+				name: 'width',
+				url: 'widthframe/index.html',
+				frame: {
+					name: 'frame',
+					url: 'widthframe/index_frm.html',
+					rect: {
+						marginTop: 44 + statusBarHeight,
+						marginBottom: 50
+					},
+					progress: {
+						type: 'page',
+						color: '#F0F'
+					}
+				}
+			});
+		}
+		
+    </script>
+
+</html>

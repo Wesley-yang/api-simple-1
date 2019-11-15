@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>窗口系统</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css" />
+    <link rel="stylesheet" type="text/css" href="./css/box.css" />
+    <script src="./script/public.js"></script>
+        <style>
+        	body{
+        		background: #FCFCFC;
+        		display:-webkit-box;
+				-webkit-box-orient:vertical;
+				-webkit-box-pack:center;
+        	}
+        </style>
+    </head>
+    
+    <body>
+    	<div class="info-area" id='smart_des'>
+    		<h2>tab_content_2<h2>
+    	</div>
+        <div class="clickbtn" tapmode="active" onclick="setTile()" >更新标题栏文字</div>
+        <div class="clickbtn" tapmode="active" onclick="opNavBar()" >隐藏/显示NavigationBar</div>
+        <div class="clickbtn" tapmode="active" onclick="opTabBar()" >隐藏/显示TabBar</div>
+        <div class="clickbtn" tapmode="active" onclick="opNavTabBar()" >同时隐藏/显示Nav/TabBar</div>
+        <div class="clickbtn" tapmode="active" onclick="showUiModule()" >显示UI模块</div>
+    </body>
+    <script>
+    	apiready = function(){
+    		api.addEventListener({
+				name:'abc'
+			}, function(ret){
+				console.log('recevie event： ' + ret.value);
+			});
+    	}
+    	
+    	var title_diff = 0;
+    	function setTile(){
+    		title_diff++;
+    		api.setTabLayoutAttr({
+    			title: '标题-' + title_diff
+    		});
+    	}
+    	
+    	var nav_flag = false;
+    	function opNavBar(){
+    		nav_flag = !nav_flag;
+    		api.setTabLayoutAttr({
+    			hideNavigationBar: nav_flag
+    		});
+    	}
+    	
+    	var tab_flag = false;
+    	function opTabBar(){
+    		tab_flag = !tab_flag;
+    		api.setTabLayoutAttr({
+    			hideTabBar: tab_flag
+    		});
+    	}
+    	
+    	function opNavTabBar(){
+    		opNavBar();
+    		opTabBar();
+    	}
+    	
+    	function showUiModule(){
+			/*
+			var test = api.require('test');
+			test.show({
+				y: 44 + statusBarHeight
+			});
+			*/
+			toast('需要在代码中配置UI模块');
+		}
+    </script>
+
+</html>

@@ -1,0 +1,7 @@
+﻿<widget id="123456"  version="0.0.1" sandbox="testApp">
+    <name>subWgt</name>
+    <content src="index.html" />
+    <preference name="appBackground" value="#FFF"/>
+    <preference name="pageBounce" value="false"/>
+    <access origin="*" />
+</widget>

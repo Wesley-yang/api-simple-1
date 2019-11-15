@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>窗口系统</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css" />
+    <link rel="stylesheet" type="text/css" href="./css/box.css" />
+    <script src="./script/public.js"></script>
+        <style>
+        	body{
+        		background: #FCFCFC;
+        		display:-webkit-box;
+				-webkit-box-orient:vertical;
+				-webkit-box-pack:center;
+        	}
+        </style>
+    </head>
+    
+    <body>
+		<div class="clickbtn" tapmode onclick="api.closeWin()" >关闭窗口</div>
+    	<div class="clickbtn" tapmode onclick="openWinB()" >打开新的普通窗口</div>
+    	<div class="clickbtn" tapmode onclick="openFrames()" >打开一个Frame</div>
+    	<div class="clickbtn" tapmode onclick="openLayout()" >打开新的TabLayout</div>
+    	<div class="info-area" id='smart_des'>
+    		<h2>tab_content_1<h2>
+    	</div>
+    	<div class="clickbtn" tapmode onclick="lisNavBak()" >监听NavBar的back按钮点击</div>
+    	<div class="clickbtn" tapmode onclick="lisTabbar()" >监听TabBar的选项点击</div>
+        <div class="clickbtn" tapmode onclick="lisNavBtn()" >监听NavBar的按钮点击</div>
+        <div class="clickbtn" tapmode="active" onclick="showUiModule()" >显示UI模块</div>
+    </body>
+    <script>
+    	apiready = function(){
+    		api.addEventListener({
+				name:'abc'
+			}, function(ret){
+				console.log('recevie event： ' + ret.value);
+			});
+			api.addEventListener({
+			    name:'viewappear'
+			},function(ret,err){
+			    console.debug('viewappear... ');
+			});
+			api.addEventListener({
+			    name:'viewdisappear'
+			},function(ret,err){
+			    console.debug('viewdisappear... ');
+			});
+			api.addEventListener({
+			    name:'pause'
+			},function(ret,err){
+			    console.debug('pause... ');
+			});
+			api.addEventListener({
+			    name:'resume'
+			},function(ret,err){
+			    console.debug('resume... ');
+			});
+			api.addEventListener({
+				name:'tabframe'
+			}, function(ret){
+				console.log('tabframe： ' + ret.index + ", " + ret.name);
+			});
+    	}
+    	
+    	function openWinB(){
+    		api.openWin({
+    			name:'winb',
+    			url:'./norm/winb.html'
+    		});
+    	}
+    	
+    	function openFrames(){
+    		api.openFrame({
+    			name:'frm_11',
+    			url:'./index_frm.html',
+    			rect:{
+    				//marginTop: api.winHeight / 2,
+    				marginBottom: 0,
+    				h:200
+    			},
+    			animation:{
+					type: 'push',
+					subType: 'from_bottom',
+				    duration:350  
+				}
+    		});
+    	}
+    	
+    	function openLayout(){
+    		var parm = {
+				name: 'tbwin',
+				url: './main_content.html',
+				title:'窗口A',
+				bgColor:'#fff',
+			  	navigationBar: {
+			  		height: 45,
+			    	background: "#FCFCFC",
+			    	color: "#000",
+			    	selectedColor: "#45C01A",
+			    	shadow: '#ddd',
+			    	blurEffect: false,
+			    	hideBackButton: false
+			  	}
+			}
+			api.openTabLayout(parm);
+    	}
+    	
+    	function lisNavBak(){
+    		api.addEventListener({
+			    name: 'navbackbtn'
+			}, function(ret, err) {
+			    apialert('点击了返回按钮');
+			});
+			apialert('监听成功，点击返回按钮将由你的代码自定义处理');
+    	}
+    	
+    	function lisNavBtn(){
+    		api.addEventListener({
+			    name: 'navitembtn'
+			}, function(ret, err) {
+			    apialert('点击了按钮：' + ret.index + ', 类型：' + ret.type, function(){
+					if(ret.type == 'left' && 0 == ret.index){
+						api.closeWin();
+					}
+				});
+			});
+			apialert('监听成功，点击NavBar的按钮将由你的代码自定义处理');
+    	}
+    	
+    	function lisTabbar(){
+    		api.addEventListener({
+			    name: 'tabitembtn'
+			}, function(ret, err) {
+			    //apialert('点击了选项：' + ret.index);
+			    console.log('点击了Tab选项：' + ret.index);
+				api.setTabBarAttr({
+	    			index: ret.index
+	    		});
+			});
+			apialert('监听成功，点击TabBar选项将由你的代码自定义处理');
+    	}
+    	
+    	//接收来自normal窗口的执行脚本动作
+		function fromNormal(){
+			apialert("tab_content_1'alert!");
+		}
+		
+		function showUiModule(){
+			/*
+			var test = api.require('test');
+			test.show({
+				y: 0
+			});
+			*/
+			toast('需要在代码中配置UI模块');
+		}
+    </script>
+
+</html>

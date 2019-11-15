@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>oauth</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <style type="text/css">
+    
+    </style>
+</head>
+<body>
+	<div id='header'>
+	    <div class="back" tapmode="back-active" onclick="api.closeWin()">返回</div>
+	    <h1>oauth认证</h1>
+	    <div class="adpt" ></div>
+	</div>
+    <div id="main">
+        <div class='clickbtn' tapmode onclick='init();'>初始化</div>
+        <div class='clickbtn' tapmode onclick='startOAuth();'>开始认证</div>
+        <div class='clickbtn' tapmode onclick='getToken();'>获取Token</div>
+        <div class='clickbtn' tapmode onclick='getUserInfo();'>获取用户信息</div>
+        <div class='clickbtn' tapmode onclick='getUserDetile();'>获取用户详细信息</div>
+    </div>
+</body>
+
+<script type="text/javascript">
+
+	var oauth = null;
+    apiready = function(){
+        oauth = api.require('oauth');
+    };
+
+	function init(){
+		oauth.init({
+			clientId:'3e90dbb1-581a-47ba-8c8e-cb6d49b8066e',
+			clientSecret:'64af23e5-8361-421f-b84f-b6c6169b7596',
+			domain:'https://passport.c.haier.net',
+			redirectUrl:''
+		}, function(ret){
+    		apialert(JSON.stringify(ret));
+    	});
+	}
+	
+	function startOAuth(){
+		oauth.startOAuth(function(ret){
+    		apialert(JSON.stringify(ret));
+    	});
+	}
+    
+    function getToken(){
+    	var token = oauth.getLocalAccessToken();
+    	if(token){
+    		apialert("Token为：" + token);
+    		return;
+    	}
+    	waitting();
+    	oauth.getAccessToken(function(ret){
+    		finaling();
+    		apialert(JSON.stringify(ret));
+    	});
+    }
+    
+    function getUserInfo(){
+    	waitting();
+    	oauth.getUserInfo(function(ret){
+    		finaling();
+    		apialert(JSON.stringify(ret));
+    	});
+    }
+    
+    function getUserDetile(){
+    	waitting();
+    	oauth.getUserDetailInfo(function(ret){
+    		finaling();
+    		apialert(JSON.stringify(ret));
+    	});
+    }
+    
+    function waitting(){
+    	api.showProgress();
+    }
+    
+    function finaling(){
+    	api.hideProgress();
+    }
+</script>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>PUSH CONTENT</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script type="text/javascript" src="../script/public.js"></script>
+
+    <style>
+    
+    </style>
+    <script type="text/javascript">
+
+		var push = null;
+		
+		apiready = function(){
+	    	push = api.require('push');
+	    }
+
+		//设置静默时间段
+		function setSilenceTime(){
+			var startH = $('startHour').value;
+			var endH = $('endHour').value;
+			var startM = $('startMinute').value;
+			var endM = $('endMinute').value;
+			if(!startH){
+				startH = 0;
+			}
+			if(!endH){
+				endH = 23;
+			}
+			if(!startM){
+				startM = 0
+			}
+			if(!endM){
+				endM = 59;
+			}
+			var silenceOption = {
+				startHour: startH,
+				endHour: endH,
+				startMinute: startM,
+				endMinute: endM
+			}
+			push.setPreference({
+				silenceTime: silenceOption
+			}, function(ret){
+				apialert("操作成功!在每天的"+ startH + "时" + startM + "分至" + endH + "时" + endM + "之间收到推送时手机将不再震动或响铃");
+			});
+		}
+		
+		//设置是否弹出通知
+		function setPushNotify(){
+			var node = $("notify");
+			var v = node.options[node.selectedIndex].value;
+			var flag = '1' === v ? true : false;
+			push.setPreference({
+				notify: flag
+			}, function(ret){
+				var msg = "操作成功!将不再有通知弹出到手机状态栏";
+				if(flag){
+					msg = "操作成功!收到推送时将有通知弹出到手机状态栏";
+				}
+				apialert(msg);
+			});
+		}
+		
+		//设置新弹出到手机状态栏的通知是否覆盖最后一个
+		function setNotifyUpdateLast(){
+			var node = $("update");
+			var v = node.options[node.selectedIndex].value;
+			var flag = '1' === v ? true : false;
+			push.setPreference({
+				updateCurrent: flag
+			}, function(ret){
+				var msg = "操作成功!本app收到推送弹出到状态栏的通知将只有最后一条";
+				if(!flag){
+					msg = "操作成功!本app收到的所有推送通知都将展示在状态栏";
+				}
+				apialert(msg);
+			});
+		}
+		
+		//设置通知提示类型
+		function setNotifyDefaults(){
+			var node = $("defaults");
+			var flag = node.options[node.selectedIndex].value;
+			push.setPreference({
+				defaults: flag
+			}, function(ret){
+				var msg = "操作成功!本app收到推送弹出通知时将震动和响铃";
+				if('sound' === flag){
+					msg = "操作成功!本app收到推送弹出通知时只响铃";
+				}else if('vibrate' === flag){
+					msg = "操作成功!本app收到推送弹出通知时只震动";
+				}
+				apialert(msg);
+			});
+		}
+		
+	</script>
+</head>
+<body>
+    <div >
+        <div id="wrap">
+        	<div id='header'>
+	            <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	            <h1>推送设置</h1>
+	            <div class="adpt" ></div>
+        	</div> 
+            <div>
+            	<div class='itemtitle'>1、设置通知静默时间:</div>
+            	<div>
+            		<lable>静默开始时，0-23</lable><br>
+            		<input type='number' id='startHour'/><br>
+            		<lable>静默开始分，0-59</lable><br>
+            		<input type='number' id='startMinute'/><br>
+            		<lable>静默结束时，0-23</lable><br>
+            		<input type='number' id='endHour'/><br>
+            		<lable>静默结束分，0-59</lable><br>
+            		<input type='number' id='endMinute'/><br>
+            	</div>
+            	<div class="clickbtn" tapmode="active" onclick="setSilenceTime()" >设置</div>
+            	<div class='itemtitle'>2、设置是否弹出通知到手机状态栏:</div>
+				<select id="notify">
+				  <option value="1">是</option>
+				  <option value="0">否</option>
+				</select><br>
+				<div class="clickbtn" tapmode="active" onclick="setPushNotify()" >设置</div>
+            	<div class='itemtitle'>3、设置新弹通知是否覆盖最后一个:</div>
+				<select id="update">
+				  <option value="1">是</option>
+				  <option value="0">否</option>
+				</select><br>
+				<div class="clickbtn" tapmode="active" onclick="setNotifyUpdateLast()" >设置</div>
+				<div class='itemtitle'>4、设置提示类型</div>
+				<select id="defaults">
+				  <option value="all">震动加响铃</option>
+				  <option value="vibrate">只震动</option>
+				  <option value="sound">只响铃</option>
+				</select><br>
+				<div class="clickbtn" tapmode="active" onclick="setNotifyDefaults()" >设置</div><br>
+            </div>
+        </div>   
+    </div>
+</body>
+</html>

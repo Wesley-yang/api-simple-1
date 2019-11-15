@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <link rel="stylesheet" href="css/api.css">
+    <link rel="stylesheet" href="css/box.css">
+    <script type="text/javascript" src="script/public.js"></script>
+</head>
+<body class='center'>
+    <div>
+        <div class='row'>
+        	<div tapmode='active' class='clickitem' onclick="GotoWin('html/wina.html')">监听Html5事件测试</div>
+        	<div tapmode='active' class='clickitem' onclick="GotoWin('html/winb.html')">Html5访问Native测试</div>
+        	<div tapmode='active' class='clickitem' onclick="GotoWin('html/winc.html')">拦截Url访问测试</div>
+        </div>
+        <div class='row'>
+        	<div tapmode='active' class='clickitem' onclick="GotoWin('html/wind.html')">向Html5发送事件测试</div>
+        	<div tapmode='active' class='clickitem' onclick="devicInfo()">设备信息</div>
+        	<div tapmode='active' class='clickitem' onclick="GotoWin('html/winf.html')">窗口测试</div>
+        </div>
+        <div class='row'>
+        	<div tapmode='active' class='clickitem' onclick="GotoWin('html/wing.html')">窗口测试</div>
+        	<div tapmode='active' class='clickitem' onclick="GotoWin('html/winh.html')">窗口测试</div>
+        	<div tapmode='active' class='clickitem' onclick="GotoWin('html/wini.html')">窗口测试</div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+	
+    apiready = function(){
+    	//devicInfo();
+    }
+    
+    function devicInfo(){
+		var ver = api.version;
+		var sType = api.systemType;
+		var sVer = api.systemVersion;
+		var id = api.deviceId;
+		var model = api.deviceModel;
+		var name = api.deviceName;
+		var cType = api.connectionType;
+		var winName = api.winName;
+		var winWidth = api.winWidth;
+		var winHeight = api.winHeight;
+		var frameName = api.frameName || '';
+		var frameWidth = api.frameWidth || '';
+		var frameHeight = api.frameHeight || '';
+
+		var str = '';
+		str += '引擎版本信息: ' + ver + '\n';
+		str += '系统类型: ' + sType + '\n';
+		str += '系统版本: ' + sVer + '\n';
+		str += '设备标识: ' + id + '\n';
+		str += '设备型号: ' + model + '\n';
+		str += '设备名称: ' + name + '\n';
+		str += '网络状态: ' + cType + '\n';
+		str += '主窗口名字: ' + winName + '\n';
+		str += '主窗口宽度: ' + winWidth + '\n';
+		str += '主窗口高度: ' + winHeight + '\n';
+		str += '子窗口名字: ' + frameName + '\n';
+		str += '子窗口宽度: ' + frameWidth + '\n';
+		str += '子窗口高度: ' + frameHeight + '\n';
+
+		apialert(str);
+
+    };
+</script>
+</html>

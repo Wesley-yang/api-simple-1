@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>MCM_更新操作</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <script type="text/javascript" src="component.js"></script>
+
+    <script type="text/javascript">
+		var mcm = null;
+		var query = null;
+
+		apiready = function(){
+	    	mcm = api.require('model');
+	    	query = api.require('query');
+	    }
+	    
+		var clazz = "Endo";
+		
+		function checkClass(){
+			clazz = $('clzz').value;
+		}
+		
+		function mcm_updateAll(){
+			toast('暂不支持');
+		}
+		
+		function mcm_updateById(){
+			var objectId = $('objectId').value;
+			if(!objectId){
+				apialert('数据Id不能为空');
+				return;
+			}
+			var n = $('name').value;
+			var d = $('des').value;
+			if(!n && !d){
+				apialert('请至少输入一项');
+				return;
+			}
+			doBefore();
+			var updateValue = {}
+			if(n){
+				updateValue.name = n;//name对应云端数据库里clazz表中的name字段
+			}
+			if(d){
+				updateValue.des = d;//des对应云端数据库里clazz表中的des字段
+			}
+			var param = {
+				class:clazz, 
+				id:objectId
+			};
+			//param.value = {name:'哈哈哈哈', user:[{a:'aa'}, {b:'bb'}, {c:'ee'}]};
+			param.value = updateValue;
+			mcm.updateById(param, doComplete);
+		}
+		
+	</script>
+</head>
+<body>
+    <div >
+        <div id="wrap">
+        	<div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>更新操作</h1>
+		        <div class="adpt" ></div>
+			</div> 
+            <div>
+            	<div class="itemtitle">1、更新操作</div>
+            	<lable>请输入操作对象：</lable><br><input type="text" value="Endo" id="clzz"/><br>
+            	<div class="itemtitle">被更新数据的ID</div>
+            	<input type="text" value="54ae74fa6fdf471145469c7d" id="objectId"/>
+            	<div class="itemtitle">更新的内容</div>
+            	<lable>name：</lable><br><input type="text" value="张无忌" id="name"/><br>
+    			<lable>des：</lable><br><input type="text" value="张无忌和张学友是好基友" id="des"/>
+            	<div class="clickbtn" tapmode="active" onclick="mcm_updateById()" >根据ID更新</div>
+            	<div class="clickbtn" tapmode="active" onclick="mcm_updateAll()" >根据条件更新（暂不支持）</div> 
+            </div>
+        </div>   
+    </div>
+</body>
+</html>

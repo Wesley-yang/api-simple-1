@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>MCM_插入操作</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <script type="text/javascript" src="component.js"></script>
+    <script type="text/javascript">
+		var mcm = null;
+		var query = null;
+		apiready = function(){
+	    	mcm = api.require('model');
+	    	query = api.require('query');
+	    }
+	    
+		var clazz = "Endo";
+		
+		function checkClass(){
+			clazz = $('clzz').value;//clazz对应云端数据库里同名的表
+		}
+		
+		function mcm_insert(){
+			var n = $('name').value;
+			var d = $('des').value;
+			if(!n && !d){
+				apialert('请至少输入一项');
+				return;
+			}
+			var insertValue = {}
+			if(n){
+				insertValue.name = n;//name对应云端数据库里clazz表中的name字段
+			}
+			if(d){
+				insertValue.des = d;//des对应云端数据库里clazz表中的des字段
+			}
+	    	doBefore();
+			var param = {
+				class:clazz, 
+				value:insertValue
+			};
+			mcm.insert(param, doComplete);
+		}
+		
+		function mcm_insertAll(){
+			toast('暂不支持');
+		}
+	</script>
+</head>
+<body>
+    <div id='wrap'>
+    	<div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>插入操作</h1>
+	        <div class="adpt" ></div>
+		</div>
+    	<div class="itemtitle">1、插入操作</div>
+    	<lable>请输入操作对象：</lable><br><input type="text" value="Endo" id="clzz"/>
+    	<div class="itemtitle">插入的内容</div>
+    	<lable>name：</lable><br><input type="text" value="张三" id="name"/><br>
+    	<lable>des：</lable><br><input type="text" value="张三说李四是王五的小六" id="des"/>
+    	<div class="clickbtn" tapmode="active" onclick="mcm_insert()" >插入一条</div>
+    	<div class="clickbtn" tapmode="active" onclick="mcm_insertAll()" >插入多条（暂不支持）</div>
+    </div>  
+</body>
+</html>

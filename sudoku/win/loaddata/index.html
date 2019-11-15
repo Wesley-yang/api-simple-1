@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <style>
+    	#footer{
+			width:auto; 
+			height:50px;
+			padding:0 8px; 
+			display:-webkit-box;
+			-webkit-box-orient:horizontal;
+			background-color: #5982c2; 
+		}
+		
+		.tab-item {
+		    height:50px;
+		  	-webkit-box-flex:1;
+		  	display:-webkit-box;
+		  	-webkit-box-orient:vertical;
+		  	-webkit-box-pack:center;
+		  	-webkit-box-align:center;
+		}
+		
+		center{
+			color:#FFF;
+		}
+
+		.active {
+			background-color:#33B5E5; 
+		}
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <!-- <div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1 id='title'>LoadData演示</h1>
+	        <div class="adpt" ></div>
+		</div> -->
+        <div id="main">
+                
+        </div>
+        <div id='footer'>
+            <div class='tab-item' tapmode='active' onclick='loadData(0)'>
+            	<center>导航一</center>
+            </div>
+            <div class='tab-item' tapmode='active' onclick='loadData(1)'>
+            	<center>导航二</center>
+            </div>
+            <div class='tab-item' tapmode='active' onclick='loadData(2)'>
+            	<center>导航三</center>
+            </div>
+		</div>
+    </div>
+</body>
+<script type="text/javascript">
+	apiready = function(){
+    	var area = {
+			marginTop: 44 + statusBarHeight, //标题栏高度44
+			marginBottom: 50 //下导航栏高度50
+		}
+		api.openFrame({
+		    name: 'frame',
+		    data: "<div>我是第一页div<\/div> " + 
+			"<script>apiready=function(){console.log('第一页ready: ' + window.location)}<\/script>" + 
+			"<script src='res.js'><\/script>",
+		    url: 'widget://sudoku/win/loaddata/index.html',
+		    bounces: false,
+		    rect: area,
+		});
+	}
+	
+	
+	function loadData(inx){
+		var htmstr = '';
+		if(0 == inx){
+			htmstr = "<body style='background:#FFF;'><div>我是第一页div<\/div> " + 
+			"<script>apiready=function(){console.log('第一页ready: ' + window.location)}<\/script><\/body>";
+		}else if(1 == inx){
+			htmstr = "<body style='background:#FFF;'><div>我是第二页div<\/div> <script>apiready=function(){console.log('第二页ready' + window.location)}<\/script><\/body>";
+		}else if(2 == inx){
+			htmstr = "<body style='background:#FFF;'><div>我是第三页div<\/div> <script>apiready=function(){console.log('第三页ready' + window.location)}<\/script><\/body>";
+		}
+		api.loadData({
+			url: 'widget://sudoku/win/loaddata/index.html',
+			frameName: 'frame',
+			data: htmstr
+		});
+		/**
+		api.openWin({
+			name:'ssss',
+			//url: 'widget://sudoku/win/loaddata/index.html',
+			//frameName: 'frame',
+			data: htmstr
+		});
+		**/
+	}
+    
+</script>
+</html>

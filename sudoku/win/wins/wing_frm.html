@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>窗口系统</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script src="../../script/public.js"></script>
+        <style>
+        	body{
+        		/**background: #aaaaaa;**/
+        		/**background: #FFF;**/
+        		display:-webkit-box;
+				-webkit-box-orient:vertical;
+				-webkit-box-pack:center;
+        	}
+        	
+        </style>
+    </head>
+    
+    <body >
+        <div class="clickbtn" tapmode onclick="closeToWin()" >回到A窗口</div><br><br>
+        <div class="clickbtn" tapmode onclick="initFrames()" >打开九宫格Frame</div>
+        <div class="clickbtn" tapmode onclick="exeScriptToRoot()" >Root窗口执行脚本</div>
+        <br><br><br><br><br><br><br><br>
+        <div class="clickbtn" tapmode onclick="allwindows()" >显示APP所有win</div>
+        <div class="clickbtn" tapmode onclick="allframes()" >显示当前win所有frame</div>
+        <div class="clickbtn" tapmode onclick="closeFrames()" >关闭九宫格Frame</div>
+    </body>
+    <script>
+    	apiready = function(){
+    		api.addEventListener({
+				name:'abc'
+			}, function(ret){
+				//console.log('recevie event： ' + ret.value);
+			});
+    	}
+    	
+    	function closeToWin(){
+    		api.closeToWin({
+    			name:'wina'
+    		});
+    	}
+    	
+    	function allwindows(){
+    		var b = curtime();
+    		var list = api.windows();
+    		var e = curtime();
+    		console.log('use: ' + (e - b));
+    		apialert('共' + (list ? list.length : 0) + '个\n详情：' + JSON.stringify(list));
+    	}
+    	
+    	function allframes(){
+    		var b = curtime();
+    		var list = api.frames();
+    		var e = curtime();
+    		console.log('use: ' + (e - b));
+    		apialert('共' + (list ? list.length : 0) + '个\n详情：' + JSON.stringify(list));
+    	}
+    	
+    	function initFrames(){//初始化4个frame
+    		var headerHeight = 44 + statusBarHeight;//定义标题栏默认高度
+			var footerHeight = 30;//定义底部导航栏默认高度
+			var cw = api.winWidth;//可使用区域宽
+			var ch = api.winHeight - headerHeight - footerHeight;//可使用区域高
+			var padding = 10;//可使用区域内间距
+			var fw = (cw - (padding * 3)) / 2;//frame的宽度动态算法：可使用区域高减去上下padding及两个frame之间的padding，再除以2平分
+			var fh = (ch - (padding * 3)) / 3;//frame的高度动态算法：可使用区域高减去上下padding及两个frame之间的padding，再除以2平分
+			//第1个frame的区域
+			var rect = {};
+			rect.x = padding;
+			rect.y = headerHeight + padding;
+			rect.w = fw;
+			rect.h = fh;
+			api.openFrame({
+                  name:'frame1',
+                  rect:rect,
+                  url:'../html/frame1.html'
+            });
+            //第2个frame的区域
+			rect = {};
+			rect.x = fw + (padding * 2);
+			rect.y = headerHeight + padding;
+			rect.w = fw;
+			rect.h = fh;
+			api.openFrame({
+                  name:'frame2',
+                  rect:rect,
+                  url:'../html/frame2.html'
+            });
+            //第3个frame的区域
+			rect = {};
+			rect.x = padding;
+			rect.y = headerHeight + fh + (padding * 2);
+			rect.w = fw;
+			rect.h = fh;
+			api.openFrame({
+                  name:'frame3',
+                  rect:rect,
+                  url:'../html/frame3.html'
+            });
+            //第4个frame的区域
+			rect = {};
+			rect.x = fw + (padding * 2);
+			rect.y = headerHeight + fh + (padding * 2);
+			rect.w = fw;
+			rect.h = fh;
+			api.openFrame({
+                  name:'frame4',
+                  rect:rect,
+                  url:'../html/frame4.html'
+            });
+        }
+        
+        function closeFrames(){
+        	var i = 1;
+        	for(;i <= 4; ++i){
+        		api.closeFrame({
+        			name:'frame' + i
+        		});
+        	}
+        }
+        
+        function exeScriptToRoot(){
+        	var jsfun = 'fromRemote()';
+			api.execScript({
+			    name: 'root',
+			    //frameName:'frame',
+			    script: jsfun
+			});
+        }
+    </script>
+
+</html>

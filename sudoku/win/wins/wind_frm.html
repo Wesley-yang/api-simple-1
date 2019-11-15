@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>窗口系统</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script src="../../script/public.js"></script>
+        <style>
+        	body{
+        		background: #ff0000;
+        		display:-webkit-box;
+				-webkit-box-orient:vertical;
+				-webkit-box-pack:center;
+        	}
+        	
+        </style>
+    </head>
+    
+    <body >
+        <div class="clickbtn" tapmode onclick="openWin()" >打开E窗口</div>
+        <div class="clickbtn" tapmode onclick="allwindows()" >显示APP所有win</div>
+        <div class="clickbtn" tapmode onclick="openWin('./win_single.html', 'win_single', {singleInstance:true})" >打开单例窗口</div>
+    </body>
+    <script>
+    	apiready = function(){
+    		api.addEventListener({
+				name:'abc'
+			}, function(ret){
+				//console.log('recevie event： ' + ret.value);
+			});
+    	}
+    	
+    	function openWin(){
+    		api.openWin({
+    			name:'wine',
+    			url:'wine.html'
+    		});
+    	}
+    	
+    	function allwindows(){
+    		var list = api.windows();
+    		apialert('共' + (list ? list.length : 0) + '个\n详情：' + JSON.stringify(list));
+    	}
+    </script>
+
+</html>

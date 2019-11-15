@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>MCM_功能索引</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <script>
+    	function showCacheSize(){
+    		api.getCacheSize(function(ret){
+    			apialert('共：' + parseInt(ret.size / 1024) + 'KB');
+    		});
+    	}
+    </script>
+</head>
+<body class='center'>
+    <div >
+        <div class='row'>
+        	<div tapmode='active' class='clickitem' onclick="openWin('insert.html')">插入操作</div>
+        	<div tapmode='active' class='clickitem' onclick="openWin('delete.html')">删除操作</div>
+        	<div tapmode='active' class='clickitem' onclick="openWin('update.html')">更新操作</div>
+        </div>
+        <div class='row'>
+        	<div tapmode='active' class='clickitem' onclick="openWin('query.html')">查询操作</div>
+        	<div tapmode='active' class='clickitem' onclick="openWin('user.html')">用户相关</div>
+        	<div tapmode='active' class='clickitem' onclick="openWin('relation.html')">关系操作</div>
+        </div>
+        <div class='row'>
+        	<div tapmode='active' class='clickitem' onclick="openWin('fileop.html')">文件操作</div>
+        	<div tapmode='active' class='clickitem' onclick="openWin('cus.html')">AJAX操作数据云</div>
+        	<div tapmode='active' class='clickitem' onclick="openWin('information/index.html')">基于数据云的新闻资讯小Demo</div>
+        </div>
+        <div class='row'>
+        	<div tapmode='active' class='clickitem' onclick="showCacheSize()">查询缓存</div>
+        	<div tapmode='active' class='clickitem' >Come Soon</div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>EVENT</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+	<script type="text/javascript">
+		function registerShake(){
+			api.addEventListener({
+			    name:'shake'
+			},function(ret,err){
+			    apialert({msg:'触发了摇一摇事件'});
+			    //TO DO 
+			});
+			apialert('注册成功，现在摇一摇手机看看');
+		}
+		
+		function unRegisterShake(){
+			api.removeEventListener({
+			    name:'shake'
+			});
+			apialert('取消成功，摇一摇手机将不再有事件回调');
+		}
+		
+		var counter = 0;
+		function registerBattery(){
+			counter = 0;
+			api.addEventListener({
+			    name:'batterystatus'
+			},function(ret,err){
+			    //apialert({msg:'手机电量发生变化： ' + JSON.stringify(ret)});
+			    counter++;
+			    $('blis').innerHTML = '手机电量发生变化' + counter + '次：电量' + ret.level + '，是否连接电源：' + ret.isPlugged;
+			    //TO DO 
+			});
+			apialert('注册成功，手机电量发生变化将收到提示');
+		}
+		
+		function unRegisterBattery(){
+			api.removeEventListener({
+			    name:'batterystatus'
+			});
+			$('blis').innerHTML = "";
+			apialert('取消成功，手机电量变化将不再有事件回调');
+		}
+		
+		function registerLowBattery(){
+			api.addEventListener({
+			    name:'batterylow'
+			},function(ret,err){
+			    apialert({msg:'手机电量过低： ' + JSON.stringify(ret)});
+			    //TO DO 
+			});
+			apialert('注册成功，手机电量过低时将收到提示');
+		}
+		
+		function unRegisterLowBattery(){
+			api.removeEventListener({
+			    name:'batterylow'
+			});
+			apialert('取消成功，手机电量过低时将不再有事件回调');
+		}
+		
+		function registerAppPause(){
+			api.addEventListener({
+			    name:'pause'
+			},function(ret,err){
+			    apialert('app进入后台');
+			});
+			apialert('监听成功，按home键进入后台将收到回调弹出对话框');
+		}
+		
+		function openmodule(){
+			api.getPicture();
+		}
+		
+		function unRegisterAppPause(){
+			api.removeEventListener({
+			    name:'pause'
+			},function(ret,err){
+			    ;
+			});
+			apialert('取消成功，按home键进入后台将不再收到回调');
+		}
+		
+		function registerAppResume(){
+			api.addEventListener({
+			    name:'resume'
+			},function(ret,err){
+			    apialert('app回到前台');
+			});
+			apialert('监听成功，app由后台回到前台将收到回调弹出对话框');
+		}
+		
+		function unRegisterAppResume(){
+			api.removeEventListener({
+			    name:'resume'
+			},function(ret,err){
+			    ;
+			});
+			apialert('取消成功，app由后台回到前台将将不再收到回调');
+		}
+		
+		function eventTest(){
+	    	var n = 0;
+			for (var i = 0; i < 200; i++) {
+			  api.addEventListener({
+			   name : 'event' + i
+			  }, function(ret, err) {
+			   n++;
+			   console.log(n);
+			   api.removeEventListener({
+			    name : 'event' + i
+			   });
+			  });
+			}
+			for (var i = 0; i < 200; i++) {
+			  api.sendEvent({
+			   name : 'event' + i
+			  });
+			}
+	    }
+		
+	</script>
+</head>
+<body>
+	<div id="wrap">
+		<!-- <div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>设备事件</h1>
+	        <div class="adpt" ></div>
+		</div> -->
+		<div class="itemtitle">1、摇一摇事件</div>
+			<div class="clickbtn" tapmode="active" onclick="registerShake()" >点击注册监听</div>
+			<div class="clickbtn" tapmode="active" onclick="unRegisterShake()" >点击取消监听</div>
+		<div class="itemtitle">2、电池变化事件</div>
+			<div class="tips" id='blis'></div>
+			<div class="clickbtn" tapmode="active" onclick="registerBattery()" >点击注册监听</div>
+			<div class="clickbtn" tapmode="active" onclick="unRegisterBattery()" >点击取消监听</div>
+		<div class="itemtitle">3、电池电量过低事件</div>
+			<div class="clickbtn" tapmode="active" onclick="registerLowBattery()" >点击注册监听</div>
+			<div class="clickbtn" tapmode="active" onclick="unRegisterLowBattery()" >点击取消监听</div>
+		<div class="itemtitle">4、APP暂停/恢复事件</div>
+			<div class="clickbtn" tapmode="active" onclick="registerAppPause()" >点击注册监听APP暂停事件</div>
+			<div class="clickbtn" tapmode="active" onclick="openmodule()" >调用打开模块事件</div>
+			<div class="clickbtn" tapmode="active" onclick="unRegisterAppPause()" >点击取消监听APP暂停事件</div>
+			<div class="clickbtn" tapmode="active" onclick="registerAppResume()" >点击注册监听APP恢复事件</div>
+			<div class="clickbtn" tapmode="active" onclick="unRegisterAppResume()" >点击取消监听APP恢复事件</div>
+		<div class="itemtitle">5、发送大量自定义事件</div>
+			<lable>在开发工具控制台可看到log输出</lable><br>
+			<div class="clickbtn" tapmode="active" onclick="eventTest()" >点击开始</div><br>
+	</div>
+</body>
+</html>

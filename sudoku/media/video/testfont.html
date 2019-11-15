@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>APP</title>
+  <style>body{background:#fff}</style>
+</head>
+<body>
+    <label id="con">Hello APP</label>
+	<div id='sys-info'></div>
+
+<a href="javascript:;" onclick="opentest()"  >点我开新窗口</a>
+  <video autoplay controls="controls" style="width:100%" height="300"  src="http://linecg-work.linecg.com/ljvSO4ATekq383CXASB-LoxrgjLt.mp4"> </video>
+
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+
+function fullscreenEnable(){
+		var isFullscreen = document.fullscreenEnabled ||
+		window.fullScreen ||
+		document.webkitIsFullScreen ||
+		document.msFullscreenEnabled;
+		//注意：要在用户授权全屏后才能准确获取当前的状态
+		if(isFullscreen){
+			api.setScreenOrientation({
+			    orientation: 'auto_landscape'
+			});
+		}else{
+			api.setScreenOrientation({
+			    orientation: 'portrait_up'
+			});
+		}
+	}
+
+
+	function opentest(){
+		  api.openFrame({
+            name: 'main',
+            url: 'index.html',
+            bounces: true,
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.winWidth,
+                h: api.winHeight
+            }
+        });
+	}
+
+  document.addEventListener('fullscreenchange', function(){ fullscreenEnable(); });
+  		document.addEventListener('webkitfullscreenchange', function(){ fullscreenEnable(); });
+  		document.addEventListener('mozfullscreenchange', function(){fullscreenEnable();});
+  		document.addEventListener('MSFullscreenChange', function(){ fullscreenEnable(); });
+
+
+
+
+    apiready = function(){
+
+
+    };
+</script>
+</html>

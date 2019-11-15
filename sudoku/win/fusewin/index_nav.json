@@ -1,0 +1,15 @@
+{
+	name: 'nativewin',
+	url: './main_content.html',
+	title:'高级窗口',
+	bgColor:'#FCFCFC',
+	navigationBar: {
+		height: 45,
+		background: "#FCFCFC",
+		//color: "#000",
+		selectedColor: "#45C01A",
+		shadow: '#ddd',
+		blurEffect: false,
+		hideBackButton: false
+	}
+}

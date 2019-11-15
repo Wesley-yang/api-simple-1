@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+	<title>winbg</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+<style>
+	
+		p{
+			margin:10px;
+			border-bottom:1px solid;
+		}
+
+</style>
+</head>
+<body>
+    <div id="wrap">
+    	<!-- <div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>背景层次</h1>
+	        <div class="adpt" ></div>
+		</div> -->
+    	<br>
+    	<p>config中如果不配置windowBackground，Window默认是透明的；本测试case中没配置。</p>
+    	<p>App背景为红色的，如果Window的body透明，将显示出App的红色。</p><br>
+    	<p>当前Window背景为白色的，因此看不到红色，请依次点击下方按钮进行验证</p>
+    	<br>
+         <div class="clickbtn" tapmode="active" onclick='openWin1();'>打开背景透明的window</div>
+    	 <div class="clickbtn" tapmode="active" onclick='openWin2();'>打开背景为蓝色的window</div>
+    	 <div class="clickbtn" tapmode="active" onclick='openWin3();'>打开背景透明且带一个蓝色背景Frame的window</div>
+    	 <div class="clickbtn" tapmode="active" onclick='openWin4();'>打开背景透明且带一个透明背景Frame的window</div>
+    	 <div class="clickbtn" tapmode="active" onclick='openWin5();'>打开使用图片背景的window</div>
+         <br>
+    </div>
+</body>
+<script>
+	function openWin1(){
+		api.openWin({name:'win1', url:'window1.html'});
+	}
+	
+	function openWin2(){
+		api.openWin({name:'win2', url:'window2.html'});
+	}
+	
+	function openWin3(){
+		api.openWin({name:'win3', url:'window3.html'});
+	}
+	
+	function openWin4(){
+		api.openWin({name:'win4', url:'window4.html'});
+	}
+	
+	function openWin5(){
+		api.openWin({name:'win5', url:'window5.html', bgColor:'widget://res/uz_splash_bg.png'});
+	}
+</script>
+</html>

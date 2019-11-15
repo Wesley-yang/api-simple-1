@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>窗口系统</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script src="../../script/public.js"></script>
+        <style>
+        	html,body{
+        		background: rgba(0, 0, 0, 0);
+				display:-webkit-box;
+				-webkit-box-orient:vertical;
+				-webkit-box-align:center;
+        	}
+        	.vlick{
+        		background-color: #EEEEEE;
+				border-color: #CCCCCC;
+				border-style: solid;
+				border-width: 1px;
+				color: #333333;
+				font-size: 14px;
+				margin:5px;
+				padding:3px 10px;
+        	}
+        </style>
+    </head>
+    
+    <body>
+    	<br>
+        <div id='txt0' class='vlick' tapmode onclick='bringToFront()'>将本Frame置于到最上层</div>
+        <div id='txt0' class='vlick' tapmode onclick='sendToBack()'>将本Frame置于到最底层</div>
+        <div id='txt1' class='vlick' tapmode onclick='closeFrame()'>我是frame，单击关闭我</div>
+        <div id='txt1' class='vlick' tapmode onclick='setOrientation()'>旋转屏幕</div>
+        <div id='txt2' class='vlick' tapmode onclick='hiddenFrame()'>我是frame，单击隐藏我</div>
+    </body>
+    <script>
+    	
+    	var colors = ['#FF0000', '#00FF00', '#0000FF', '#FF00FF', 
+    	'#00FFFF', '#FF0000', '#00FF00', '#00FFFF', 
+    	'#0000FF', '#00FFFF' ,'#FF0000', '#00FF00', 
+    	'#FF00FF', '#0000FF', '#00FFFF', '#FF0000', 
+    	'#00FF00', '#00FFFF', '#0000FF', '#00FFFF'];
+    
+    	apiready = function() {
+    		var id = api.pageParam.id;
+    		$('txt1').innerHTML = "我是frame " + id + '，单击关闭我';
+    		document.body.style.background = colors[id];
+    		api.addEventListener({
+				name:'index_frm'
+			}, function(ret){
+				console.log('index_frm ' + api.pageParam.id + ' event： ' + ret.value);
+			});
+    	}
+    	
+		function hiddenFrame(){
+			api.setFrameAttr({
+			    name: api.frameName,
+			    hidden: true
+			});
+		}
+		
+		function closeFrame(){
+			api.closeFrame({
+			    /**
+			    animation:{
+			    	type:"push",                //动画类型（详见动画类型常量）
+				    subType:"from_right",       //动画子类型（详见动画子类型常量）
+				    duration:300 
+				}
+				**/
+			});
+		}
+		
+		function bringToFront(){
+			api.bringFrameToFront({
+				from:api.frameName,
+				//to:'frm_2'
+			});
+		}
+		
+		function sendToBack(){
+			api.sendFrameToBack({
+			    from: api.frameName,
+			    //to: 'frm_2'
+			});
+		}
+		
+		var _portrait = true;
+    	function setOrientation(){
+    		_portrait = !_portrait;
+    		api.setScreenOrientation({
+    			orientation: _portrait ? 'portrait_up' : 'auto_landscape'
+    		});
+    		//screenInfo();
+    	}
+    </script>
+
+</html>

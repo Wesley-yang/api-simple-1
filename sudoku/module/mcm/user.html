@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>MCM_用户操作</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <script type="text/javascript" src="component.js"></script>
+
+    <script type="text/javascript">
+		
+		var mcm = null;
+		var user = null;
+		
+		var userToken = null;
+		
+		apiready = function(){
+	    	mcm = api.require('model');
+	    	user = api.require('user');
+	    }
+
+		function mcm_login(){
+			var uname = $('username').value;
+			var psw = $('password').value;
+			if(!uname){
+				apialert("username can not be empty!");
+				return;
+			}
+			if(!psw){
+				apialert("password can not be empty!");
+				return;
+			}
+			doBefore();
+			user.login({
+				username:uname, 
+				password:psw
+			}, function(ret, err){
+				if(ret && ret.userId){
+					userToken = ret.userId;
+				}
+				doComplete(ret, err);
+			});
+			
+			//statusCode-401：登录失败，用户名或密码错误
+			//statusCode-200：登录成功，且返回userId等用户基本信息
+			//statusCode-其他：登录失败，网络错误，或者appkey验证失败等
+		}
+		
+		function mcm_register(){
+			var uname = $('ri_1').value;
+			var psw = $('ri_2').value;
+			var eml = $('ri_3').value;
+			if(!uname){
+				apialert("username can not be empty!");
+				return;
+			}
+			if(!psw){
+				apialert("password can not be empty!");
+				return;
+			}
+			var param = {
+				username:uname, 
+				password:psw
+			};
+			if(eml){
+				param.email = eml;
+			}
+			doBefore();
+			user.register(param, doComplete);
+			//ret.error：注册失败，用户已存在
+			//ret且200：注册成功，且返回用户基本信息
+		}
+		
+		function mcm_logout(){
+			doBefore();
+			user.logout(doComplete);
+			//ret且200：登出成功
+		}
+		
+		function mcm_updatePassword(){
+			var psw = $('up_1').value;
+			if(!psw){
+				apialert("new password can not be empty!");
+				return;
+			}
+			doBefore();
+			user.updatePassword({
+				password:psw
+			}, doComplete);
+			//ret且200：更新成功，且返回更新后的数据
+		}
+		
+		function mcm_updateAny(){
+			var num = $('mynumber').value;
+			if(!num){
+				apialert("new number can not be empty！");
+				return;
+			}
+			if(!userToken){
+				apialert("请先登录！");
+				return;
+			}
+			doBefore();
+			var updateValue = {}
+			updateValue.mynumber = num;//name对应云端数据库里clazz表中的mynumber字段
+			var param = {
+				class:'user', 
+				id:userToken
+			};
+			param.value = updateValue;
+			user.updateById(param, doComplete);
+		}
+		
+		function mcm_loginByPhoneNumber(){
+			var phone = $('usename').value;
+			var psw = $('password').value;
+			doBefore();
+			user.loginByPhoneNumber({
+				username:uname, 
+				password:psw
+			}, doComplete);
+		}
+		
+		function mcm_loginWithAuthData(){
+			var phone = $('usename').value;
+			var psw = $('password').value;
+			doBefore();
+			user.loginWithAuthData({
+				username:uname, 
+				password:psw
+			}, doComplete);
+		}
+		
+		function mcm_verifyPhoneNumber(){
+			var phone = $('usename').value;
+			var psw = $('password').value;
+			doBefore();
+			user.verifyPhoneNumber({
+				username:uname, 
+				password:psw
+			}, doComplete);
+		}
+		
+		function mcm_verifyEmail(){
+			var phone = $('usename').value;
+			var psw = $('password').value;
+			doBefore();
+			user.verifyEmail({
+				username:uname, 
+				password:psw
+			}, doComplete);
+		}
+		
+		var captchaId = null;
+		function refresh_captcha(){
+			if(captchaId){
+			}
+			document.getElementById("img").src ="http://member.95go.cn/api/v1/login/captcha?rid=" + new Date().getTime();
+		}
+		
+	</script>
+</head>
+<body>
+    <div id='wrap'>
+    	<div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>用户操作</h1>
+	        <div class="adpt" ></div>
+		</div>
+    	<div class="itemtitle">1、用户操作</div>
+		<div >
+			<div class="itemtitle">1、Login</div>
+			<input type="text" id="username" placeholder="username"/>
+			<input type="text" id="password" placeholder="password"/>
+			<div class="clickbtn" tapmode="active" onclick="mcm_login()" >login</div>
+		</div>
+		<div >
+			<div class="itemtitle">2、Register</div>
+			<input type="text" id="ri_1" placeholder="username"/>
+			<input type="text" id="ri_2" placeholder="password"/>
+			<input type="text" id="ri_3" placeholder="email"/>
+			<div class="clickbtn" tapmode="active" onclick="mcm_register()" >register</div>
+		</div>
+		<div >
+			<div class="itemtitle">3、Logout</div>
+			<div class="clickbtn" tapmode="active" onclick="mcm_logout()" >logout</div>
+		</div>
+		<div >
+			<div class="itemtitle">4、UpdatePassword</div>
+			<input type="text" id="up_1" placeholder="new password"/>
+			<div class="clickbtn" tapmode="active" onclick="mcm_updatePassword()" >updatePassword</div>
+		</div>
+		<div >
+			<div class="itemtitle">5、更新user表的自定义mynumber字段</div>
+			<input type="number" id="mynumber" placeholder="new number"/>
+			<div class="clickbtn" tapmode="active" onclick="mcm_updateAny()" >updateAny</div>
+		</div>
+		<div >
+			<div class="itemtitle">6、LoginByPhoneNumber（暂不支持）</div>
+			<input type="text" id="lp_1" placeholder="phone number"/>
+			<input type="text" id="lp_2" placeholder="password"/>
+			<div class="clickbtn" tapmode="active" onclick="mcm_loginByPhoneNumber()" >loginByPhoneNumber</div>
+		</div>
+		<div >
+			<div class="itemtitle">7、LoginWithAuthData（暂不支持）</div>
+			<input type="text" id="la_1" placeholder="auth data"/>
+			<div class="clickbtn" tapmode="active" onclick="mcm_loginWithAuthData()" >loginWithAuthData</div>
+		</div>
+		<div >
+			<div class="itemtitle">8、VerifyPhoneNumber（暂不支持）</div>
+			<input type="text" id="vp_1" placeholder="phone number"/>
+			<div class="clickbtn" tapmode="active" onclick="mcm_verifyPhoneNumber()" >verifyPhoneNumber</div>
+		</div>
+		<div >
+			<div class="itemtitle">9、VerifyEmail（暂不支持）</div>
+			<input type="text" id="ve_1" placeholder="email"/>
+			<div class="clickbtn" tapmode="active" onclick="mcm_verifyEmail()" >verifyEmail</div>
+		</div>
+		<div >
+			<div class="itemtitle">10、短信验证</div>
+			<img id='img' width=150 height=50 ><div class="clickbtn" tapmode="active" onclick="refresh_captcha()" >刷新验证码</div>
+			<input type="text" id="captcha" placeholder="email"/>
+			<div class="clickbtn" tapmode="active" onclick="mcm_verifyEmail()" >verifyEmail</div>
+		</div>
+    </div>
+</body>
+</html>

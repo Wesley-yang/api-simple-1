@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>模块测试</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script src="../script/public.js"></script>
+    <script>
+    	function tosoftInput(url, m){
+    		openWin(url,"",{softInputMode:m});
+    	}
+    </script>
+    </head>
+    <body >
+        <div id="wrap">
+        	<!-- <div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>输入测试</h1>
+		        <div class="adpt" ></div>
+			</div>-->
+        	<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick="openWin('any.html')">任意测试</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('form.html')">form表单</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('nofocus.html')">点击弹出键盘</div>
+        	</div>
+        	<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick='tosoftInput("sw_resize.html","resize")'>键盘-resize</div>
+        		<div tapmode='active' class='clickitem' onclick='tosoftInput("sw_pan.html","pan")'>键盘-pan</div>
+        		<div tapmode='active' class='clickitem' onclick='tosoftInput("sw_auto.html","auto")'>键盘-auto</div>
+        	</div>
+        	<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick="openWin('focus.html')">默认弹出键盘</div>
+        		<div tapmode='active' class='clickitem' onclick="openWin('pda.html')">PDA设备</div>
+        	</div>  
+        </div>
+    </body>
+</html>

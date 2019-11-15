@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>widget列表</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <style>
+    	.icon {
+            width:50px;
+            height:50px;
+            border:0;
+        }
+    </style>
+    <script type="text/javascript" src="../script/public.js"></script>
+</head>
+<body class='center'>
+    <div id='applist'>
+        <!-- <div class='row'>
+        	<div tapmode='active' class='clickitem' >
+        		<img class='icon' src='default.png'>
+        		<center>wgt1</center>
+        	</div>
+        	<div tapmode='active' class='clickitem' >
+        		<img class='icon' src='default.png'>
+        		<center>wgt2</center>
+        	</div>
+        	<div tapmode='active' class='clickitem' >
+        		<img class='icon' src='default.png'>
+        		<center>wgt3</center>
+        	</div>
+        </div>
+        <div class='row'>
+        	<div tapmode='active' class='clickitem' >
+        		<img class='icon' src='default.png'>
+        		<center>wgt4</center>
+        	</div>
+        </div> -->
+    </div>
+</body>
+<script>
+
+	apiready = function() {
+	    updateWgt();
+	    api.addEventListener({
+			name: 'resume'
+		}, function(ret, err){
+			updateWgt();
+		});
+	}
+
+	function updateWgt(){
+		api.showProgress();
+		api.getFsWidgets(onGetWidgetsResult);
+	}
+	
+	function startWgt(wid){
+		api.openWidget({
+			id:wid
+		});
+	}
+
+	function onGetWidgetsResult(ret, err) {
+        api.hideProgress();
+        var data = ret ? ret.data : null;
+        if(!data || (data.length == 0)){
+        	return;
+        }
+        var inhtml = "<div class='row'> ";
+        var rows = 0;
+        for(var i = 0; i <data.length; ++i){
+	    	var wgtId = data[i].widgetId;
+	    	var name = data[i].name;
+	        var iconpath = data[i].iconPath;
+	        var icon = 'default.png';
+	        if(iconpath){
+	            icon = iconpath+ '/icon150x150.png'; 
+	        }
+	        inhtml += "<div tapmode='active' class='clickitem' onclick='startWgt(\"" + wgtId + "\")'> "
+	        +  "<img onerror='loadIconErr(this);' class='icon' src='" + icon + "'> <center>" + name + "</center></div> ";
+	        rows++;
+	        if((rows % 3) == 0){
+	        	inhtml += "</div> <div class='row'> ";
+	        }
+	        $('applist').innerHTML = inhtml;
+	        api.parseTapmode();
+		}
+    }
+    
+    function loadIconErr(el){
+        if(el){
+            el.src = 'default.png';
+        }
+    }
+</script>
+</html>

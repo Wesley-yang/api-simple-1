@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <title>A窗口</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="api.js"></script>
+        <style>
+        	body{
+        		background: #F0F;
+        		padding:0;
+        		margin:0;
+        	}
+        	
+        	.btn {
+				background-color: #EEEEEE;
+				background-image: -webkit-linear-gradient(top, #EEEEEE, #CCCCCC);
+				border-color: #CCCCCC #CCCCCC #BBBBBB;
+				-webkit-border-radius: 4px;
+				border-style: solid;
+				border-width: 1px;
+				color: #333333;
+				font: bold 18px;
+				padding: 8px 0;
+				text-align: center;
+				text-shadow: 0 1px 0 #EEEEEE;
+				width: 220px;
+				margin-top:15px;
+				margin-left:auto;
+				margin-right:auto;
+				display:block;
+			}
+			
+			.active {
+				background-color: #CCCCCC;
+				background-image: -webkit-linear-gradient(top, #CCCCCC, #DDDDDD);
+				border-color: #CCCCCC #CCCCCC #BBBBBB;
+			}
+			
+        </style>
+    </head>
+    
+    <body>
+        <div id="header" style="z-index:9999999;">我是frame</div>
+    </body>
+    <script>
+    	
+    	var colors = ['#FF0000', '#00FF00', '#0000FF', '#FF00FF', 
+    	'#00FFFF', '#FF0000', '#00FF00', '#00FFFF', 
+    	'#0000FF', '#00FFFF' ,'#FF0000', '#00FF00', 
+    	'#FF00FF', '#0000FF', '#00FFFF', '#FF0000', 
+    	'#00FF00', '#00FFFF', '#0000FF', '#00FFFF'];
+    
+    	apiready = function(){
+    		var id = api.pageParam.id;
+    		document.getElementById('header').innerHTML = "frame " + id;
+    		document.body.style.background = colors[id];
+    		
+    		api.addEventListener({
+				name:'index_frm'
+			}, function(ret){
+				console.log('index_frm ' + api.pageParam.id + ' event： ' + ret.value);
+			});
+			//setInterval("clock()", 2000);
+    	}
+    	
+    	function clock(){
+		  
+		  console.log('index_frm ' + api.pageParam.id + ' clock... ');
+		}
+    </script>
+
+</html>

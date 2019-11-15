@@ -1,0 +1,254 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>component</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script type="text/javascript" src="../script/public.js"></script>
+    <style>
+    	
+    	
+    </style>
+    <script type="text/javascript">
+		
+		apiready = function(){
+	    	
+	    }
+		
+		function apiAlert(){
+			var mssg = $('alertId').value;
+			api.alert({
+				title:'友情提醒',
+				msg:mssg,
+				buttons: ['我知道了']
+			}, function(ret){
+				console.log('alert:\n' + JSON.stringify(ret));
+			});
+		}
+		
+		function apiConfirm(){
+			var mssg = $('confirmId').value;
+			api.confirm({
+				title:'有新的消息',
+				msg:mssg,
+				buttons: ['不约', '约', '滚！']
+			}, function(ret){
+				console.log('confirm:\n' + JSON.stringify(ret));
+			});
+		}
+		
+		function apiPromt(){
+			var mssg = $('promtId').value;
+			api.prompt({
+				title:'有新的消息',
+				text:mssg,
+				buttons: ['好', '不好', '牛！']
+			}, function(ret){
+				console.log('promt:\n' + JSON.stringify(ret));
+			});
+		}
+		
+		function jsAlert(){
+			var mssg = $('alertId').value;
+			var ret = alert(mssg);
+			console.log('alert:\n' + JSON.stringify(ret));
+		}
+		
+		function jsConfirm(){
+			var mssg = $('confirmId').value;
+			var ret = confirm('有新的消息', mssg);
+			console.log('confirm:\n' + JSON.stringify(ret));
+		}
+		
+		function jsPromt(){
+			var mssg = $('promtId').value;
+			var ret = prompt('有新的消息', mssg);
+			console.log('promt:\n' + JSON.stringify(ret));
+		}
+		
+		function apiActionSheet(){
+			var _title = $('as_title').value;
+			var _cancelTitle = $('as_cancel').value;
+			var _destructiveTitle = $('as_des').value;
+			var _buttons = new Array();
+			_buttons.push($('as_btn1').value);
+			_buttons.push($('as_btn2').value);
+			api.actionSheet({
+			    title: _title,
+			    cancelTitle: _cancelTitle,
+			    destructiveTitle: _destructiveTitle,
+			    buttons: _buttons,
+			    style:{
+				    //fontNormalColor:'#0F0',    //选项按钮正常状态文字颜色，支持#000、#000000、rgb、rgba，默认值：#007AFF
+				    //fontPressColor:'#FFF',     //选项按钮按下时文字颜色，支持#000、#000000、rgb、rgba，默认值：#0060F0
+				    //titleFontColor:'#000'      //标题文字颜色，支持#000、#000000、rgb、rgba，默认值：#8F8F8F
+				}
+			},function(ret,err){
+			    console.log('actionSheet: ' + JSON.stringify(ret));
+			});
+		}
+		
+		function apiToast(){
+			var _global = (1 == radioValue('t_global'));
+			var _location = radioValue('t_loc');
+			var _msg = $('toastId').value;
+			api.toast({
+				msg: _msg,
+				location: _location,
+				global: _global,
+				duration: 3000
+			});
+		}
+		
+		function apiProgress(){
+			var mssg = $('progressId').value;
+			api.showProgress({
+				text:mssg,
+				modal: false
+			});
+		}
+		
+		function apiCloseProgress(){
+			api.hideProgress();
+		}
+		
+		function apiDatePicker(){
+			api.openPicker({
+			    type: 'date',
+			    date: '2016-01-20 20:00',
+			    //title:'选择日期'
+			}, function(ret){
+				apialert(JSON.stringify(ret));
+				if(ret){
+					var st = '选择结果为：' + ret.year + '年' + ret.month + '月' + ret.day + '日';
+					$('datePickerId').innerHTML = st;
+				}
+			});
+		}
+		
+		function apiTimePicker(){
+			api.openPicker({
+			    type: 'time',
+			    date: '2016-01-25 21:00',
+			    title:'选择时间'
+			}, function(ret){
+				apialert(JSON.stringify(ret));
+				if(ret){
+					var st = '选择结果为：' + ret.hour + '时' + ret.minute + '分';
+					$('timePickerId').innerHTML = st;
+				}
+			});
+		}
+		
+		function setRefrash(){
+			//setInfo();
+			api.refreshHeaderLoading();
+		}
+		
+		function resetRefrash(){
+			api.refreshHeaderLoadDone();
+		}
+		
+		function setRefrashInfo(){
+    		api.setRefreshHeaderInfo({
+    			loadingImg:'../image/refresh.png',
+    			//loadingImg:'widget://image/refresh.png',
+    			//visible:true
+    			textDown:'哇哈哈哈'
+    		}, function(){
+    			apialert('Refrash..');
+    		});
+	    }
+	    
+	    function apiFloatBox(){
+	    	api.showFloatBox({
+				preventDefault:true,
+				//iconPath:'../image/tmp_icon.png',
+				iconPath:'widget://image/refresh.png'
+			}, function(ret){
+				alert('你点击了球');
+			});
+	    }
+	    
+	</script>
+</head>
+<body>
+    <div >
+        <div id="wrap">
+        	<!-- <div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>小组件测试</h1>
+		        <div class="adpt" ></div>
+			</div> -->
+            <div  >
+            	<div class='itemtitle'>1、Alert对话框</div>
+            		<lable>请输入提示内容：</lable><br>
+	            	<input type="text" id="alertId" value='你的人品已用尽！'/>
+	            	<div class="clickbtn" tapmode="active" onclick="apiAlert()" >API弹出</div>
+	            	<div class="clickbtn" tapmode="active" onclick="jsAlert()" >标准弹出</div>
+            	<div class='itemtitle'>2、Confirm对话框</div>
+            		<lable>请输入提示内容：</lable><br>
+	            	<input type="text" id="confirmId" value='约不约？'/>
+	            	<div class="clickbtn" tapmode="active" onclick="apiConfirm()" >API弹出</div>
+	            	<div class="clickbtn" tapmode="active" onclick="jsConfirm()" >标准弹出</div>
+	            <div class='itemtitle'>3、Promt对话框</div>
+	            	<lable>请输入默认内容：</lable><br>
+	            	<input type="text" id="promtId" value='大叔好'/>
+	            	<div class="clickbtn" tapmode="active" onclick="apiPromt()" >API弹出</div>
+	            	<div class="clickbtn" tapmode="active" onclick="jsPromt()" >标准弹出</div>
+	            <div class='itemtitle'>4、ActionSheet</div>
+	            	<lable>请输入标题（可选）：</lable><br>
+	            	<input type="text" id="as_title" value='请选择图片'/><br>
+	            	<lable>请输入警示内容（可选）：</lable><br>
+	            	<input type="text" id="as_des" value='第三方应用'/><br>
+	            	<lable>请输入按钮项1（可选）：</lable><br>
+	            	<input type="text" id="as_btn1" value='照相机'/><br>
+	            	<lable>请输入弹出项2（可选）：</lable><br>
+	            	<input type="text" id="as_btn2" value='手机相册'/><br>
+	            	<lable>请输入取消按钮（默认显示‘取消’）：</lable><br>
+	            	<input type="text" id="as_cancel" value='取消'/>
+	            	<div class="clickbtn" tapmode="active" onclick="apiActionSheet()" >弹出</div>
+	            <div class='itemtitle'>5、Progress</div>
+	            	<lable>请输入弹出内容：</lable><br>
+	            	<input type="text" id="progressId" value='请稍后...'/>
+	            	<div class="clickbtn" tapmode="active" onclick="apiProgress()" >弹出</div>
+	            	<div class="clickbtn" tapmode="active" onclick="apiCloseProgress()" >关闭</div>
+	            <div class='itemtitle'>6、Toast</div>
+	            	<lable>请输入弹出内容：</lable><br>
+	            	<input type="text" id="toastId" value='Hello!'/><br>
+	            	<lable>弹出位置：</lable>
+					<div style='margin:10px 15px;'>
+						顶部<input type="radio" name="t_loc" value="top" />
+						中间<input type="radio" name="t_loc" value="middle" />
+						底部<input type="radio" name="t_loc" checked value="bottom" />
+					</div>
+	            	<lable>是否全局：</lable>
+					<div style='margin:10px 15px;'>
+						否<input type="radio" name="t_global" checked value="0" />
+						是<input type="radio" name="t_global" value="1" />
+					</div>
+	            	<div class="clickbtn" tapmode="active" onclick="apiToast()" >弹出</div>
+	            <div class='itemtitle'>7、日期选择器</div>
+	            	<div class="clickbtn" tapmode="active" onclick="apiDatePicker()" >弹出选择</div>
+	            	<div class="clickbtn" id='datePickerId'>选择结果</div>
+	            <div class='itemtitle'>8、时间选择器</div>
+	            	<div class="clickbtn" tapmode="active" onclick="apiTimePicker()" >弹出选择</div>
+	            	<div class="clickbtn" id='timePickerId'>选择结果</div>
+	            <div class='itemtitle'>9、直接进入下拉刷新状态</div>
+	            	<div class="clickbtn" tapmode="active" onclick="setRefrash()" >进入</div>
+	            <div class='itemtitle'>10、结束下拉刷新状态</div>
+	            	<div class="clickbtn" tapmode="active" onclick="resetRefrash()" >结束</div>
+	            <div class='itemtitle'>11、设置下拉刷新头信息</div>
+	            	<lable>设置后再调下拉刷新看看</lable><br>
+	            	<div class="clickbtn" tapmode="active" onclick="setRefrashInfo()" >设置</div>
+	            <div class='itemtitle'>12、屏幕悬浮小球（子wgt有效）</div>
+	            	<div class="clickbtn" tapmode="active" onclick="apiFloatBox()" >点击显示</div>
+	            <br>
+            </div>
+        </div>   
+    </div>
+</body>
+</html>

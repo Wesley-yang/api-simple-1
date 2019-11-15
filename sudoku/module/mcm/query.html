@@ -1,0 +1,569 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>MCM_查询操作</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <script type="text/javascript" src="component.js"></script>
+    <style>
+    	.input-small{
+    		width: 70px;
+    		margin:3px 0px;
+    	}
+    	.small{
+    		font-size:14px;
+    		margin-top:10px;
+    		display:-webkit-box;
+    		-webkit-box-pack:center;
+		    -webkit-box-align:center;
+		   -webkit-box-orient: horizontal;
+    	}
+    	
+    	.left{
+    		-webkit-box-pack:start;
+    	}
+    	
+    	.right{
+    		-webkit-box-pack:end;
+    	}
+    </style>
+    <script type="text/javascript">
+		var mcm = null;
+		var query = null;
+		
+		apiready = function(){
+	    	mcm = api.require('model');
+	    	query = api.require('query');
+	    }
+	    
+		var clazz = "Endo";
+		var objectId = "54b3d0698e40473a64f16cfe";
+		
+		function checkClass(){
+			clazz = $('clzz').value;
+			objectId = $('objectId').value;
+		}
+
+		function checkOrder(QID){
+			var orderColumn = $('orderColumn').value;
+			if(!orderColumn){
+				return;
+			}
+			var asc = true;
+			if(!$('order_asc').checked){
+				asc = false;
+			}
+            if(asc){
+            	query.asc({
+            		qid:QID, 
+            		column:orderColumn
+            	});
+            }else{
+            	query.desc({
+            		qid:QID, 
+            		column:orderColumn
+            	});
+            }
+		}
+		
+		function createQuery(callback){
+			query.createQuery(function(ret){
+				callback(ret.qid);
+			});
+		}
+
+		function mcm_count(){
+			doBefore();
+			createQuery(function(QID){
+				mcm.count({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findById(){
+			doBefore();
+			var param = {
+				class:clazz, 
+				id:objectId
+			};
+			mcm.findById(param, doComplete);
+		}
+		
+		function mcm_exist(){
+			doBefore();
+			var param = {
+				class:clazz, 
+				id:objectId
+			};
+			mcm.exist(param, doComplete);
+		}
+		
+		function mcm_findOrder(){
+			doBefore();
+			var lit = $('limit').value;
+			lit = lit ? lit : 30;
+			var skp = $('skip').value;
+			skp = skp ? skp : 0;
+			createQuery(function(QID){
+				query.limit({
+					qid:QID, 
+					value:lit
+				});
+				query.skip({
+					qid:QID, 
+					value:skp
+				});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findEqual(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({
+					qid:QID, 
+					value:30
+				});
+				query.skip({
+					qid:QID, 
+					value:0
+				});
+				query.whereEqual({
+					qid:QID, 
+					column:"name", 
+					value:"张三"
+				});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findNotEqual(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({
+					qid:QID, 
+					value:30
+				});
+				query.skip({
+					qid:QID, 
+					value:0
+				});
+				query.whereNotEqual({
+					qid:QID, 
+					column:"A", 
+					value:"我"
+				});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findLike(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({qid:QID, value:30});
+				query.skip({qid:QID, value:0});
+				query.whereLike({qid:QID, column:"A", value:"aaaa"});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findUnLike(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({qid:QID, value:30});
+				query.skip({qid:QID, value:0});
+				query.whereUnLike({qid:QID, column:"A", value:"aaaa"});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findStartWith(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({qid:QID, value:30});
+				query.skip({qid:QID, value:0});
+				query.whereStartWith({qid:QID, column:"A", value:"img"});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findEndWith(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({qid:QID, value:30});
+				query.skip({qid:QID, value:0});
+				query.whereEndWith({qid:QID, column:"A", value:"NaN"});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findBetween(){
+			/**
+			doBefore();
+			createQuery(function(QID){
+				query.limit({qid:QID, value:30});
+				query.skip({qid:QID, value:0});
+				query.whereEndWith({qid:QID, column:"title", value:"冰泉"});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});**/
+		}
+		
+		function mcm_findExist(){
+			doBefore();
+			createQuery(function(QID){
+				query.whereExist({qid:QID, column:"B"});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findNotExist(){
+			doBefore();
+			createQuery(function(QID){
+				query.whereNotExist({qid:QID, column:"C"});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findContain(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({qid:QID, value:30});
+				query.skip({qid:QID, value:0});
+				query.whereContain({qid:QID, column:"ary", value:44});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findContainAll(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({qid:QID, value:30});
+				query.skip({qid:QID, value:0});
+				query.whereContainAll({qid:QID, column:"ary", value:"44,88"});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findNotContain(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({qid:QID, value:30});
+				query.skip({qid:QID, value:0});
+				query.whereNotContain({
+					qid:QID, 
+					column:"ary", 
+					value:44
+				});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findGreaterThan(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({qid:QID, value:30});
+				query.skip({qid:QID, value:0});
+				query.whereGreaterThan({
+					qid:QID, 
+					column:"price", 
+					value:20
+				});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findGreaterThanOrEqual(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({qid:QID, value:30});
+				query.skip({qid:QID, value:0});
+				query.whereGreaterThanOrEqual({
+					qid:QID, 
+					column:"price", 
+					value:100
+				});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findLessThan(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({qid:QID, value:30});
+				query.skip({qid:QID, value:0});
+				query.whereLessThan({qid:QID, column:"price", value:50});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findLessThanOrEqual(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({qid:QID, value:30});
+				query.skip({qid:QID, value:0});
+				query.whereLessThanOrEqual({qid:QID, column:"price", value:2});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findInclude(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({qid:QID, value:30});
+				query.skip({qid:QID, value:0});
+				query.include({qid:QID, column:"pot"});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_findAll(){
+			doBefore();
+			createQuery(function(QID){
+				query.limit({qid:QID, value:30});
+				query.skip({qid:QID, value:0});
+				//query.justFields({qid:QID, value:["title", "content"]});
+				query.exceptFields({qid:QID, value:["title"]});
+				//query.whereEqual({qid:QID, column:"title", value:"青岛鲜啤"});
+				//query.whereEqual({qid:QID, column:"title", value:"青岛鲜啤"});
+				checkOrder(QID);
+				mcm.findAll({
+					class:clazz, 
+					qid:QID
+				}, doComplete);
+			});
+		}
+		
+		function mcm_pointer(){
+			doBefore();
+			var param = {
+				class:clazz, 
+				id:"53f6fc47c29734c565f3aeda"
+			};
+			mcm.pointer(param, doComplete);
+		}
+
+	</script>
+</head>
+<body>
+    <div id='wrap'>
+    	<div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>查询操作</h1>
+	        <div class="adpt" ></div>
+		</div>
+    	<div class="itemtitle">1、基本查询</div>
+	    	<lable>请输入操作对象：</lable><br>
+	    	<input type="text" id="clzz" value="Endo" placeholder="请输入class" />
+	    	<div class="clickbtn" tapmode="active" onclick="mcm_exist()" >查询对象是否存在</div>
+	    	<div class="clickbtn" tapmode="active" onclick="mcm_count()" >查询本对象记录总数</div>
+	    	<lable>请输入操作对象下某条记录的ID：</lable><br>
+	    	<input type="text" id="objectId" value="54ae74fa6fdf471145469c7d" placeholder="请输入ID" />
+	    	<div class="clickbtn" tapmode="active" onclick="mcm_findById()">根据ID查询</div>
+    	<div class="itemtitle">2、根据条件查询</div>
+    	<div class="small left">
+    		<lable>limit</lable>
+    		<input type="text" id="limit" class="input-small" value="20"/>
+    	</div>
+    	<div class="small left">
+    		<lable>skip&nbsp;</lable>
+    		<input type="text" id="skip" class="input-small" value="0"/>
+    	</div>
+    	<div class="small left">
+    		<lable>include</lable>
+    		<input type="text" id="include" class="input-small" value="pot" placeholder="column"/>
+    	</div>
+    	<div class="small left">
+    		<lable>order</lable>
+    		正序<input type="radio" name="order" id='order_asc' checked="checked" />&nbsp;
+			倒序<input type="radio" name="order" id='order_dsc' />
+		</div>
+		<div class="small left">
+			<lable>orderColumn</lable>
+			<input type="text" id="orderColumn" class="input-small" value='name' placeholder="column"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findOrder()" >条件查询[order]</div>
+		<div class="itemtitle"></div>
+		<div class="small">
+			<input type="text" id="e_1" class="input-small" placeholder="column"/>
+			Equal
+			<input type="text" id="e_2" class="input-small" placeholder="value"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findEqual()" >条件查询[Equal]</div>
+		<div class="small">
+			<input type="text" id="ne_1" class="input-small" placeholder="column"/>
+			NotEqual
+			<input type="text" id="ne_2" class="input-small" placeholder="value"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findNotEqual()" >条件查询[NotEqual]</div>
+		<div class="small">
+			<input type="text" id="sw_1" class="input-small" placeholder="column"/>
+			StartWith
+			<input type="text" id="sw_2" class="input-small" placeholder="value"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findStartWith()" >条件查询[StartWith]</div>
+		<div class="small">
+			<input type="text" id="ew_1" class="input-small" placeholder="column"/>
+			EndWith
+			<input type="text" id="ew_2" class="input-small" placeholder="value"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findEndWith()" >条件查询[EndWith]</div>
+		<div class="small">
+			<input type="text" id="l_1" class="input-small" placeholder="column"/>
+			Like
+			<input type="text" id="l_2" class="input-small" placeholder="value"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findLike()" >条件查询[Like]</div>
+		<div class="small">
+			<input type="text" id="ul_1" class="input-small" placeholder="column"/>
+			UnLike
+			<input type="text" id="ul_2" class="input-small" placeholder="value"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findUnLike()" >条件查询[UnLike]</div>
+		<div class="small">
+			<input type="text" id="b_1" class="input-small" placeholder="column"/>
+			Between
+			<input type="text" id="b_2" class="input-small" placeholder="value"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findBetween()" >条件查询[Between]（暂不支持）</div>
+		<div class="small">
+			<input type="text" id="et_1" class="input-small" placeholder="column" style="visibility:hidden;"/>
+			Exist
+			<input type="text" id="et_2" class="input-small" placeholder="column"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findExist()" >条件查询[Exist]</div>
+		<div class="small">
+			<input type="text" id="net_1" class="input-small" placeholder="column" style="visibility:hidden;"/>
+			NotExist
+			<input type="text" id="net_2" class="input-small" placeholder="column"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findNotExist()" >条件查询[NotExist]</div>
+		<div class="small">
+			<input type="text" id="c_1" class="input-small" placeholder="column"/>
+			Contain
+			<input type="text" id="c_2" class="input-small" placeholder="value"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findContain()" >条件查询[Contain]</div>
+		<div class="small">
+			<input type="text" id="ca_1" class="input-small" placeholder="column"/>
+			ContainAll
+			<input type="text" id="ca_2" class="input-small" placeholder="v1,v2,v3"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findContainAll()" >条件查询[ContainAll]</div>
+		<div class="small">
+			<input type="text" id="nc_1" class="input-small" placeholder="column"/>
+			NotContain
+			<input type="text" id="nc_2" class="input-small" placeholder="value"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findNotContain()" >条件查询[NotContain]</div>
+		<div class="small">
+			<input type="text" id="gt_1" class="input-small" placeholder="column"/>
+			GreaterThan
+			<input type="text" id="gt_2" class="input-small" placeholder="value"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findGreaterThan()" >条件查询[GreaterThan]</div>
+		<div class="small">
+			<input type="text" id="gte_1" class="input-small" placeholder="column"/>
+			GreaterThanOrEqual
+			<input type="text" id="gte_2" class="input-small" placeholder="value"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findGreaterThanOrEqual()" >条件查询[GreaterThanOrEqual]</div>
+		<div class="small">
+			<input type="text" id="lt_1" class="input-small" placeholder="column"/>
+			LessThan
+			<input type="text" id="lt_2" class="input-small" placeholder="value"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findLessThan()" >条件查询[LessThan]</div>
+		<div class="small">
+			<input type="text" id="lte_1" class="input-small" placeholder="column"/>
+			LessThanOrEqual
+			<input type="text" id="lte_2" class="input-small" placeholder="value"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findLessThanOrEqual()" >条件查询[LessThanOrEqual]</div>
+		<div class="small">
+			<input type="text" id="i_1" class="input-small" placeholder="column"/>
+			Include
+			<input type="text" id="i_2" class="input-small" placeholder="value"/>
+		</div>
+		<div class="clickbtn" tapmode="active" onclick="mcm_findInclude()" >条件查询[Include]</div>
+    	<div class="clickbtn" tapmode="active" onclick="mcm_findAll()" >基于以上所有条件综合查询</div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>device</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script type="text/javascript" src="../script/public.js"></script>
+    <style>
+    	
+    	
+    </style>
+    <script type="text/javascript">
+		
+		apiready = function(){
+	    	;
+	    }
+		
+    	function clearAllCache(){
+    		api.clearCache({
+    			//timeThreshold:0.5
+    		}, function(){
+    			apialert('sucess!');
+    		});
+    		
+    	}
+		
+		function diskFreeSpace(){
+			api.getFreeDiskSpace(function(ret){
+    			var length = ret.size;
+    			if(length < 0){
+    				apialert('无法获取');
+    			}else{
+    				apialert('存储空间剩余：' + parseFloat(length / 1000 / 1000 / 1000).toFixed(2) + 'GB');
+    			}
+    		});
+		}
+		
+		function diskTotalSpace(){
+			api.getTotalSpace(function(ret){
+    			var length = ret.size;
+    			if(length < 0){
+    				apialert('无法获取');
+    			}else{
+    				apialert('总存储空间：' + parseFloat(length / 1000 / 1000 / 1000).toFixed(2) + 'GB');
+    			}
+    		});
+		}
+		
+		function diskCacheSize(){
+			api.getCacheSize(function(ret){
+    			var length = ret.size;
+    			if(length < 0){
+    				apialert('无法获取');
+    			}else{
+    				apialert('本APP缓存共：' + parseInt(length / 1000) + 'KB');
+    			}
+    		});
+		}
+		
+		function stStorage(){
+			window.localStorage.abc = 'abc';
+		}
+		
+		function gtStorage(){
+			apialert(localStorage.abc);
+		}
+		
+		function setGlobalData(){
+			api.setGlobalData({key:'key1', value:'abcdefg'});
+			api.setGlobalData({key:'key2', value:123});
+			api.setGlobalData({key:'key3', value:false});
+			api.setGlobalData({key:'key4', value:{a:'aaa', b:'bbbb'}});
+			apialert('设置成功');
+		}
+		
+		function getGlobalData(){
+			var str = '';
+			str += "key1: " + api.getGlobalData({key:'key1'}) + '\n';
+			str += "key2: " + api.getGlobalData({key:'key2'}) + '\n';
+			str += "key3: " + api.getGlobalData({key:'key3'}) + '\n';
+			str += "key4: " + api.getGlobalData({key:'key4'}) + '\n';
+			apialert(str);
+		}
+		
+	</script>
+</head>
+<body>
+    <div >
+        <div id="wrap">
+        	<!-- <div id='header'>
+	            <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	            <h1>数据存储</h1>
+	            <div class="adpt" ></div>
+        	</div>-->
+            <div class='itemtitle'>1、剩余存储空间</div>
+            	<div class="clickbtn" tapmode="active" onclick="diskFreeSpace()" >查看</div>
+            <div class='itemtitle'>2、总存储空间</div>
+            	<div class="clickbtn" tapmode="active" onclick="diskTotalSpace()" >查看</div>
+            <div class='itemtitle'>3、计算缓存大小</div>
+            	<div class="clickbtn" tapmode="active" onclick="diskCacheSize()" >查看</div>
+            <div class='itemtitle'>4、清除缓存</div>
+            	<div class="clickbtn" tapmode="active" onclick="clearAllCache()" >清除</div>
+			<div class="itemtitle">5、设置存储</div>
+				<div class="clickbtn" tapmode="active" onclick="stStorage()" >点击设置</div>
+			<div class="itemtitle">6、获取存储</div>
+				<div class="clickbtn" tapmode="active" onclick="gtStorage()" >点击获取</div>
+			<div class='itemtitle'>7、全局变量globalData</div>
+            	<div class="clickbtn" tapmode="active" onclick="setGlobalData()" >设置</div>
+            	<div class="clickbtn" tapmode="active" onclick="getGlobalData()" >获取</div>
+            <br>
+        </div>   
+    </div>
+</body>
+</html>

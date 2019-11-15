@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>EVENT</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+	<script type="text/javascript" src="touch.js"></script>
+	<script>
+
+		function domclick(msg){
+			apialert("domclick: " + msg);
+			console.log("domclick: " + event.target);
+		}
+		
+		function domlongclick(e){
+			apialert(e + ">触发了长按事件");
+			console.log(e + ">触发了长按事件");
+		}
+
+		
+	</script>
+</head>
+<body>
+	<div id='wrap'>
+	    <div id='header'>
+	        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	        <h1>点击相关</h1>
+	        <div class="adpt" ></div>
+		</div>
+		<div class="clickbtn" >
+			 	A:<input type="text" class='input-small' name="a" value="a" > <br>
+			 	B:<input type="number" class='input-small' name="b" value="b" > <br>
+				C:<input type="email" class='input-small' name="c" value="c" > <br>
+				D:<input type="tel" class='input-small' name="d" value="d" > <br>
+		     	<input type="submit" name="点击提交" value="Submit" ><br>
+		</div>
+		<div class="clickbtn" tapmode='active' longclick="domlongclick(this)" onclick="domclick('最外层div')">
+			<div class="clickbtn" tapmode='active' onclick="domclick('我是内层DIV标签')">我是内层DIV标签</div><br>
+			<p class="clickbtn" tapmode='active' onclick="domclick('我是内层P标签');">我是内层P标签</p><br>
+			<a class="clickbtn" tapmode='active' onclick="domclick('我是内层A标签')">我是内层A标签</a><br><br>
+			<div class="clickbtn" tapmode='active' onclick="domclick('我是内层DIV标签文字')">
+				我是内层DIV标签文字<br>
+				<div class="clickbtn" tapmode='active' onclick="domclick('我是内内层DIV标签')"><br>我是内内层DIV标签<br></div>
+				<div class="clickbtn" tapmode='active' onclick="domclick('我是内内层DIV标签1')"><br>我是内内层DIV标签1<br></div>
+				<div class="clickbtn" tapmode='active' onclick="domclick('我是内内层DIV标签2')"><br>我是内内层DIV标签2<br></div><br>
+				我是内层DIV标签文字
+			</div>
+			<br><br><br>
+			<div class="clickbtn" tapmode='active' onclick="domclick('我是内层DIV标签文字2')">
+				我是内层DIV标签文字2<br>
+				<div class="clickbtn" >我是内内层DIV标签</div>
+				<div class="clickbtn" ><br>我是内内层DIV标签1<br></div>
+				<div class="clickbtn" ><br>我是内内层DIV标签2<br></div><br>
+				我是内层DIV标签文字2
+			</div>
+		</div>
+	</div>
+</body>
+</html>

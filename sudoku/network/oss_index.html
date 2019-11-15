@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>阿里OSS测试</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script type="text/javascript" src="../script/public.js"></script>
+    <style>
+    	
+    	
+    </style>
+    <script type="text/javascript">
+		
+		apiready = function(){
+	    	;
+	    }
+	
+		//获取本地图库里面的图片或者视频
+		function captureMedia(mediaType, callback) {
+		    mediaType = mediaType ? mediaType : 'pic';
+		    api.getPicture({
+		        sourceType: 'library',
+		        mediaValue: mediaType
+		    }, function (ret, err) {
+		    	console.log('获取结果：\n' + JSON.stringify(ret));
+		        callback(ret.data, err);
+		    });
+		}
+		
+		var imgFileTmp = null;
+		
+		function loadImgToSrc(){
+			captureMedia('pic', function(filePath){
+				if(filePath){
+					$('img').src = filePath;
+					imgFileTmp = filePath;
+				}
+			});
+		}
+		
+		function uploadImage(){
+			if(!imgFileTmp){
+				apialert('请先获取本地图片');
+				return;
+			}
+			uploadFileToCloud(imgFileTmp);
+		}
+		
+		//var f = '/storage/sdcard0/DCIM/Camera/中文7.png';
+		var count = 111;
+		var accessKey = 'DvpfBPrDIldfi5bj';
+		var accessSecret = 'cKh4Zzm6BwSGJbQLgBaHk6m3b7fwnz';
+		var bucketName = 'apione';
+		var endpoint = "http://apione.oss-cn-qingdao.aliyuncs.com";
+
+		function uploadFileToCloud(imgFile){
+			if(!imgFile){
+				apialert('请选择一个本地文件！');
+				return;
+			}
+		
+			var verb = 'PUT';
+			var contentMd5 = "";
+			var contentType = 'image/png';
+			var date = new Date().toUTCString();//os.time();
+			console.log('date: ' + date);
+			var cOSSHeaders = '';
+			var cResource = '/' + bucketName + '/' + 'sampleObject' + os.hash();
+			console.log('cResource: ' + cResource);
+			var sing = verb + '\n' + contentMd5 + '\n' + contentType + '\n' + date + '\n' + cOSSHeaders + cResource;
+			//console.log('sing: ' + sing);
+			sing = os.signature(accessSecret, sing);
+			var auth = "OSS " + accessKey + ':' + sing;
+			console.log('auth: ' + auth);
+            
+            var hosts = endpoint + cResource;
+            
+            var option = {
+            	url: hosts,
+            	method: verb,
+            	returnAll: true,
+            	report:true,
+            	headers:{
+            		Authorization: auth
+            	},
+	        	data:{
+	        		stream: imgFile
+	        	}
+            }
+    		api.ajax(option, function (ret, err) {
+	            if (ret) {
+	                console.log(JSON.stringify(ret));
+	            } else {
+	                apialert('出错了！\n' + '网络状态码:' + err.statusCode + '\n错误码:' + err.code + '\n错误信息:' + err.msg);
+	            }
+        	});
+		}
+		
+		function asdg(){
+			OssUpload: function (opts) {
+	            //policy base64编码
+	            var policyBase64 = Base64.encode(JSON.stringify(params.policy));
+	            //生成签名
+	            var signature = b64_hmac_sha1(params.osskey, policyBase64);
+	            //生成路径名
+	            var filePathName = params.filePath+'/'+ params.fileName;
+	            api.ajax({
+	                url: params.contentHostName,
+	                method: 'POST',
+	                dataType: 'json',
+	                data: {
+	                    values: {
+	                        'key': filePathName,      
+	                        'Signature': signature,               
+	                        'policy': policyBase64,  
+	                        'OSSAccessKeyId': params.OSSAccessKeyId,
+	                        'Content-Type': 'text/plain',
+	                    },
+	                    files: {
+	                        'file': opts.path
+	                    }
+	                }
+	            }, function (ret, err) {
+                    if (ret) {
+                        // callBack(filePathName);
+                        apialert(JSON.stringify(ret));
+                    } else {
+                        apialert(JSON.stringify(err));
+                    }
+                });
+        	}
+		}
+	</script>
+</head>
+<body>
+    <div id="wrap">
+	<div id='header'>
+        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+        <h1>文件操作</h1>
+        <div class="adpt" ></div>
+	</div> 
+	<div class="itemtitle">1、阿里云OSS文件上传</div>
+	<div class="clickbtn" tapmode="active" onclick="loadImgToSrc()" >获取本地图片</div>
+	<div>
+		<img id='img' width=100 height=100 src='../mcm/hold.png'>
+	</div>
+	<div class="clickbtn" tapmode="active" onclick="uploadImage()" >点击上传图片</div>
+	<br>  
+</div>
+</body>
+</html>

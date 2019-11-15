@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>API索引</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <script type="text/javascript" src="../script/public.js"></script>
+    <style>
+    	html,body{
+			background-color:#f8f8f8;
+		}
+		img{
+			border:0;
+		}
+		.px-line {
+			position: relative;
+		}
+		.px-line:after {
+			content: "";
+			position: absolute;
+			bottom: 0px;
+			left: 0px;
+			right: 0px;
+			border-bottom: 1px solid #E3E4E0;
+			box-sizing: border-box;
+			-webkit-transform: scaleY(0.5);
+			-webkit-transform-origin: 0 0;
+		}
+		#section {
+			padding:10px;
+		}
+
+		#info{
+			background-color:#FFF;
+			border-radius:8px;
+		}
+		
+		.item{
+		   padding:10px;
+		   display:-webkit-box;
+		   -webkit-box-orient: horizontal;
+		   -webkit-box-align:center;
+		   background: url(../image/right.png) no-repeat right;
+  			background-size:14px 15px;
+			background-origin:content-box;
+		}
+		.item-active{
+		   opacity:0.7;
+		}
+		
+		.item-icon{
+			display:-webkit-box;
+			width:25px;
+			height:25px;
+			-webkit-box-align:center;
+			-webkit-box-pack:center;
+			-webkit-border-radius: 100%;
+			background:red;
+		}
+		.wap{
+			-webkit-box-flex:1;
+			margin-left:10px;
+		}
+		
+		.des{
+			color:#A9A9A9;
+			font-size:12px;
+			margin-top:5px;
+		}
+    </style>
+</head>
+<body>
+    <div id='section'>
+		<div id="info">
+			<ul id='list'>
+				<li class='item' tapmode='item-active' onclick="openWin('win/index.html')">
+					<div class='item-icon'></div>
+					<div class='wap'>
+						<div class='name'>打开A窗口</div>
+						<!-- <div class='des'>演示APICloud窗口系统使用</div> -->
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</body>
+<script>
+
+var apilist = [
+	{name:'打开A窗口', des:'演示打开窗口', url:'wins/wina.html'},
+	{name:'TabLayout', des:'演示TabLayout使用', url:'fusewin/index.html'},
+	{name:'窗口动画', des:'演示窗口动画使用', url:'anim/index.html'},
+	{name:'SlidLayout', des:'演示SlidLayout使用', url:'storages/index.html'},
+	
+
+];
+var inner = '';
+for(var i in apilist){
+	inner += "<li class='item px-line' tapmode='item-active' onclick=\"openWin('" + apilist[i].url + "')\"> " +   
+			//"<div class='item-icon'></div> " +   
+			"<div class='wap'> " +   
+				"<div class='name'>" + apilist[i].name + "</div> " +   
+				"<div class='des'>" + apilist[i].des + "</div> " +   
+			"</div> " +   
+		"</li> ";
+}
+$('list').innerHTML = inner;
+
+</script>
+</html>

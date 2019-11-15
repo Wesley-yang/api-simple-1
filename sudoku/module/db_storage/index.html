@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="chs">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,user-scalable=0">
+    <title>数据存储</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/box.css" />
+    <script type="text/javascript" src="../../script/public.js"></script>
+    <style>
+    	
+    </style>
+    <script type="text/javascript">
+		var db = null;
+		apiready = function(){
+	    	db = api.require('db');
+	    }
+
+		function opendb(){
+			db.openDatabase({
+				name:'mydb',
+				//path:'fs://database/'
+				//path:'widget://db/myres.db'
+				//path:'fs://db/myres.db'
+			}, function(ret, err){
+				if(ret){
+					apialert(JSON.stringify(ret));
+				}
+				if(err){
+					apialert(JSON.stringify(err));
+				}
+			});
+		}
+		
+		function createsql(){
+			var sl = "CREATE TABLE alarms (_id INTEGER PRIMARY KEY, hour INTEGER, minutes INTEGER, daysofweek INTEGER, alarmtime INTEGER, enabled INTEGER, vibrate INTEGER, message TEXT, alert TEXT);";
+			db.executeSql({
+				name:'mydb',
+				sql:sl
+			}, function(ret, err){
+				if(ret){
+					apialert(JSON.stringify(ret));
+				}
+				if(err){
+					apialert(JSON.stringify(err));
+				}
+			});
+		}
+		
+		function insertsql(num){
+			var count = 0;
+			var sl = "INSERT INTO alarms (hour, minutes, daysofweek, alarmtime, enabled, vibrate, message, alert) VALUES (8, 30, 31, 0, 0, 1, \'\', \'\');";
+			if(num > 0){
+				var count = 0;
+				for(var i = 0; i < num; ++i){
+					db.executeSql({
+						name:'mydb',
+						sql:sl
+					}, function(ret, err){
+						count++;
+						if(count != (num - 1)){
+							if(ret){
+								console.log(JSON.stringify(ret) + " , " + count);
+							}
+							if(err){
+								console.log(JSON.stringify(err) + " , " + count);
+							}
+							return;
+						}
+						apialert("insert finish!");
+						if(ret){
+							apialert(JSON.stringify(ret));
+						}
+						if(err){
+							apialert(JSON.stringify(err));
+						}
+					});
+				}
+				return;
+			}
+			db.executeSql({
+				name:'mydb',
+				sql:sl
+			}, function(ret, err){
+				if(ret){
+					apialert(JSON.stringify(ret));
+				}
+				if(err){
+					apialert(JSON.stringify(err));
+				}
+			});
+		}
+		
+		function selsql(){
+			var sl = "SELECT * FROM alarms";
+			db.selectSql({
+				name:'mydb',
+				sql:sl
+			}, function(ret, err){
+				if(ret){
+					apialert(JSON.stringify(ret));
+				}
+				if(err){
+					apialert(JSON.stringify(err));
+				}
+			});
+		}
+		
+		function closedb(){
+			db.closeDatabase({
+				name:'mydb'
+			}, function(ret, err){
+				if(ret){
+					apialert(JSON.stringify(ret));
+				}
+				if(err){
+					apialert(JSON.stringify(err));
+				}
+			});
+		}
+		
+		function transbegin(){
+			db.transaction({
+				name:'mydb',
+				operation: 'begin'
+			}, function(ret, err){
+				if(ret){
+					apialert(JSON.stringify(ret));
+				}
+				if(err){
+					apialert(JSON.stringify(err));
+				}
+			});
+		}
+		
+		function transend(){
+			db.transaction({
+				name:'mydb',
+				operation: 'commit'
+			}, function(ret, err){
+				if(ret){
+					apialert(JSON.stringify(ret));
+				}
+				if(err){
+					apialert(JSON.stringify(err));
+				}
+			});
+		}
+		
+		function funSetPrefs(){
+			var v = {
+				a:'aaaaa',
+				b:'bbbbb',
+				c:'ccccc'
+			};
+			api.setPrefs({
+				key:'ldx',
+				value:v
+			});
+			apialert('设置成功!');
+		}
+		
+		function funGetPrefs(){
+			var s = api.getPrefs({
+				key:'ldx'
+			}, function(ret){
+				apialert(ret.value);
+			});
+		}
+		
+		function funRemovePrefs(){
+			api.removePrefs({
+				key:'ldx'
+			});
+			apialert('移除成功！');
+		}
+		
+		function funReadFiles(){
+			api.readFile({
+			    path: 'fs://APICloudFileTest.txt'
+			}, function(ret, err){
+			    if(ret && ret.status){
+			         apialert('读取结果：\n' + ret.data);
+			         return;
+			    }
+			    apialert(JSON.stringify(err));
+			});
+		}
+		
+		function funWriteFiles(){
+			var content = $('writeContent').value;
+			if(!content){
+				apialert('请输入内容！');
+				return;
+			}
+			var appd = $("append");
+			var appd_str = appd.options[appd.selectedIndex].value;
+			api.writeFile({
+			    path: 'fs://APICloudFileTest.txt',
+			    data: content,
+			    append: appd_str
+			}, function(ret, err){
+			    if(ret && ret.status){
+			         apialert('写入成功');
+			         $('writeContent').value = '';
+			         return;
+			    }
+			    apialert(JSON.stringify(err));
+			});
+		}
+		
+	</script>
+</head>
+<body>
+	<!-- <div id='header'>
+        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+        <h1>数据存储</h1>
+        <div class="adpt" ></div>
+	</div>-->
+    <div id='main'>
+    	<div class='itemtitle'>1、数据库操作</div>
+    		<div class="clickbtn" tapmode="active" onclick="opendb()" >打开数据库</div>
+    		<div class="clickbtn" tapmode="active" onclick="createsql()" >执行创建表语句</div>
+    		<div class="clickbtn" tapmode="active" onclick="insertsql()" >执行插入语句</div>
+    		<div class="clickbtn" tapmode="active" onclick="selsql()" >执行查询语句</div>
+    		<div class="clickbtn" tapmode="active" onclick="transbegin()" >事物开始</div>
+    		<div class="clickbtn" tapmode="active" onclick="insertsql(1000)" >执行插入1000条语句</div>
+	    	<div class="clickbtn" tapmode="active" onclick="transend()" >事物结束</div>
+    		<div class="clickbtn" tapmode="active" onclick="closedb()" >关闭数据库</div>
+    	<div class='itemtitle'>2、偏好设置</div>
+    		<div class="clickbtn" tapmode="active" onclick="funSetPrefs()" >setPrefs</div>
+    		<div class="clickbtn" tapmode="active" onclick="funGetPrefs()" >getPrefs</div>
+    		<div class="clickbtn" tapmode="active" onclick="funRemovePrefs()" >removePrefs</div>
+    	<div class='itemtitle'>3、文件操作</div>
+    		<lable>请输入要写入的内容：</lable><br>
+    		<input type='text' id='writeContent' value="" /><br>
+    		<lable>是否追加到已存在文件后面:</lable><br>
+			<select id="append">
+			  <option value="true">true</option>
+			  <option value="false">false</option>
+			</select><br>
+    		<div class="clickbtn" tapmode="active" onclick="funWriteFiles()" >写文件</div>
+    		<div class="clickbtn" tapmode="active" onclick="funReadFiles()" >读文件</div>
+    	<br>  
+    </div>
+</body>
+</html>

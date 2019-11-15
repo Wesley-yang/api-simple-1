@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>窗口系统</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css" />
+    <link rel="stylesheet" type="text/css" href="./css/box.css" />
+    <script src="./script/public.js"></script>
+    </head>
+    
+    <body >
+        <div id="wrap">
+        	<!-- <div id='header'>
+		        <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+		        <h1>高级窗口</h1>
+		        <div class="adpt" ></div>
+			</div> -->
+        	<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick="openNavWin()">打开只有Nav窗口</div>
+        		<div tapmode='active' class='clickitem' onclick="openTabWin()">打开只有Tab窗口</div>
+        		<div tapmode='active' class='clickitem' onclick="openNativeWin()">打开Nav-Tab窗口</div>
+        	</div>
+        	<div class='row'>
+        		<div tapmode='active' class='clickitem' onclick="openNavWinBtn()">打开自定义btn的Nav窗口</div>
+        	</div>
+        	
+        </div>
+        
+    </body>
+    <script>
+    
+    	apiready = function(){
+    		console.log('pageParam: ' + JSON.stringify(api.pageParam));
+    	}
+
+		function openNavWin(){
+			var parm = {
+				name: 'nativewin',
+				url: './main_content.html',
+				title:'高级窗口',
+				bgColor:'#FCFCFC',
+				hideNavigationBar: false,
+			  	navigationBar: {
+			  		height: 45,
+			    	background: "#FCFCFC",
+			    	//color: "#000",
+			    	selectedColor: "#45C01A",
+			    	shadow: '#ddd',
+			    	blurEffect: false,
+			    	hideBackButton: false
+			  	}
+			}
+			api.openTabLayout(parm);
+		}
+		
+		function openNavWinBtn(){
+			var parm = {
+				name: 'nativewin',
+				url: './tab_content_1.html',
+				title:'Nav窗口',
+				bgColor:'#FCFCFC',
+			  	navigationBar: {
+			  		height: 45,
+			    	//background: "#303030",
+			    	//color: "#FFF",
+			    	//background: "#FCFCFC",
+			    	//color: "#999",
+			    	//selectedColor: "#45C01A",
+			    	shadow: '#ddd',
+			    	blurEffect: false,
+			    	hideBackButton: false,
+			    	leftButtons: [{
+						text: "返回",
+						//color: "#000",
+						iconPath: "./image/left_back.png"
+					}],
+			    	rightButtons: [{
+						text: "更多",
+						//color: "#000",
+						iconPath: "./image/more.png"
+					}]
+			  	}
+			}
+			api.openTabLayout(parm);
+		}
+		
+		function openTabWin(){
+			var parm = {
+				name: 'nativewin',
+				bgColor:'#FCFCFC',
+				tabBar: {
+			  		height: 54,
+			    	background: "#FCFCFC",
+			    	shadow: "#ddd",
+			    	color: "#999",
+			    	selectedColor: "#45C01A",
+			    	animated: true,
+			    	scrollEnabled: false,
+			    	index: 0,
+			    	list: [
+			    		{
+			      			text: "微信",
+			      			iconPath: "./image/nav_tab_1.png",
+			      			selectedIconPath: "./image/nav_tab_1_on.png"
+			    		}, {
+			      			text: "通讯录",
+			      			iconPath: "./image/nav_tab_2.png",
+			      			selectedIconPath: "./image/nav_tab_2_on.png"
+			    		}, {
+			      			text: "发现",
+			      			iconPath: "./image/nav_tab_3.png",
+			      			selectedIconPath: "./image/nav_tab_3_on.png"
+			    		}, {
+			      			text: "我",
+			      			iconPath: "./image/nav_tab_4.png",
+			      			selectedIconPath: "./image/nav_tab_4_on.png"
+			    		}
+			    	],
+			    	frames: [
+						{
+							title: "微信",//tab切换时对应的标题
+							name: "tab_frm_1",
+							url: "./tab_content_1.html",
+							//其他继承自openFrame的参数
+						}, {
+							title: "通讯录",
+							name: "tab_frm_2",
+							url: "./tab_content_2.html"
+							//其他继承自openFrame的参数
+						}, {
+							title: "发现",
+							name: "tab_frm_3",
+							url: "./tab_content_3.html"
+							//其他继承自openFrame的参数
+						}, {
+							title: "我",
+							name: "tab_frm_4",
+							url: "./tab_content_4.html"
+							//其他继承自openFrame的参数
+						}
+					]
+			  	}
+			}
+			api.openTabLayout(parm);
+		}
+		
+		function openNativeWin(){
+			var parm = {
+				name: 'nativewin',
+				url: './main_content.html',
+				title:'高级窗口',
+				bgColor:'#FCFCFC',
+			  	navigationBar: {
+			  		height: 45,
+			    	background: "#303030",
+			    	shadow: "#eee",
+			    	color: "#FFF",
+			    	blurEffect: false,
+			    	hideBackButton: false
+			  	},
+			  	tabBar: {
+			  		height: 54,
+			    	background: "#FCFCFC",
+			    	shadow: "#ddd",
+			    	color: "#999",
+			    	selectedColor: "#45C01A",
+			    	//scrollEnabled: false,
+			    	animated: false,
+			    	index: 0,
+			    	list: [
+			    		{
+			      			text: "微信",
+			      			iconPath: "./image/nav_tab_1.png",
+			      			selectedIconPath: "./image/nav_tab_1_on.png"
+			    		}, {
+			      			text: "通讯录",
+			      			iconPath: "./image/nav_tab_2.png",
+			      			selectedIconPath: "./image/nav_tab_2_on.png"
+			    		}, {
+			      			//text: "凸起",
+			      			iconPath: "./image/nav_tab_tu.png",
+			      			selectedIconPath: "./image/nav_tab_tu_on.png"
+			    		}, {
+			      			text: "发现",
+			      			iconPath: "./image/nav_tab_3.png",
+			      			selectedIconPath: "./image/nav_tab_3_on.png"
+			    		}, {
+			      			text: "我",
+			      			iconPath: "./image/nav_tab_4.png",
+			      			selectedIconPath: "./image/nav_tab_4_on.png"
+			    		}
+			    	],
+			    	frames: [
+						{
+							title: "微信",//tab切换时对应的标题
+							name: "tab_frm_1",
+							url: "./tab_content_1.html",
+							//其他继承自openFrame的参数
+						}, {
+							title: "通讯录",
+							name: "tab_frm_2",
+							url: "./tab_content_2.html"
+							//其他继承自openFrame的参数
+						}, {
+							title: "凸起",
+							name: "tab_frm_3",
+							url: "./main_content.html"
+							//其他继承自openFrame的参数
+						}, {
+							title: "发现",
+							name: "tab_frm_4",
+							url: "./tab_content_3.html"
+							//其他继承自openFrame的参数
+						}, {
+							title: "我",
+							name: "tab_frm_5",
+							url: "./tab_content_4.html"
+							//其他继承自openFrame的参数
+						}
+					]
+			  	}
+			}
+			api.openTabLayout(parm);
+		}
+		
+    </script>
+
+</html>

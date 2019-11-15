@@ -1,0 +1,174 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>device</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/box.css" />
+    <script type="text/javascript" src="../script/public.js"></script>
+    <style>
+    	
+    	
+    </style>
+    <script type="text/javascript">
+		
+		apiready = function(){
+	    	;
+	    }
+		
+		function chooseType(media_type){
+			var bts = ['图片库', '相机', '相册'];
+			api.actionSheet({
+			    title: '请选择来源',
+			    buttons: bts
+			},function(ret, err){
+				var indx = ret.buttonIndex;
+				if(4 == indx){
+					//取消
+					return;
+				}
+				var stype = (1 == indx) ? "library" : (2 == indx) ? "camera" : "album";
+			    catchMedia(stype, media_type);
+			});
+		}
+		
+		function catchMedia(source_type, media_type){
+    		var data = {
+            	sourceType: source_type,
+            	mediaValue: media_type,
+            	//groupName: 'abc',
+            	//saveToPhotoAlbum: true,
+            	//videoQuality:'high',
+            	//destinationType:'base64'
+        	};
+    		api.getPicture(data, function(ret, err){
+    			console.log('getPicture: ' + JSON.stringify(ret));
+    			//alert('ret: ' + JSON.stringify(ret));
+	            if (ret.data) {
+	            	if('video' == media_type){
+	            		playVideo(ret.data);
+	            	}else{
+	            		$('img').src = ret.data;
+	            	}
+	            } 
+        	});
+    	}
+    	
+    	function saveMedia(){
+    		api.showProgress();
+			api.saveMediaToAlbum({
+				//path:'widget://sudoku/media/video/videoviewdemo.mp4'
+				//path:'http://a631aa25874caa1814bd.b0.upaiyun.com/apicloud/658978733f461776de959263d45de83e.jpg?a=dd&bb=ggg'
+				path:'http://www.w3school.com.cn/i/movie.mp4'
+			}, function(ret){
+				api.hideProgress();
+				apialert(JSON.stringify(ret));
+			});
+		}
+		
+		
+		var rpath = null;
+		
+		function startRecord(){
+			api.startRecord();
+		}
+		
+		function stopRecord(){
+			api.stopRecord(function(ret, err){
+				if(ret){
+					rpath = ret.path;
+					apialert('录制成功！\n时长:' + ret.duration + "\n地址:" + rpath);
+					return;
+				}
+				apialert('录制失败！\n:' + JSON.stringify(err));
+			});
+		}
+		
+		function playRecord(){
+			if(!rpath){
+				apialert('请先录音！');
+				return;
+			}
+			api.startPlay({
+                path:rpath
+        	});
+		}
+		
+		function startPlay(){
+			var url = $('music').value;
+			if(!url){
+				apialert('请输入音乐本地地址');
+				return;
+			}
+			api.startPlay({
+				path:url			
+			}, function(ret){
+				apialert('播放完成:' + JSON.stringify(ret));
+			});
+		}
+		
+		function stopPlay(){
+			
+			api.stopPlay();
+		}
+		
+		function playVideo(vurl){
+			var plurl = vurl;
+			if(!plurl){
+				plurl = $('vurl').value;
+			}
+			if(!plurl){
+				apialert('播放地址不能为空');
+				return;
+			}
+			console.log('playVideo: ' + plurl);
+			apialert('将跳转系统播放器播放！', function(ret){
+				api.openVideo({
+		        	url:plurl
+		        });
+			});
+		}
+		
+	</script>
+</head>
+<body>
+    <div >
+        <div id="wrap">
+        	<!-- <div id='header'>
+	            <div class="back" tapmode="back-active" onclick="api.closeWin()" >返回</div>
+	            <h1>多媒体</h1>
+	            <div class="adpt" ></div>
+        	</div> -->
+            <div class='itemtitle'>1、获取多媒体文件</div>
+            	<div class="clickbtn" tapmode="active" onclick="chooseType('pic')" >获取图片</div>
+            	<img id='img' src='../image/tmp_icon.png' width=200 height=200 />
+            	<div class="clickbtn" tapmode="active" onclick="chooseType('video')" >获取视频</div>
+            <div class='itemtitle'>2、存储多媒体文件至系统相册</div>
+            	<div class="clickbtn" tapmode="active" onclick="saveMedia()" >存储</div>
+            <div class='itemtitle'>3、音频录制</div>
+            	<div class="clickbtn" tapmode="active" onclick="startRecord()" >开始录制</div>
+            	<div class="clickbtn" tapmode="active" onclick="stopRecord()" >结束录制</div>
+            	<div class="clickbtn" tapmode="active" onclick="playRecord()" >播放录音</div>
+            <div class="itemtitle">4、音乐播放</div>
+				<lable>输入音乐地址：</lable><br>
+				<input type="text"  id="music" value="widget://incoming_bg_ring.mp3" /><br>
+				<div class="clickbtn" tapmode="active" onclick="startPlay()" >点击开始播放</div>
+				<div class="clickbtn" tapmode="active" onclick="stopPlay()" >点击结束播放</div><br>
+            <div class="itemtitle">5、视频播放（调用系统播放器）</div>
+				<lable>输入音乐地址：</lable><br>
+				<input type="text"  id="vurl" value="http://www.w3school.com.cn/i/movie.mp4" /><br>
+				<div class="clickbtn" tapmode="active" onclick="playVideo()" >点击开始播放</div>
+            <br>
+            <div class="itemtitle">6、Video标签播放</div>
+				<div class="clickbtn" tapmode="active" onclick="openWin('./video/main.html')" >跳转</div>
+			<div class="itemtitle">7、Video标签播放-深度</div>
+				<div class="clickbtn" tapmode="active" onclick="openWin('./video/chromium.html')" >跳转</div>
+			<div class="itemtitle">8、Video标签播放-深度1</div>
+				<div class="clickbtn" tapmode="active" onclick="openWin('./video/testfont.html')" >跳转</div>
+            <br>
+        </div>   
+    </div>
+</body>
+</html>
